@@ -2,9 +2,9 @@ FC = gfortran
 FCFLAGS = -g -fcheck=all -Warray-bounds
 
 # source files and objects
-SRCS = sequentiel.f90 projet.f90
+SRCS = donnees.f90 sequentiel.f90 projet.f90
 # program name
-PROGRAM = test
+PROGRAM = run
 
 all: $(PROGRAM)
 
@@ -15,6 +15,7 @@ $(PROGRAM): $(SRCS)
 	$(FC) $(FCFLAGS) -c $<
 
 project.o:sequentiel.o
+sequentiel.o:donnees.o
 
 clean:
-	rm -f *.o *.mod test
+	rm -f *.o *.mod run
