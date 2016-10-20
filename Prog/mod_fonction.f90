@@ -19,12 +19,12 @@ contains
 
   subroutine gradc(a, b, c, epsilon, Niter, Nx, Ny, X, V, h)
 
-    real*8, intent(in)                      :: a, b, c, epsilon, h
+    real(8), intent(in)                      :: a, b, c, epsilon, h
     integer, intent(in)                     :: Niter, Nx, Ny
-    real*8, dimension(:), intent(in)        :: V
-    real*8, dimension(size(V)), intent(out) :: X
-    real*8, dimension(size(V))              :: R, D, W
-    real*8                                  :: alpha, beta
+    real(8), dimension(:), intent(in)        :: V
+    real(8), dimension(size(V)), intent(out) :: X
+    real(8), dimension(size(V))              :: R, D, W
+    real(8)                                  :: alpha, beta
     integer                                 :: iter
 
     X = 10
@@ -49,17 +49,17 @@ contains
        
     end do
 
-  end subroutine gradc 
+  end subroutine gradc
 
   !*******************************************************!
   !*******************************************************!
 
   subroutine prod_mat_vec(a, b, c, x, y, Nx, Ny, h)
 
-    real*8, intent(in)                      :: a, b, c, h
-    real*8, intent(in), dimension(Nx*Ny)    :: x
-    real*8, intent(inout), dimension(Nx*Ny) :: y
     integer, intent(in)                     :: Nx, Ny
+    real(8), intent(in)                      :: a, b, c, h
+    real(8), intent(in), dimension(Nx*Ny)    :: x
+    real(8), intent(inout), dimension(Nx*Ny) :: y
     integer                                 :: i, j, k
 
     ! 1er bloc
@@ -98,8 +98,8 @@ contains
   function norme(R) ! norme euclidienne
 
     implicit none
-    real*8, intent(in), dimension(:) :: R
-    real*8                           :: norme, S
+    real(8), intent(in), dimension(:) :: R
+    real(8)                           :: norme, S
     integer                          ::i
 
     S = 0
@@ -115,9 +115,9 @@ contains
 
   subroutine printmat(A,n,ch)
 
+    integer,intent(in)             :: n
     real,dimension(n,n),intent(in) :: A
     character(len=*),intent(in)    :: ch
-    integer,intent(in)             :: n
     integer                        :: i
 
     print*, ch
@@ -132,12 +132,12 @@ contains
 
   subroutine  writeVtk(U, Nx, Ny, dx, dy, N)
 
-    real*8,dimension(Nx*Ny),intent(in) :: U
-    integer,intent(in)                 :: Nx, Ny, N
-    real*8, intent(in)                 :: dx, dy
-    integer                            :: i, j
-    character(len=20)                  :: F_NAME
-    character(len=40)                  :: s1, s2, s3, s4, s5, s
+    integer,intent(in)                  :: Nx, Ny, N
+    real(8),dimension(Nx*Ny),intent(in) :: U
+    real(8), intent(in)                 :: dx, dy
+    integer                             :: i, j
+    character(len=20)                   :: F_NAME
+    character(len=40)                   :: s1, s2, s3, s4, s5, s
 
     if (N<10) then
        F_NAME='fichier/T'
@@ -205,11 +205,11 @@ contains
 
   subroutine printvector(U, Nx, Ny, dx, dy, N)
 
-    real*8,dimension(Nx*Ny),intent(in) :: U
-    integer,intent(in)                 :: Nx, Ny, N
-    real*8, intent(in)                 :: dx, dy
-    integer                            :: i, j
-    character(len=20)                  :: F_NAME
+    integer,intent(in)                  :: Nx, Ny, N
+    real(8),dimension(Nx*Ny),intent(in) :: U
+    real(8), intent(in)                 :: dx, dy
+    integer                             :: i, j
+    character(len=20)                   :: F_NAME
 
     if (N<10) then
        F_NAME='fichier/T'
@@ -241,7 +241,7 @@ contains
 
     do i=1,Nx
        do j=1,Ny
-          write(2,*),i*dx,j*dy,U(bij(i,j,Ny))
+          write(2,*) i*dx, j*dy, U(bij(i,j,Ny))
        end do
        write(2,*)
     end do
