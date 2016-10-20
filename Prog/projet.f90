@@ -1,7 +1,7 @@
 program projet
   use sequentiel
   implicit none
-
+!lgdscvlsj
 integer::i,j,k
 
   call initialisation("param.dat")
