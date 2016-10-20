@@ -1,4 +1,4 @@
-PROG =	SHS
+PROG =	run
 
 SRCS =	donnees.f90 mod_preprocess.f90 mod_physique.f90 mod_fonction.f90 main.f90
 
