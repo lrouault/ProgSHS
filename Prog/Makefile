@@ -1,8 +1,8 @@
 PROG =	SHS
 
-SRCS =	donnees.f90 sequentiel.f90 projet.f90
+SRCS =	donnees.f90 mod_preprocess.f90 mod_physique.f90 mod_fonction.f90 main.f90
 
-OBJS =	donnees.o sequentiel.o projet.o
+OBJS =	donnees.o mod_preprocess.o mod_physique.o mod_fonction.o main.o
 
 LIBS =	
 
@@ -26,12 +26,13 @@ $(PROG): $(OBJS)
 	$(F90) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
 
 clean:
-	rm -f $(PROG) $(OBJS) *.mod
+	rm -f $(PROG) $(OBJS) *.mod *~ fichier/*
 
 .SUFFIXES: $(SUFFIXES) .f90
 
 .f90.o:
 	$(F90) $(F90FLAGS) -c $<
 
-sequentiel.o: donnees.o
-projet.o: sequentiel.o
+mod_preprocess.o: donnees.o mod_fonction.o
+mod_physique.o: donnees.o
+main.o: mod_fonction.o mod_physique.o mod_preprocess.o donnees.o
