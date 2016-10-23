@@ -14,7 +14,7 @@ module donnees
   real(PR)  :: Text, Tad
   real(PR)  :: rho, cp, lambda
   real(PR)  :: h
-  real(PR)  :: Ea, R, k0, Q, coef, tmp
+  real(PR)  :: Ea, R, k0, Q, coef
 
   ! Modele  
   real(PR), dimension(:), allocatable :: U, U0, V, Fm, eta, chi, eta0

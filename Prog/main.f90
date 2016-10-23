@@ -6,8 +6,10 @@ program main
 
   implicit none
 
-  integer::i,j,k
+  real(PR) :: tmp
+  integer  :: i,j,k
 
+  
   call initialisation("param.dat")
   call creation_matrice()
 
@@ -23,12 +25,12 @@ program main
 
   !*************Marche en temps*********************
   do k = 1,Niter
-    !..! print*, "BOUCLE : ",k !!!!!!!!!!!!!!!
+     !..! print*, "BOUCLE : ",k !!!!!!!!!!!!!!!
      t = k*dt
      do j=1,Ny
         U0(bij(1,j,Ny)) = min(Tad, Tad*(5*t/Tmax)+Text)
      end do
-    !..! print*,"Calc cd U0 : OK" !!!!!!!!!!!!
+     !..! print*,"Calc cd U0 : OK" !!!!!!!!!!!!
      ! Conditions limites :
      !******************définition de V****************
 
@@ -50,9 +52,10 @@ program main
      tmp = 0.
      do i = 1,size(eta)
         coef   = -Ea/(R*U0(i))
-        !..!print*,"coeff, k0",coef,k0,dt !!!!!!!!!!!!!!!!!!!!!!
+        if (coef<-700) coef=-700
+        !print*,"coeff, k0",coef,k0,dt !!!!!!!!!!!!!!!!!!!!!!
         eta(i) = (eta(i)+dt*k0*exp(coef)) / (1+k0*dt*exp(coef))
-        !..!print*,"eta",eta(i)
+        !print*,"eta",eta(i)
         tmp    = max(tmp, eta(i)-eta0(i))
         !..!print*, "tmp", tmp
         chi(i) = Q/Cp * (eta(i)-eta0(i))!k0*(1-eta(i))*exp(coef)/(1,77e+1)
