@@ -48,6 +48,7 @@ contains
     do i = 1,Ny
        U0(bij(1,i,Ny)) = (3.0/4) * Tad
     end do
+    U=U0
 
   end subroutine initialisation
 

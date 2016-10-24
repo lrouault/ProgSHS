@@ -39,5 +39,5 @@ cleanmodres:
 
 mod_fonction.o: donnees.o
 mod_preprocess.o: donnees.o mod_fonction.o
-mod_physique.o: donnees.o
+mod_physique.o: donnees.o mod_fonction.o
 main.o: mod_fonction.o mod_physique.o mod_preprocess.o donnees.o
