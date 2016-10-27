@@ -21,33 +21,35 @@ contains
     read(11,'(A7,F4.6)')  bfr, lambda ! "lambda"
 
     N       = Nx*Ny
-    Tmax    = 1000
+    Tmax    = 1000.
     Niter   = 10000
     Nmax    = n+1
-    epsilon = 1e-7
-    Text    = 298
-    Tad     = 2300.0
+    epsilon = 1.e-7
+    Text    = 298.
+    Tad     = 850 !2300.0
     h       = 10.0d+0
-    Ea      = 266547
+    Ea      = 266547.
     R       = 8.3144621d+0
-    k0      = 2.0e+4
-    Q       = 626e+3
+    k0      = 6.2e17 !2.0e+4
+    Q       = 287.e+3 !626e+3
 
-    dt = real(Tmax)/Niter
+    dt = 1.e-4 ! real(Tmax)/Niter
     dx = Lx/(Nx+1)
     dy = Ly/(Ny+1)
 
     allocate(U(N), V(N), U0(N), eta(N), chi(N))
+    allocate(alpha(Nx*Ny), beta((Nx-1)*Ny), gamma(Nx*(Ny-1)))
 
     V   = 0
     eta = 0
 
     ! Conditions initiales
 
-    U0 = Text
-    do i = 1,Ny
-       U0(bij(1,i,Ny)) = (3.0/4) * Tad
-    end do
+    U0 = 298.
+    !do i = 1,Ny
+    !   U0(bij(1,i,Ny)) = (3.0/4) * Tad
+    !end do
+    U=U0
 
   end subroutine initialisation
 

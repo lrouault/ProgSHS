@@ -27,10 +27,10 @@ $(PROG): $(OBJS)
 	make cleanmodres
 
 clean:
-	rm -f $(PROG) $(OBJS) *.mod *~ fichier/*
+	rm -f $(PROG) $(OBJS) *.mod *~ fichier/*.dat
 
 cleanmodres:
-	rm -f $(OBJS) *.mod *~ fichier/*
+	rm -f $(OBJS) *.mod *~ fichier/*.dat
 
 .SUFFIXES: $(SUFFIXES) .f90
 
@@ -39,5 +39,5 @@ cleanmodres:
 
 mod_fonction.o: donnees.o
 mod_preprocess.o: donnees.o mod_fonction.o
-mod_physique.o: donnees.o
+mod_physique.o: donnees.o mod_fonction.o
 main.o: mod_fonction.o mod_physique.o mod_preprocess.o donnees.o
