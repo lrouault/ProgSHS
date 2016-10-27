@@ -5,12 +5,12 @@ module mod_fonction
 
 contains
 
-  function bij(i, j, Ny)
+  function bij(i, j, Nx)
 
-    integer,intent(in) :: i, j, Ny
+    integer,intent(in) :: i, j, Nx
     integer            :: bij
 
-    bij=(j-1)*Ny+i
+    bij=(j-1)*Nx+i
 
   end function bij
 
@@ -230,9 +230,9 @@ contains
 
     open(unit=2, file=F_NAME, action="write")
 
-    do i=1,Ny
+    do i=1,Nx
        do j=1,Ny
-          write(2,*) i*dx, j*dy, U(bij(i,j,Ny)), eta(bij(i,j,Ny))
+          write(2,*) i*dx, j*dy, U(bij(i,j,Nx)), eta(bij(i,j,Nx))
        end do
        write(2,*)
     end do
@@ -258,7 +258,7 @@ contains
 
     real(PR),dimension(Nx*Ny) :: residu,p
     real(PR)                  :: norm_prec_c,norm_c,norm0_c,App
-    integer                 :: n,nb_iter
+    integer                   :: n,nb_iter
 
     ! Initialisation des variables
     n=Nx*Ny
@@ -351,7 +351,7 @@ contains
     norm=0
 
     do i=1,n
-       norm= norm+x(i)**2
+       norm = norm+x(i)**2
     end do
   end subroutine norme_carre
 end module mod_fonction

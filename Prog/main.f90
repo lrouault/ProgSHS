@@ -19,7 +19,7 @@ program main
   !h=h*dt/(Ly*rho*cp) ! h=1.0e-2
   !print*,'h',h
 
-
+  write(*,*) dx*(Nx+1),dx,Nx
   !*************Marche en temps*********************
   do k = 1,Niter
      t = k*dt

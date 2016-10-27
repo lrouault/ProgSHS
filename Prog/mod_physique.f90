@@ -22,16 +22,19 @@ contains
     integer :: i,j
     V = 0
     do j = 1,Ny
-       V(bij(1,j,Ny)) =2000*(lambda*dt)/(dx**2)
-       !   V(bij(1,j,Ny)) = -c*Tad + V(bij(1,j,Ny))!-c*min(Tad,Tad*(500*t/Tmax))+V(bij(1,j,Ny))
-       !   V(bij(Nx,j,Ny)) = 1000  *b*dy !-c*Text + V(bij(Nx,j,Ny))!-h*dt/(rho*cp*Lx)*(U0(bij(Nx,j,Ny))-Text)
+       V(bij(1,j,Nx)) = V(bij(1,j,Nx)) + 2000*(lambda*dt)/(dx**2)
+       V(bij(Nx,j,Nx)) = V(bij(Nx,j,Nx)) + U(bij(Nx,j,Nx))*(lambda*dt)/(dx**2)
+       !   V(bij(1,j,Nx)) = -c*Tad + V(bij(1,j,Nx))!-c*min(Tad,Tad*(500*t/Tmax))+V(bij(1,j,Nx))
+       !   V(bij(Nx,j,Nx)) = 1000  *b*dy !-c*Text + V(bij(Nx,j,Nx))!-h*dt/(rho*cp*Lx)*(U0(bij(Nx,j,Nx))-Text)
     end do
 
     do i = 1,Nx
-       !   V(bij(i,1,Ny))  =- 1000  
-       !   V(bij(i,Ny,Ny))  =- 1000  *c*dy
-       !V(bij(i,1,Ny)) = +V(bij(i,1,Ny)) - 10*(U(bij(i,1,Ny))-Text)!+V(bij(i,1,Ny))!-b*Text+V(bij(i,1,Ny))
-       !V(bij(i,Ny,Ny)) = +V(bij(i,Ny,Ny)) - 10*(U(bij(i,Ny,Ny))-Text)!+V(bij(i,Ny,Ny))-b*Text+V(bij(i,Ny,Ny))
+       V(bij(i,1,Nx)) =V(bij(i,1,Nx)) + U(bij(i,1,Nx))*(lambda*dt)/(dy**2)
+       V(bij(i,Ny,Nx)) =V(bij(i,Ny,Nx)) + U(bij(i,Ny,Nx))*(lambda*dt)/(dy**2)
+       !   V(bij(i,1,Nx))  =- 1000  
+       !   V(bij(i,Ny,Nx))  =- 1000  *c*dy
+       !V(bij(i,1,Nx)) = +V(bij(i,1,Nx)) - 10*(U(bij(i,1,Nx))-Text)!+V(bij(i,1,Nx))!-b*Text+V(bij(i,1,Nx))
+       !V(bij(i,Ny,Nx)) = +V(bij(i,Ny,Nx)) - 10*(U(bij(i,Ny,Nx))-Text)!+V(bij(i,Ny,Nx))-b*Text+V(bij(i,Ny,Nx))
     end do
 
   end subroutine cd_limite
@@ -51,7 +54,7 @@ contains
        !print*,"eta",eta(i)
        tmp    = max(tmp, eta(i)-eta0(i))
        !..!print*, "tmp", tmp
-       chi(i) = Q/Cp * (eta(i)-eta0(i)) !k0*(1-eta(i))*exp(coef)/(1,77e+1)
+       chi(i) = rho * Q * (eta(i)-eta0(i)) !k0*(1-eta(i))*exp(coef)/(1,77e+1)
     end do
 
   end subroutine eq_arrhenius

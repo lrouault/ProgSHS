@@ -45,7 +45,7 @@ contains
 
     ! Conditions initiales
 
-    U0 = 1000
+    U0 = 298.
     !do i = 1,Ny
     !   U0(bij(1,i,Ny)) = (3.0/4) * Tad
     !end do
