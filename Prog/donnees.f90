@@ -19,6 +19,9 @@ module donnees
   ! Modele  
   real(PR), dimension(:), allocatable :: U, U0, V, Fm, eta, chi, eta0
   real(PR)                            :: D, a, b, c, epsilon
+    real(PR),dimension(:),allocatable :: alpha
+    real(PR),dimension(:),allocatable :: beta
+    real(PR),dimension(:),allocatable :: gamma
 
 contains
 

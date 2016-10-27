@@ -10,79 +10,79 @@ contains
     integer,intent(in) :: i, j, Ny
     integer            :: bij
 
-    bij=Ny*(i-1)+j
+    bij=(j-1)*Ny+i
 
   end function bij
 
   !*******************************************************!
   !*******************************************************!
-
-  subroutine gradc(a, b, c, epsilon, Niter, X, V)
-
-    real(PR), intent(in)                      :: a, b, c, epsilon
-    integer, intent(in)                     :: Niter
-    real(PR), dimension(:), intent(in)        :: V
-    real(PR), dimension(size(V)), intent(out) :: X
-    real(PR), dimension(size(V))              :: R, D, W
-    real(PR)                                  :: alpha, beta
-    integer                                 :: iter
-
-    X = 10
-    call prod_mat_vec(a, b, c, X, R)
-    R    = R - V
-    D    = R
-    iter = 1
-
-    do while ((norme(R)>epsilon).AND.(iter<Niter))
-
-       call prod_mat_vec(a, b, c, D, W)
-       alpha = dot_product(D,R) / dot_product(D,W)
-       X=X-alpha*D
-
-       beta = 1 / (norme(R)**2)
-       R    = R - alpha*W
-       beta = beta * norme(R)**2
-
-       D = R + beta*D
-       iter = iter + 1
-       !print*,'iter',iter
-       
-    end do
-
-  end subroutine gradc
-
-  !*******************************************************!
-  !*******************************************************!
-
-  subroutine prod_mat_vec(a, b, c, x, y)
-
-
-    real(PR), intent(in)::a,b,c
-    real(PR), intent(in), dimension(Nx*Ny)::x
-    real(PR), intent(inout), dimension(Nx*Ny)::y
-    integer::i,j
-    
-    ! 1er bloc
-    y(bij(1,1,Ny)) = (a-b)*x(bij(1,1,Ny))+b*x(bij(1,2,Ny))+c*x(bij(2,1,Ny))
-    do j = 2, Ny-1
-       y(bij(1,j,Ny)) = b*x(bij(1,j-1,Ny))+a*x(bij(1,j,Ny))+b*x(bij(1,j+1,Ny))+c*x(bij(2,j,Ny))
-    end do
-    y(bij(1,Ny,Ny)) = b*x(bij(1,Ny-1,Ny))+(a-b)*x(bij(1,Ny,Ny))+c*x(bij(2,Ny,Ny))
-    ! Milieu Matrice
-    do i = 2, Nx-1
-       y(bij(i,1,Ny)) = c*x(bij(i-1,1,Ny))+(a-b)*x(bij(i,1,Ny))+b*x(bij(i,2,Ny))+c*x(bij(i+1,1,Ny))
-       do j = 2, Ny-1
-          y(bij(i,j,Ny)) = c*x(bij(i-1,j,Ny))+b*x(bij(i,j-1,Ny))+a*x(bij(i,j,Ny))+b*x(bij(i,j+1,Ny))+c*x(bij(i+1,j,Ny))
-       end do
-       y(bij(i,Ny,Ny)) = c*x(bij(i-1,Ny,Ny))+b*x(bij(i,Ny-1,Ny))+(a-b)*x(bij(i,Ny,Ny))+c*x(bij(i+1,Ny,Ny))
-    end do
-    ! Dernier bloc
-    y(bij(Nx,1,Ny)) = c*x(bij(Nx-1,1,Ny))+(a-b)*x(bij(Nx,1,Ny))+b*x(bij(Nx,2,Ny))
-    do j = 2, Ny-1
-       y(bij(Nx,j,Ny)) = c*x(bij(Nx-1,j,Ny))+b*x(bij(Nx,j-1,Ny))+a*x(bij(Nx,j,Ny))+b*x(bij(Nx,j+1,Ny))
-    end do
-    y(bij(Nx,Ny,Ny)) = c*x(bij(Nx-1,Ny,Ny))+b*x(bij(Nx,Ny-1,Ny))+(a-b)*x(bij(Nx,Ny,Ny))
-  end subroutine prod_mat_vec
+!!$
+!!$  subroutine gradc(a, b, c, epsilon, Niter, X, V)
+!!$
+!!$    real(PR), intent(in)                      :: a, b, c, epsilon
+!!$    integer, intent(in)                     :: Niter
+!!$    real(PR), dimension(:), intent(in)        :: V
+!!$    real(PR), dimension(size(V)), intent(out) :: X
+!!$    real(PR), dimension(size(V))              :: R, D, W
+!!$    real(PR)                                  :: alpha, beta
+!!$    integer                                 :: iter
+!!$
+!!$    X = 10
+!!$    call prod_mat_vec(a, b, c, X, R)
+!!$    R    = R - V
+!!$    D    = R
+!!$    iter = 1
+!!$
+!!$    do while ((norme(R)>epsilon).AND.(iter<Niter))
+!!$
+!!$       call prod_mat_vec(a, b, c, D, W)
+!!$       alpha = dot_product(D,R) / dot_product(D,W)
+!!$       X=X-alpha*D
+!!$
+!!$       beta = 1 / (norme(R)**2)
+!!$       R    = R - alpha*W
+!!$       beta = beta * norme(R)**2
+!!$
+!!$       D = R + beta*D
+!!$       iter = iter + 1
+!!$       !print*,'iter',iter
+!!$       
+!!$    end do
+!!$
+!!$  end subroutine gradc
+!!$
+!!$  !*******************************************************!
+!!$  !*******************************************************!
+!!$
+!!$  subroutine prod_mat_vec(a, b, c, x, y)
+!!$
+!!$
+!!$    real(PR), intent(in)::a,b,c
+!!$    real(PR), intent(in), dimension(Nx*Ny)::x
+!!$    real(PR), intent(inout), dimension(Nx*Ny)::y
+!!$    integer::i,j
+!!$    
+!!$    ! 1er bloc
+!!$    y(bij(1,1,Ny)) = (a-b)*x(bij(1,1,Ny))+b*x(bij(1,2,Ny))+c*x(bij(2,1,Ny))
+!!$    do j = 2, Ny-1
+!!$       y(bij(1,j,Ny)) = b*x(bij(1,j-1,Ny))+a*x(bij(1,j,Ny))+b*x(bij(1,j+1,Ny))+c*x(bij(2,j,Ny))
+!!$    end do
+!!$    y(bij(1,Ny,Ny)) = b*x(bij(1,Ny-1,Ny))+(a-b)*x(bij(1,Ny,Ny))+c*x(bij(2,Ny,Ny))
+!!$    ! Milieu Matrice
+!!$    do i = 2, Nx-1
+!!$       y(bij(i,1,Ny)) = c*x(bij(i-1,1,Ny))+(a-b)*x(bij(i,1,Ny))+b*x(bij(i,2,Ny))+c*x(bij(i+1,1,Ny))
+!!$       do j = 2, Ny-1
+!!$          y(bij(i,j,Ny)) = c*x(bij(i-1,j,Ny))+b*x(bij(i,j-1,Ny))+a*x(bij(i,j,Ny))+b*x(bij(i,j+1,Ny))+c*x(bij(i+1,j,Ny))
+!!$       end do
+!!$       y(bij(i,Ny,Ny)) = c*x(bij(i-1,Ny,Ny))+b*x(bij(i,Ny-1,Ny))+(a-b)*x(bij(i,Ny,Ny))+c*x(bij(i+1,Ny,Ny))
+!!$    end do
+!!$    ! Dernier bloc
+!!$    y(bij(Nx,1,Ny)) = c*x(bij(Nx-1,1,Ny))+(a-b)*x(bij(Nx,1,Ny))+b*x(bij(Nx,2,Ny))
+!!$    do j = 2, Ny-1
+!!$       y(bij(Nx,j,Ny)) = c*x(bij(Nx-1,j,Ny))+b*x(bij(Nx,j-1,Ny))+a*x(bij(Nx,j,Ny))+b*x(bij(Nx,j+1,Ny))
+!!$    end do
+!!$    y(bij(Nx,Ny,Ny)) = c*x(bij(Nx-1,Ny,Ny))+b*x(bij(Nx,Ny-1,Ny))+(a-b)*x(bij(Nx,Ny,Ny))
+!!$  end subroutine prod_mat_vec
 
   !*******************************************************!
   !*******************************************************!
@@ -230,9 +230,9 @@ contains
 
     open(unit=2, file=F_NAME, action="write")
 
-    do i=1,Nx
+    do i=1,Ny
        do j=1,Ny
-          write(2,*) i*dx, j*dy, U(bij(i,j,Ny))
+          write(2,*) i*dx, j*dy, U(bij(i,j,Ny)), eta(bij(i,j,Ny))
        end do
        write(2,*)
     end do
@@ -243,4 +243,115 @@ contains
 
   end subroutine printvector
 
+
+  !*******************************************************!
+  !*******************************************************!
+  !*******************************************************!
+  !*******************************************************!
+
+
+  subroutine Gradient_conjugue(X,b,eps)
+    implicit none
+    real(PR),dimension(Nx*Ny),intent(inout) :: x
+    real(PR),dimension(Nx*Ny),intent(in)    :: b
+    real(PR),intent(in)                     :: eps   
+
+    real(PR),dimension(Nx*Ny) :: residu,p
+    real(PR)                  :: norm_prec_c,norm_c,norm0_c,App
+    integer                 :: n,nb_iter
+
+    ! Initialisation des variables
+    n=Nx*Ny
+
+    x=0
+
+    residu=b-Matmula(Nx,Ny,x)
+    call norme_carre(residu,norm_c)
+    norm_prec_c=norm_c
+    norm0_c = norm_c
+    p=residu
+
+    ! Boucle 
+    nb_iter=0
+    do while ((sqrt(norm_c/norm0_c) >=  eps).and.(nb_iter<10000))
+
+       call prod_scal(Matmula(Nx,Ny,p),p,App)
+       x=x+(norm_c/App)*p
+       residu=residu-(norm_c/App)*Matmula(Nx,Ny,p)
+       call norme_carre(residu,norm_c)    
+       p=residu+(norm_c/norm_prec_c)*p
+
+       norm_prec_c=norm_c
+       nb_iter=nb_iter+1
+    end do
+
+    ! print*,"nb_iter",nb_iter
+    ! print*,"norme_res",sqrt(norm_c/norm0_c)
+
+  end subroutine Gradient_conjugue
+
+
+
+  function Matmula(Nx,Ny,U) 
+    implicit none
+    integer::Nx,Ny
+    real(PR),dimension(Nx*Ny) :: U,Matmula
+
+    integer:: i,j,k
+    Matmula=0
+    do j= 1,Ny
+       do i=1,Nx
+          k=(j-1)*Nx+i
+          ! gamma gauche
+          if(j/=1)then
+             Matmula(k)=Matmula(k)+gamma(k-Nx)*U(k-Nx)  !!
+          end if
+          ! beta gauche
+          if(i/=1)then
+             Matmula(k)=Matmula(k)+beta(k-j)*U(k-1)    !!
+          end if
+          ! alpha
+          Matmula(k)=Matmula(k)+alpha(k)*U(k)
+          ! beta droite
+          if(i/=Nx)then        
+             Matmula(k)=Matmula(k)+beta(k-j+1)*U(k+1)    !!
+          end if
+          ! gamma droite
+          if(j/=Ny)then        
+             Matmula(k)=Matmula(k)+gamma(k)*U(k+Nx)  !!
+          end if
+       end do
+    end do
+  end function Matmula
+
+  subroutine prod_scal(x,y,p) 
+    implicit none
+
+    real(PR),dimension(:), intent(in):: x,y
+    real(PR),intent(out):: p
+    integer:: i,n
+
+    n=size(x)
+    p=0
+
+    do i=1,n
+       p=p+x(i)*y(i)
+    end do
+
+  end subroutine prod_scal
+
+
+  subroutine norme_carre(x,norm)
+    implicit none
+    real(PR), dimension(:),intent(in)::x
+    real(PR),intent(out)::norm
+    integer:: i,n
+
+    n=size(x)
+    norm=0
+
+    do i=1,n
+       norm= norm+x(i)**2
+    end do
+  end subroutine norme_carre
 end module mod_fonction

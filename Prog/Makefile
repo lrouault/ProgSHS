@@ -27,10 +27,10 @@ $(PROG): $(OBJS)
 	make cleanmodres
 
 clean:
-	rm -f $(PROG) $(OBJS) *.mod *~ fichier/*
+	rm -f $(PROG) $(OBJS) *.mod *~ fichier/*.dat
 
 cleanmodres:
-	rm -f $(OBJS) *.mod *~ fichier/*
+	rm -f $(OBJS) *.mod *~ fichier/*.dat
 
 .SUFFIXES: $(SUFFIXES) .f90
 

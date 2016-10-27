@@ -13,24 +13,25 @@ program main
   call creation_matrice()
 
   print *, "rho cp lambda dt Tad",rho,cp,lambda,dt,Tad
-  
+
   call printvector(U0,0)
 
-  h=h*dt/(Ly*rho*cp) ! h=1.0e-2
-  print*,'h',h
+  !h=h*dt/(Ly*rho*cp) ! h=1.0e-2
+  !print*,'h',h
 
 
   !*************Marche en temps*********************
   do k = 1,Niter
      t = k*dt
-     
-     do j=1,Ny
-        U0(bij(1,j,Ny)) = min(Tad, Tad*(5*t/Tmax)+Text)
-     end do
+
+     !do j=1,Ny
+     !   U0(bij(1,j,Ny)) = min(Tad, Tad*(5*t/Tmax)+Text)
+     !end do
+
 
      call cd_limite()
      call eq_arrhenius()
-     call gradc(a, b, c, epsilon, Nmax, U, U0+V) !+chi
+     call Gradient_conjugue(U, rho*cp*U0+V+chi,epsilon) !V+chi
 
      !~ do i=1,size(U)
      !~ 	if(U(i)>=Tad)then      
@@ -41,7 +42,7 @@ program main
      if(modulo(k,100) == 0) then
         call printvector(U, k/100)
      end if
-     
+
      U0 = U
 
   end do
