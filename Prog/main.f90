@@ -25,7 +25,7 @@ program main
      t = k*dt
 
      !do j=1,Ny
-     !   U0(bij(1,j,Ny)) = min(Tad, Tad*(5*t/Tmax)+Text)
+     !   U0(bij(1,j,Ny)) = min(Tad, Text+Tad*t)
      !end do
 
 

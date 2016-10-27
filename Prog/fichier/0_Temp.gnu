@@ -1,4 +1,4 @@
-set xrange[0:0.1]
+set xrange[0:0.01]
 set yrange[0:0.01]
 
 set zrange[0:2000]

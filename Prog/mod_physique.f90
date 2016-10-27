@@ -22,7 +22,7 @@ contains
     integer :: i,j
     V = 0
     do j = 1,Ny
-       V(bij(1,j,Nx)) = V(bij(1,j,Nx)) + 2000*(lambda*dt)/(dx**2)
+       V(bij(1,j,Nx)) = V(bij(1,j,Nx)) +  min(Tad, 2*Text+Tad*t)*(lambda*dt)/(dx**2)
        V(bij(Nx,j,Nx)) = V(bij(Nx,j,Nx)) + U(bij(Nx,j,Nx))*(lambda*dt)/(dx**2)
        !   V(bij(1,j,Nx)) = -c*Tad + V(bij(1,j,Nx))!-c*min(Tad,Tad*(500*t/Tmax))+V(bij(1,j,Nx))
        !   V(bij(Nx,j,Nx)) = 1000  *b*dy !-c*Text + V(bij(Nx,j,Nx))!-h*dt/(rho*cp*Lx)*(U0(bij(Nx,j,Nx))-Text)

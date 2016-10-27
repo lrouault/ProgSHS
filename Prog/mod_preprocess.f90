@@ -26,14 +26,14 @@ contains
     Nmax    = n+1
     epsilon = 1.e-7
     Text    = 298.
-    Tad     = 2300.0
+    Tad     = 850 !2300.0
     h       = 10.0d+0
     Ea      = 266547.
     R       = 8.3144621d+0
-    k0      = 2.0e+4
-    Q       = 626.e+3 !!626e+3
+    k0      = 6.2e17 !2.0e+4
+    Q       = 287.e+3 !626e+3
 
-    dt = real(Tmax)/Niter
+    dt = 1.e-4 ! real(Tmax)/Niter
     dx = Lx/(Nx+1)
     dy = Ly/(Ny+1)
 
