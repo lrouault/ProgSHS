@@ -194,7 +194,7 @@ contains
 
     ! Boucle 
     nb_iter=0
-    do while ((sqrt(norm_c/norm0_c) >=  eps).and.(nb_iter<10000))
+    do while ((norm_c/norm0_c >=  eps).and.(nb_iter<10000))
 
        call prod_scal(Matmula(Nx,Ny,p),p,App)
        x=x+(norm_c/App)*p
@@ -207,7 +207,6 @@ contains
     end do
 
   end subroutine Gradient_conjugue
-
 
 
   function Matmula(Nx,Ny,U) 

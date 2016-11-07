@@ -6,8 +6,7 @@ program main
 
   implicit none
 
-  integer  :: i,j,k
-
+  integer  :: i,j,k,iter
 
   call initialisation("param.dat")
   call creation_matrice()
@@ -16,37 +15,32 @@ program main
 
   call printvector(U0,0)
 
-  !h=h*dt/(Ly*rho*cp) ! h=1.0e-2
-  !print*,'h',h
+  flux=12000000.*2
 
   write(*,*) dx*(Nx+1),dx,Nx
   !*************Marche en temps*********************
-  do k = 1,Niter
-     t = k*dt
+  iter=0
+  Niter = nint(tmax/dt)
+  !do k = 1,Niter
+  do while(time<tmax)  
+     time = time + dt
+     iter=iter+1
 
-     !do j=1,Ny
-     !   U0(bij(1,j,Ny)) = min(Tad, Text+Tad*t)
-     !end do
+     call second_membre()
+     call Gradient_conjugue(U,rhs,epsilon) !V+chi
 
+     if(eta((Ny/2)*Nx+2)==1.)then
+        flux = 0.
+     end if
 
-     call cd_limite()
-     call eq_arrhenius()
-     call Gradient_conjugue(U, rho*cp*U0+V+chi,epsilon) !V+chi
-
-     !~ do i=1,size(U)
-     !~ 	if(U(i)>=Tad)then      
-     !~ 		U(i)=U(i)
-     !~ 	end if
-     !~ end do
-
-     if(modulo(k,100) == 0) then
-        call printvector(U, k/100)
+     if(modulo(iter*nb_fichiers,Niter) == 0) then
+        call printvector(U, iter*nb_fichiers/Niter)
      end if
 
      U0 = U
 
   end do
-
+  
   call fin()
 
 end program main
