@@ -47,4 +47,6 @@ program main
 
   end do
 
+  call fin()
+
 end program main
