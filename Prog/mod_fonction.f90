@@ -302,23 +302,23 @@ contains
     do j= 1,Ny
        do i=1,Nx
           k=(j-1)*Nx+i
-          ! gamma gauche
+          ! Cy gauche
           if(j/=1)then
-             Matmula(k)=Matmula(k)+gamma(k-Nx)*U(k-Nx)  !!
+             Matmula(k)=Matmula(k)+Cy(k-Nx)*U(k-Nx)  !!
           end if
-          ! beta gauche
+          ! Cx gauche
           if(i/=1)then
-             Matmula(k)=Matmula(k)+beta(k-j)*U(k-1)    !!
+             Matmula(k)=Matmula(k)+Cx(k-j)*U(k-1)    !!
           end if
-          ! alpha
-          Matmula(k)=Matmula(k)+alpha(k)*U(k)
-          ! beta droite
+          ! Cd
+          Matmula(k)=Matmula(k)+Cd(k)*U(k)
+          ! Cx droite
           if(i/=Nx)then        
-             Matmula(k)=Matmula(k)+beta(k-j+1)*U(k+1)    !!
+             Matmula(k)=Matmula(k)+Cx(k-j+1)*U(k+1)    !!
           end if
-          ! gamma droite
+          ! Cy droite
           if(j/=Ny)then        
-             Matmula(k)=Matmula(k)+gamma(k)*U(k+Nx)  !!
+             Matmula(k)=Matmula(k)+Cy(k)*U(k+Nx)  !!
           end if
        end do
     end do

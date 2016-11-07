@@ -38,7 +38,7 @@ contains
     dy = Ly/(Ny+1)
 
     allocate(U(N), V(N), U0(N), eta(N), chi(N))
-    allocate(alpha(Nx*Ny), beta((Nx-1)*Ny), gamma(Nx*(Ny-1)))
+    allocate(Cd(Nx*Ny), Cx((Nx-1)*Ny), Cy(Nx*(Ny-1)))
 
     V   = 0
     eta = 0
