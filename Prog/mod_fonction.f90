@@ -5,85 +5,6 @@ module mod_fonction
 
 contains
 
-  function bij(i, j, Nx)
-
-    integer,intent(in) :: i, j, Nx
-    integer            :: bij
-
-    bij=(j-1)*Nx+i
-
-  end function bij
-
-  !*******************************************************!
-  !*******************************************************!
-!!$
-!!$  subroutine gradc(a, b, c, epsilon, Niter, X, V)
-!!$
-!!$    real(PR), intent(in)                      :: a, b, c, epsilon
-!!$    integer, intent(in)                     :: Niter
-!!$    real(PR), dimension(:), intent(in)        :: V
-!!$    real(PR), dimension(size(V)), intent(out) :: X
-!!$    real(PR), dimension(size(V))              :: R, D, W
-!!$    real(PR)                                  :: alpha, beta
-!!$    integer                                 :: iter
-!!$
-!!$    X = 10
-!!$    call prod_mat_vec(a, b, c, X, R)
-!!$    R    = R - V
-!!$    D    = R
-!!$    iter = 1
-!!$
-!!$    do while ((norme(R)>epsilon).AND.(iter<Niter))
-!!$
-!!$       call prod_mat_vec(a, b, c, D, W)
-!!$       alpha = dot_product(D,R) / dot_product(D,W)
-!!$       X=X-alpha*D
-!!$
-!!$       beta = 1 / (norme(R)**2)
-!!$       R    = R - alpha*W
-!!$       beta = beta * norme(R)**2
-!!$
-!!$       D = R + beta*D
-!!$       iter = iter + 1
-!!$       !print*,'iter',iter
-!!$       
-!!$    end do
-!!$
-!!$  end subroutine gradc
-!!$
-!!$  !*******************************************************!
-!!$  !*******************************************************!
-!!$
-!!$  subroutine prod_mat_vec(a, b, c, x, y)
-!!$
-!!$
-!!$    real(PR), intent(in)::a,b,c
-!!$    real(PR), intent(in), dimension(Nx*Ny)::x
-!!$    real(PR), intent(inout), dimension(Nx*Ny)::y
-!!$    integer::i,j
-!!$    
-!!$    ! 1er bloc
-!!$    y(bij(1,1,Ny)) = (a-b)*x(bij(1,1,Ny))+b*x(bij(1,2,Ny))+c*x(bij(2,1,Ny))
-!!$    do j = 2, Ny-1
-!!$       y(bij(1,j,Ny)) = b*x(bij(1,j-1,Ny))+a*x(bij(1,j,Ny))+b*x(bij(1,j+1,Ny))+c*x(bij(2,j,Ny))
-!!$    end do
-!!$    y(bij(1,Ny,Ny)) = b*x(bij(1,Ny-1,Ny))+(a-b)*x(bij(1,Ny,Ny))+c*x(bij(2,Ny,Ny))
-!!$    ! Milieu Matrice
-!!$    do i = 2, Nx-1
-!!$       y(bij(i,1,Ny)) = c*x(bij(i-1,1,Ny))+(a-b)*x(bij(i,1,Ny))+b*x(bij(i,2,Ny))+c*x(bij(i+1,1,Ny))
-!!$       do j = 2, Ny-1
-!!$          y(bij(i,j,Ny)) = c*x(bij(i-1,j,Ny))+b*x(bij(i,j-1,Ny))+a*x(bij(i,j,Ny))+b*x(bij(i,j+1,Ny))+c*x(bij(i+1,j,Ny))
-!!$       end do
-!!$       y(bij(i,Ny,Ny)) = c*x(bij(i-1,Ny,Ny))+b*x(bij(i,Ny-1,Ny))+(a-b)*x(bij(i,Ny,Ny))+c*x(bij(i+1,Ny,Ny))
-!!$    end do
-!!$    ! Dernier bloc
-!!$    y(bij(Nx,1,Ny)) = c*x(bij(Nx-1,1,Ny))+(a-b)*x(bij(Nx,1,Ny))+b*x(bij(Nx,2,Ny))
-!!$    do j = 2, Ny-1
-!!$       y(bij(Nx,j,Ny)) = c*x(bij(Nx-1,j,Ny))+b*x(bij(Nx,j-1,Ny))+a*x(bij(Nx,j,Ny))+b*x(bij(Nx,j+1,Ny))
-!!$    end do
-!!$    y(bij(Nx,Ny,Ny)) = c*x(bij(Nx-1,Ny,Ny))+b*x(bij(Nx,Ny-1,Ny))+(a-b)*x(bij(Nx,Ny,Ny))
-!!$  end subroutine prod_mat_vec
-
   !*******************************************************!
   !*******************************************************!
 
@@ -182,7 +103,7 @@ contains
              write(2,'(/)',advance='no')
           end if
           s = ""
-          write(s,'(F20.10)')         U(bij(i,j,Ny))
+          write(s,'(F20.10)')         U((j-1)*Nx+i)
           write(2,'(a)',advance='no') adjustl(trim(s)) // " "
 
        end do
@@ -217,9 +138,9 @@ contains
        write(F_NAME (10:12),'(I3)') Num
        F_NAME(13:16)= '.dat'
 
-    else if ((N>=1000).and.(N<10000)) then
+    else if ((Num>=1000).and.(Num<10000)) then
        F_NAME='fichier/T'
-       write(F_NAME (10:13),'(I4)') N
+       write(F_NAME (10:13),'(I4)') Num
        F_NAME(14:17)= '.dat'
 
     else if ((Num>=10000).and.(Num<100000)) then
@@ -232,7 +153,7 @@ contains
 
     do i=1,Nx
        do j=1,Ny
-          write(2,*) i*dx, j*dy, U(bij(i,j,Nx)), eta(bij(i,j,Nx))
+          write(2,*) i*dx, j*dy, U((j-1)*Nx+i), eta((j-1)*Nx+i)
        end do
        write(2,*)
     end do
@@ -285,9 +206,6 @@ contains
        nb_iter=nb_iter+1
     end do
 
-    ! print*,"nb_iter",nb_iter
-    ! print*,"norme_res",sqrt(norm_c/norm0_c)
-
   end subroutine Gradient_conjugue
 
 
@@ -296,8 +214,8 @@ contains
     implicit none
     integer::Nx,Ny
     real(PR),dimension(Nx*Ny) :: U,Matmula
-
     integer:: i,j,k
+    
     Matmula=0
     do j= 1,Ny
        do i=1,Nx

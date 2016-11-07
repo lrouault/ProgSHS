@@ -20,7 +20,6 @@ contains
     read(11,'(A3,F10.6)') bfr, cp     ! "cp="
     read(11,'(A7,F4.6)')  bfr, lambda ! "lambda"
 
-    N       = Nx*Ny
     Tmax    = 1000.
     Niter   = 10000
     Nmax    = n+1
@@ -33,11 +32,11 @@ contains
     k0      = 6.2e17 !2.0e+4
     Q       = 287.e+3 !626e+3
 
-    dt = 1.e-4 ! real(Tmax)/Niter
+    dt = 1.e-4 
     dx = Lx/(Nx+1)
     dy = Ly/(Ny+1)
 
-    allocate(U(N), V(N), U0(N), eta(N), chi(N))
+    allocate(U(Nx*Ny), V(Nx*Ny), U0(Nx*Ny), eta(Nx*Ny), chi(Nx*Ny))
     allocate(Cd(Nx*Ny), Cx((Nx-1)*Ny), Cy(Nx*(Ny-1)))
 
     V   = 0
