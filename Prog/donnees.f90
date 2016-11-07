@@ -5,8 +5,8 @@ module donnees
   integer, parameter :: PR=Selected_real_kind(12,60) !12,60
 
   ! Maillage
-  integer   :: N, Nx, Ny
-  integer   :: Niter, Nmax, Ndisplay
+  integer   :: Nx, Ny
+  integer   :: Niter, Ndisplay
   real(PR)  :: Lx, Ly, dx, dy, x, y
   real(PR)  :: time, dt, tmax
 

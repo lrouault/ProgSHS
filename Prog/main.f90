@@ -21,12 +21,13 @@ program main
   !*************Marche en temps*********************
   iter=0
   Niter = nint(tmax/dt)
-  !do k = 1,Niter
+  
   do while(time<tmax)  
      time = time + dt
      iter=iter+1
 
-     call second_membre()
+     rhs = rho*Cp*U + rho*Q*eq_arrhenius() + cd_lim()
+     
      call Gradient_conjugue(U,rhs,epsilon) !V+chi
 
      if(eta((Ny/2)*Nx+2)==1.)then
@@ -36,8 +37,6 @@ program main
      if(modulo(iter*nb_fichiers,Niter) == 0) then
         call printvector(U, iter*nb_fichiers/Niter)
      end if
-
-     U0 = U
 
   end do
   
