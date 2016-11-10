@@ -177,29 +177,32 @@ contains
     real(PR),dimension(Nx*Ny),intent(in)    :: b
     real(PR),intent(in)                     :: eps   
 
-    real(PR),dimension(Nx*Ny) :: residu,p
-    real(PR)                  :: norm_prec_c,norm_c,norm0_c,App
+    real(PR),dimension(Nx*Ny) :: residu,p,Ap
+    real(PR)                  :: norm_prec_c,norm_c,norm0_c,App,err
     integer                   :: n,nb_iter
 
     ! Initialisation des variables
     n=Nx*Ny
 
-    x=0
-
+    !x=0
+    
     residu=b-Matmula(Nx,Ny,x)
-    call norme_carre(residu,norm_c)
+    norm_c = dot_product(residu,residu)
     norm_prec_c=norm_c
     norm0_c = norm_c
     p=residu
 
+    err = eps*norm0_c !norm_c/norm0_c >= eps
+
     ! Boucle 
     nb_iter=0
-    do while ((norm_c/norm0_c >=  eps).and.(nb_iter<10000))
+    do while ((norm_c >=  err).and.(nb_iter<10000))
 
-       call prod_scal(Matmula(Nx,Ny,p),p,App)
+       Ap = Matmula(Nx,Ny,p)
+       App = dot_product(Ap,p)
        x=x+(norm_c/App)*p
-       residu=residu-(norm_c/App)*Matmula(Nx,Ny,p)
-       call norme_carre(residu,norm_c)    
+       residu=residu-(norm_c/App)*Ap
+       norm_c = dot_product(residu,residu)  
        p=residu+(norm_c/norm_prec_c)*p
 
        norm_prec_c=norm_c

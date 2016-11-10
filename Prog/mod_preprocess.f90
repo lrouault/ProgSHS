@@ -9,7 +9,6 @@ contains
   subroutine initialisation(filename)
     character(len=*), intent(in) :: filename
     character(len=3)             :: bfr ! Variable poubelle
-    integer                      :: i
 
     open(11, file=filename, action="read", status="old")
     read(11,'(A3,I6)')    bfr, Nx     ! "Nx="

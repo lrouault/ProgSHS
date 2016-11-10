@@ -6,7 +6,7 @@ program main
 
   implicit none
 
-  integer  :: i,j,k,iter
+  integer  :: iter
 
   call initialisation("param.dat")
   call creation_matrice()

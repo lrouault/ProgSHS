@@ -9,7 +9,7 @@ LIBS =
 CC = cc
 CFLAGS = -O
 FC = f77
-FFLAGS = -O
+FFLAGS = -O 
 #F90 = ifort
 F90 = gfortran
 F90FLAGS = -O3 -march=native 
@@ -27,10 +27,16 @@ $(PROG): $(OBJS)
 	make cleanmodres
 
 clean:
-	rm -f $(PROG) $(OBJS) *.mod *~ fichier/*.dat
+	rm -f $(PROG) $(OBJS) *.mod *~ fichier/*.dat gmon.out analysis.txt test_gprof
 
 cleanmodres:
-	rm -f $(OBJS) *.mod *~ fichier/*.dat
+	rm -f $(OBJS) *.mod *~ fichier/*.dat 
+	
+gprof: 
+	$(F90) -pg -O0 donnees.f90 mod_fonction.f90 mod_physique.f90 mod_preprocess.f90 main.f90 -o test_gprof 
+	make cleanmodres
+	./test_gprof
+	gprof -l test_gprof gmon.out > analysis.txt
 
 .SUFFIXES: $(SUFFIXES) .f90
 
