@@ -11,7 +11,7 @@ program main
   call initialisation("param.dat")
   call creation_matrice()
 
-  print *, "rho cp lambda dt Tad",rho,cp,lambda,dt,Tad
+  !print *, "rho cp lambda dt Tad",rho,cp,lambda,dt,Tad
 
   call printvector(U0,0)
 
@@ -21,13 +21,15 @@ program main
   !*************Marche en temps*********************
   iter=0
   Niter = nint(tmax/dt)
-  
-  do while(time<tmax)  
+
+  do while(time<tmax)
      time = time + dt
      iter=iter+1
 
-     rhs = rho*Cp*U + rho*Q*eq_arrhenius() + cd_lim()
-     
+     call creation_matrice() ! Construit rhocp, rho, lambda, Cd Cx Cy
+
+     rhs = rhocp*U + rho*Q*eq_arrhenius() + cd_lim()
+
      call Gradient_conjugue(U,rhs,epsilon) !V+chi
 
      if(eta((Ny/2)*Nx+2)==1.)then
@@ -39,7 +41,7 @@ program main
      end if
 
   end do
-  
+
   call fin()
 
 end program main

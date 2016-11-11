@@ -109,7 +109,7 @@ contains
        end do
     end do
 
-    close(2) 
+    close(2)
 
   end subroutine writeVtk
 
@@ -175,7 +175,7 @@ contains
     implicit none
     real(PR),dimension(Nx*Ny),intent(inout) :: x
     real(PR),dimension(Nx*Ny),intent(in)    :: b
-    real(PR),intent(in)                     :: eps   
+    real(PR),intent(in)                     :: eps
 
     real(PR),dimension(Nx*Ny) :: residu,p,Ap
     real(PR)                  :: norm_prec_c,norm_c,norm0_c,App,err
@@ -185,7 +185,7 @@ contains
     n=Nx*Ny
 
     !x=0
-    
+
     residu=b-Matmula(Nx,Ny,x)
     norm_c = dot_product(residu,residu)
     norm_prec_c=norm_c
@@ -194,7 +194,7 @@ contains
 
     err = eps*norm0_c !norm_c/norm0_c >= eps
 
-    ! Boucle 
+    ! Boucle
     nb_iter=0
     do while ((norm_c >=  err).and.(nb_iter<10000))
 
@@ -202,7 +202,7 @@ contains
        App = dot_product(Ap,p)
        x=x+(norm_c/App)*p
        residu=residu-(norm_c/App)*Ap
-       norm_c = dot_product(residu,residu)  
+       norm_c = dot_product(residu,residu)
        p=residu+(norm_c/norm_prec_c)*p
 
        norm_prec_c=norm_c
@@ -212,12 +212,12 @@ contains
   end subroutine Gradient_conjugue
 
 
-  function Matmula(Nx,Ny,U) 
+  function Matmula(Nx,Ny,U)
     implicit none
     integer::Nx,Ny
     real(PR),dimension(Nx*Ny) :: U,Matmula
     integer:: i,j,k
-    
+
     Matmula=0
     do j= 1,Ny
        do i=1,Nx
@@ -233,18 +233,18 @@ contains
           ! Cd
           Matmula(k)=Matmula(k)+Cd(k)*U(k)
           ! Cx droite
-          if(i/=Nx)then        
+          if(i/=Nx)then
              Matmula(k)=Matmula(k)+Cx(k-j+1)*U(k+1)    !!
           end if
           ! Cy droite
-          if(j/=Ny)then        
+          if(j/=Ny)then
              Matmula(k)=Matmula(k)+Cy(k)*U(k+Nx)  !!
           end if
        end do
     end do
   end function Matmula
 
-  subroutine prod_scal(x,y,p) 
+  subroutine prod_scal(x,y,p)
     implicit none
 
     real(PR),dimension(:), intent(in):: x,y
@@ -274,4 +274,33 @@ contains
        norm = norm+x(i)**2
     end do
   end subroutine norme_carre
+
+
+
+  function interp(Tab,val)
+    ! Interpole la valeur (col 2) de tab
+    ! en fonction de la la valeur voulue (col 1)
+    implicit none
+    real(PR), dimension(:,:) :: Tab
+    real(PR)                 :: val, interp
+    integer                  :: i,taille
+
+    taille=size(Tab,1)
+
+    if    (val < Tab(1,1)     )then
+       interp = Tab(1,2)
+    elseif(val >= Tab(taille,1))then
+       interp = Tab(taille,2)
+    else
+       do i=1,taille-1
+          if(val<Tab(i+1,1))then
+             interp = (val - Tab(i,1)) / (Tab(i+1,1)-Tab(i,1))
+             interp = interp * (Tab(i+1,2)-Tab(i,2)) + Tab(i,2)
+             exit
+          end if
+       end do
+    end if
+
+  end function interp
+
 end module mod_fonction

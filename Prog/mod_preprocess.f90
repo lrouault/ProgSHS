@@ -15,11 +15,11 @@ contains
     read(11,'(A3,I6)')    bfr, Ny     ! "Ny="
     read(11,'(A3,F4.6)')  bfr, Lx     ! "Lx="
     read(11,'(A3,F4.6)')  bfr, Ly     ! "Ly="
-    read(11,'(A4,F10.6)') bfr, rho    ! "rho="
-    read(11,'(A3,F10.6)') bfr, cp     ! "cp="
-    read(11,'(A7,F4.6)')  bfr, lambda ! "lambda"
+    !read(11,'(A4,F10.6)') bfr, rho    ! "rho="
+    !read(11,'(A3,F10.6)') bfr, cp     ! "cp="
+    !read(11,'(A7,F4.6)')  bfr, lambda ! "lambda"
 
-    tmax    = 1.
+    tmax    = 2.
     Niter   = 10000
     epsilon = 1.e-7
     epsilon = epsilon**2
@@ -48,6 +48,33 @@ contains
 
     nb_fichiers = 100
 
+    ! MATERIAU
+    allocate(rho(Nx*Ny),   rhocp(Nx*Ny),    lambda(Nx*Ny))
+    allocate(cp_Si(1,2)    , cp_Si3N4(1,2)    , cp_N2(1,2)    , cp_fibre(1,2)    )
+    allocate(lambda_Si(1,2), lambda_Si3N4(1,2), lambda_N2(1,2), lambda_fibre(1,2))
+
+    rho_Si    = 1600.
+    cp_Si    = reshape((/298., 228./),(/1,2/))
+    lambda_Si    = reshape((/298., 22./),(/1,2/))
+
+    rho_Si3N4 = 1600.
+    cp_Si3N4 = reshape((/298., 228./),(/1,2/))
+    lambda_Si3N4 = reshape((/298., 22./),(/1,2/))
+
+    rho_N2    = 1600.
+    cp_N2    = reshape((/298., 228./),(/1,2/))
+    lambda_N2    = reshape((/298., 22./),(/1,2/))
+
+    rho_fibre = 1600.
+    cp_fibre = reshape((/298., 228./),(/1,2/))
+    lambda_fibre = reshape((/298., 22./),(/1,2/))
+
+    allocate(fraction_vol(Nx*Ny,3))! (/Si,N2,fibre/)
+    fraction_vol(:,3) = 0.1
+    fraction_vol(:,1) = 0.76*(1-fraction_vol(:,3)) ! 0.76 CFC
+    fraction_vol(:,2) = 1.-fraction_vol(:,1)-fraction_vol(:,3)
+
+
   end subroutine initialisation
 
 !*******************************************************!
@@ -56,6 +83,10 @@ contains
   subroutine fin()
 
     deallocate(U, rhs, U0, eta)
+    deallocate(rho,   rhocp,    lambda)
+    deallocate(cp_Si,     cp_Si3N4 ,    cp_N2 ,    cp_fibre )
+    deallocate(lambda_Si, lambda_Si3N4, lambda_N2, lambda_fibre)
+    deallocate(fraction_vol) ! (/Si,N2,fibre/)
 
   end subroutine fin
 
