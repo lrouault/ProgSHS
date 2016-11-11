@@ -3,17 +3,21 @@ program main
   use mod_preprocess
   use mod_physique
   use mod_fonction
+  USE, INTRINSIC :: ISO_C_BINDING, ONLY: C_CHAR
 
   implicit none
-
   integer  :: iter
 
+
+  call fillPoro("IMAGE_crop.mat","IMAGE_crop2.mat") ! Remplit fibre(porox/y/z)
+  call writeFibreVtk(Poro,porox,poroy,poroz)
+
+
   call initialisation("param.dat")
+
   call creation_matrice()
-
-  !print *, "rho cp lambda dt Tad",rho,cp,lambda,dt,Tad
-
   call printvector(U0,0)
+
 
   flux=12000000.*2
 
@@ -38,10 +42,12 @@ program main
 
      if(modulo(iter*nb_fichiers,Niter) == 0) then
         call printvector(U, iter*nb_fichiers/Niter)
+        call writeVtk(U, Nx, Ny, dx, dy, iter*nb_fichiers/Niter)
      end if
 
   end do
 
   call fin()
+!  deallocate(Poro)
 
 end program main

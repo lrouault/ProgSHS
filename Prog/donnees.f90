@@ -27,12 +27,14 @@ module donnees
   integer :: nb_fichiers
 
   ! Materiau
-  real(PR),dimension(:,:),allocatable :: fraction_vol ! (/Si,N2,fibre/) 
+  real(PR),dimension(:,:),allocatable :: fraction_vol ! (/Si,N2,fibre/)
   real(PR)                          :: rho_Si, rho_Si3N4, rho_N2, rho_fibre
   real(PR),dimension(:,:),allocatable :: cp_Si, cp_Si3N4, cp_N2, cp_fibre
   real(PR),dimension(:,:),allocatable :: lambda_Si, lambda_Si3N4, lambda_N2, lambda_fibre
 
-
+  ! fibre
+  integer, dimension(:,:,:),allocatable :: Poro
+  integer :: porox, poroy, poroz
 
 
 contains
