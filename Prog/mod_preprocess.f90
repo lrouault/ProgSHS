@@ -31,6 +31,8 @@ contains
     k0      = 6.2e17 !2.0e+4
     Q       = 287.e+3 !626e+3
 
+    flux = 7.e+6
+
     dt = 1.e-4
     dx = Lx/(Nx+1)
     dy = Ly/(Ny+1)

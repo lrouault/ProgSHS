@@ -65,12 +65,20 @@ contains
     real(PR),dimension(Nx*Ny) :: chauffage
     integer::j
 
+    if(eta((Ny/2)*Nx+2)==1.)then
+       flux = 0.
+    end if
+
     chauffage = 0.
     !chauffage((Ny/2)*Nx+1) = -Cx((Ny/2)*Nx+1)*flux*dx/lambda((Ny/2)*Nx+1)
     do j=1,Ny
-       !Répartition du chauffage à gauche -> 100% au milieu, 0% en y=0 et y=Ly, fonction quadratique -(y/Ly)**2+(y/Ly)
-       chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-(j*dy/Ly)**2+j*dy/Ly)*dx/lambda((j-1)*Nx+1) 
-    end do
+       ! Répartition du chauffage à gauche -> 100% au milieu, 0% en y=0 et y=Ly
+       ! Fonction quadratique -(y/Ly)**2+(y/Ly)
+       !chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-(j*dy/Ly)**2+j*dy/Ly)*dx/lambda((j-1)*Nx+1)
+
+       ! Fonction linéaire -|y-Ly/2|/Ly + 1 (valeur absolue)
+       chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-abs(j*dy-Ly/2)/Ly+1)*dx/lambda((j-1)*Nx+1)
+    end do    
     
   end function chauffage
 

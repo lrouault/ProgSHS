@@ -15,8 +15,6 @@ program main
 
   call printvector(U0,0)
 
-  flux=12000000.
-
   write(*,*) dx*(Nx+1),dx,Nx
   !*************Marche en temps*********************
   iter=0
@@ -31,10 +29,6 @@ program main
      rhs = rhocp*U + rho*Q*eq_arrhenius() + cd_lim() + chauffage()
 
      call Gradient_conjugue(U,rhs,epsilon) !V+chi
-
-     if(eta((Ny/2)*Nx+2)==1.)then
-        flux = 0.
-     end if
 
      if(modulo(iter*nb_fichiers,Niter) == 0) then
         call printvector(U, iter*nb_fichiers/Niter)
