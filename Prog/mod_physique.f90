@@ -76,8 +76,8 @@ contains
        ! Fonction quadratique -(y/Ly)**2+(y/Ly)
        !chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-(j*dy/Ly)**2+j*dy/Ly)*dx/lambda((j-1)*Nx+1)
 
-       ! Fonction linéaire -|y-Ly/2|/Ly + 1 (valeur absolue)
-       chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-abs(j*dy-Ly/2)/Ly+1)*dx/lambda((j-1)*Nx+1)
+       ! Fonction linéaire -|y-Ly/2|/(Ly/2) + 1 (valeur absolue)
+       chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-2*abs(j*dy-Ly/2)/Ly+1)*dx/lambda((j-1)*Nx+1)
     end do    
     
   end function chauffage
