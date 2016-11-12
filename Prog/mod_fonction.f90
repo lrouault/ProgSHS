@@ -173,9 +173,9 @@ contains
 
   subroutine Gradient_conjugue(X,b,eps)
     implicit none
-    real(PR),dimension(Nx*Ny),intent(inout) :: x
-    real(PR),dimension(Nx*Ny),intent(in)    :: b
-    real(PR),intent(in)                     :: eps
+    real(PR),dimension(Nx*Ny) :: x
+    real(PR),dimension(Nx*Ny) :: b
+    real(PR)                  :: eps
 
     real(PR),dimension(Nx*Ny) :: residu,p,Ap
     real(PR)                  :: norm_prec_c,norm_c,norm0_c,App,err
@@ -186,7 +186,7 @@ contains
 
     !x=0
 
-    residu=b-Matmula(Nx,Ny,x)
+    residu=b-Matmula(x)
     norm_c = dot_product(residu,residu)
     norm_prec_c=norm_c
     norm0_c = norm_c
@@ -198,7 +198,7 @@ contains
     nb_iter=0
     do while ((norm_c >=  err).and.(nb_iter<10000))
 
-       Ap = Matmula(Nx,Ny,p)
+       Ap = Matmula(p)
        App = dot_product(Ap,p)
        x=x+(norm_c/App)*p
        residu=residu-(norm_c/App)*Ap
@@ -212,9 +212,8 @@ contains
   end subroutine Gradient_conjugue
 
 
-  function Matmula(Nx,Ny,U)
+  function Matmula(U)
     implicit none
-    integer::Nx,Ny
     real(PR),dimension(Nx*Ny) :: U,Matmula
     integer:: i,j,k
 
@@ -243,39 +242,6 @@ contains
        end do
     end do
   end function Matmula
-
-  subroutine prod_scal(x,y,p)
-    implicit none
-
-    real(PR),dimension(:), intent(in):: x,y
-    real(PR),intent(out):: p
-    integer:: i,n
-
-    n=size(x)
-    p=0
-
-    do i=1,n
-       p=p+x(i)*y(i)
-    end do
-
-  end subroutine prod_scal
-
-
-  subroutine norme_carre(x,norm)
-    implicit none
-    real(PR), dimension(:),intent(in)::x
-    real(PR),intent(out)::norm
-    integer:: i,n
-
-    n=size(x)
-    norm=0
-
-    do i=1,n
-       norm = norm+x(i)**2
-    end do
-  end subroutine norme_carre
-
-
 
   function interp(Tab,val)
     ! Interpole la valeur (col 2) de tab

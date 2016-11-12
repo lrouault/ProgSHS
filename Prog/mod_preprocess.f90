@@ -19,7 +19,7 @@ contains
     !read(11,'(A3,F10.6)') bfr, cp     ! "cp="
     !read(11,'(A7,F4.6)')  bfr, lambda ! "lambda"
 
-    tmax    = 2.
+    tmax    = 1.
     Niter   = 10000
     epsilon = 1.e-7
     epsilon = epsilon**2

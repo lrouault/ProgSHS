@@ -83,17 +83,23 @@ contains
   end function chauffage
 
   function eq_arrhenius()
-    integer  :: i
+    integer :: i
+    !integer :: p
     real(PR),dimension(Nx*Ny)::eq_arrhenius
 
+    !p = 1
     eta0 = eta
 
     do i = 1,Nx*Ny
        coef   = -Ea/(R*U(i))
        !if (coef<-700) coef=-700
 
+       !implicite
        eta(i) = (eta(i)+dt*k0*exp(coef)) / (1+k0*dt*exp(coef))
 
+       !explicite, ordre p
+       !eta(i) = eta(i) + dt*k0*exp(-Ea/(R*U(i)))*(1-eta(i))**p
+       
        eq_arrhenius(i) = eta(i)-eta0(i)
     end do
 
