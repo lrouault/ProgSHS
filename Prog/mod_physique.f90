@@ -58,9 +58,6 @@ contains
        k=(j-1)*Nx+Nx !droite
        cd_lim(k) = cd_lim(k) + Cx(k)*h*dx*(U(k)-Text)/lambda(k)
     end do
-    
-    !cd_lim((Ny/2)*Nx+1) = cd_lim((Ny/2)*Nx+1) &
-    !- Cx((Ny/2)*Nx+1)*flux*dx/lambda((Ny/2)*Nx+1)
 
   end function cd_lim
 
@@ -71,7 +68,8 @@ contains
     chauffage = 0.
     !chauffage((Ny/2)*Nx+1) = -Cx((Ny/2)*Nx+1)*flux*dx/lambda((Ny/2)*Nx+1)
     do j=1,Ny
-       chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-(j*dy/Ly)**2+j*dy/Ly)*dx/lambda((j-1)*Nx+1) !Répartition du chauffage à gauche -> 100% au milieu, 0% aux bords, fonction quadratique -(x/Ly)**2+(x/Ly)
+       !Répartition du chauffage à gauche -> 100% au milieu, 0% en y=0 et y=Ly, fonction quadratique -(y/Ly)**2+(y/Ly)
+       chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-(j*dy/Ly)**2+j*dy/Ly)*dx/lambda((j-1)*Nx+1) 
     end do
     
   end function chauffage
