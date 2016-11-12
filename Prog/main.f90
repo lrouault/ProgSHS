@@ -15,7 +15,7 @@ program main
 
   call printvector(U0,0)
 
-  flux=12000000.*2
+  flux=12000000.
 
   write(*,*) dx*(Nx+1),dx,Nx
   !*************Marche en temps*********************
@@ -28,7 +28,7 @@ program main
 
      call creation_matrice() ! Construit rhocp, rho, lambda, Cd Cx Cy
 
-     rhs = rhocp*U + rho*Q*eq_arrhenius() + cd_lim()
+     rhs = rhocp*U + rho*Q*eq_arrhenius() + cd_lim() + chauffage()
 
      call Gradient_conjugue(U,rhs,epsilon) !V+chi
 

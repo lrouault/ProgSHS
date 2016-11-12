@@ -43,26 +43,38 @@ contains
 
     cd_lim = 0.
 
-    !do i=1,Nx
-    !   k=i !bas
-    !   cd_lim(k) = cd_lim(k) - Cy(1)*(U(k)-h*dy*(U(k)-Text)/lambda)
-
-    !   k=(Ny-1)*Nx+i !haut
-    !   cd_lim(k) = cd_lim(k) - Cy(1)*(U(k)-h*dy*(U(k)-Text)/lambda)
-    !  end do
-
-    !do j=1,Ny
-    !   k=(j-1)*Nx+1 !gauche
-    !   cd_lim(k) = cd_lim(k) - Cx(1)*(U(k)-h*dx*(U(k)-Text)/lambda)
-
-    !     k=(j-1)*Nx+Nx !droite
-    !   cd_lim(k) = cd_lim(k) - Cx(1)*(U(k)-h*dx*(U(k)-Text)/lambda)
-    !end do
-
-    cd_lim((Ny/2)*Nx+1) = cd_lim((Ny/2)*Nx+1) &
-    - Cx((Ny/2)*Nx+1)*flux*dx/lambda((Ny/2)*Nx+1)
+    do i=1,Nx
+       k=i !bas
+       cd_lim(k) = cd_lim(k) + Cy(k)*h*dy*(U(k)-Text)/lambda(k)
+       
+       k=(Ny-1)*Nx+i !haut
+       cd_lim(k) = cd_lim(k) + Cy(k)*h*dy*(U(k)-Text)/lambda(k)
+    end do
+    
+    do j=1,Ny
+       k=(j-1)*Nx+1 !gauche
+       cd_lim(k) = cd_lim(k) + Cx(k)*h*dx*(U(k)-Text)/lambda(k)
+       
+       k=(j-1)*Nx+Nx !droite
+       cd_lim(k) = cd_lim(k) + Cx(k)*h*dx*(U(k)-Text)/lambda(k)
+    end do
+    
+    !cd_lim((Ny/2)*Nx+1) = cd_lim((Ny/2)*Nx+1) &
+    !- Cx((Ny/2)*Nx+1)*flux*dx/lambda((Ny/2)*Nx+1)
 
   end function cd_lim
+
+  function chauffage()
+    real(PR),dimension(Nx*Ny) :: chauffage
+    integer::j
+
+    chauffage = 0.
+    !chauffage((Ny/2)*Nx+1) = -Cx((Ny/2)*Nx+1)*flux*dx/lambda((Ny/2)*Nx+1)
+    do j=1,Ny
+       chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-(j*dy/Ly)**2+j*dy/Ly)*dx/lambda((j-1)*Nx+1) !Répartition du chauffage à gauche -> 100% au milieu, 0% aux bords, fonction quadratique -(x/Ly)**2+(x/Ly)
+    end do
+    
+  end function chauffage
 
   function eq_arrhenius()
     integer  :: i
