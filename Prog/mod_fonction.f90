@@ -178,21 +178,19 @@ contains
     real(PR)                  :: eps
 
     real(PR),dimension(Nx*Ny) :: residu,p,Ap
-    real(PR)                  :: norm_prec_c,norm_c,norm0_c,App,err
+    real(PR)                  :: norm_prec_c,norm_c,norm_rhs,App,err
     integer                   :: n,nb_iter
 
     ! Initialisation des variables
     n=Nx*Ny
 
-    !x=0
-
     residu=b-Matmula(x)
     norm_c = dot_product(residu,residu)
     norm_prec_c=norm_c
-    norm0_c = norm_c
+    norm_rhs = dot_product(rhs,rhs)
     p=residu
 
-    err = eps*norm0_c !norm_c/norm0_c >= eps
+    err = eps*norm_rhs !norm_c/norm_rhs >= eps
 
     ! Boucle
     nb_iter=0
@@ -207,6 +205,7 @@ contains
 
        norm_prec_c=norm_c
        nb_iter=nb_iter+1
+       iteration = iteration + 1
     end do
 
   end subroutine Gradient_conjugue

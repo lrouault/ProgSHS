@@ -33,7 +33,7 @@ module donnees
   real(PR),dimension(:,:),allocatable :: lambda_Si, lambda_Si3N4, lambda_N2, lambda_fibre
 
 
-
+  integer :: iteration
 
 contains
 

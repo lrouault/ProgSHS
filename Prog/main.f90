@@ -19,7 +19,7 @@ program main
   !*************Marche en temps*********************
   iter=0
   Niter = nint(tmax/dt)
-
+  iteration = 0
   do while(time<tmax)
      time = time + dt
      iter=iter+1
@@ -37,5 +37,7 @@ program main
   end do
 
   call fin()
+
+  write(*,*) "iterations : ", iteration
 
 end program main
