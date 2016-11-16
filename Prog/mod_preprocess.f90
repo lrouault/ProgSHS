@@ -1,4 +1,5 @@
 module mod_preprocess
+  USE, INTRINSIC :: ISO_C_BINDING, ONLY: C_CHAR,C_INT32_T,C_FLOAT
   use donnees
   use mod_fonction
 
@@ -91,5 +92,73 @@ contains
     deallocate(fraction_vol) ! (/Si,N2,fibre/)
 
   end subroutine fin
+
+  !*******************************************************!
+  !*******************************************************!
+
+  subroutine fillPoro(F_NAME,F_NAME2)
+    character(len=*),intent(in)                   :: F_NAME,F_NAME2
+    !CHARACTER(KIND=C_CHAR)  :: data2
+    character(kind=C_CHAR)      :: data2
+    integer :: i,j,k
+
+    ! syntaxe complète
+    open( 101 , file=F_NAME, form="formatted", action="read")
+    read(101,*) porox,poroy,poroz
+    close(101)
+    allocate(Poro(porox,poroy,poroz))
+
+    open( 102 , file=F_NAME2, form="unformatted", action="read", &
+    access="stream")
+    ! 1	FORMAT ( Z4 ) ! Format pour ecrire les caractere en hexadecimal
+    do k=1,poroz
+      do j=1,poroy
+        do i=1,porox
+          read(102) data2
+          Poro(i,j,k) = ichar(data2)
+        enddo
+      enddo
+    enddo
+    close(102)
+    print*, "Remplissage des porosite OK"
+  end subroutine fillPoro
+
+  subroutine fillOrientation(F_NAME)
+    character(len=*),intent(in)                   :: F_NAME
+    integer(KIND=C_INT32_T) :: data_int
+    real(kind=C_FLOAT)      :: data_float
+
+    integer :: i,j,k
+
+    ! syntaxe complète
+    open( 102 , file=F_NAME, form="unformatted", action="read", &
+    access="stream")
+    1	FORMAT ( Z4 )
+
+    read(102) data_int
+    if ( porox/=data_int ) print*, "ERREUR DIM X ORIENTATION"
+    read(102) data_int
+    if ( poroy/=data_int ) print*, "ERREUR DIM Y ORIENTATION"
+    read(102) data_int
+    if ( poroz/=data_int ) print*, "ERREUR DIM Z ORIENTATION"
+
+    allocate(Orien(porox,poroy,poroz,3))
+
+    do k=1,poroz
+      do j=1,poroy
+        do i=1,porox
+          read(102) data_float
+          Orien(i,j,k,1) = data_float
+          read(102) data_float
+          Orien(i,j,k,2) = data_float
+          read(102) data_float
+          Orien(i,j,k,3) = data_float
+        enddo
+      enddo
+    enddo
+    close(102)
+    print*, "Remplissage des orientations OK"
+  end subroutine fillOrientation
+
 
 end module mod_preprocess
