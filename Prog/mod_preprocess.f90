@@ -14,8 +14,10 @@ contains
     open(11, file=filename, action="read", status="old")
     read(11,'(A3,I6)')    bfr, Nx     ! "Nx="
     read(11,'(A3,I6)')    bfr, Ny     ! "Ny="
+    read(11,'(A3,I6)')    bfr, Nz     ! "Ny="
     read(11,'(A3,F4.6)')  bfr, Lx     ! "Lx="
     read(11,'(A3,F4.6)')  bfr, Ly     ! "Ly="
+    read(11,'(A3,F4.6)')  bfr, Lz     ! "Ly="
     !read(11,'(A4,F10.6)') bfr, rho    ! "rho="
     !read(11,'(A3,F10.6)') bfr, cp     ! "cp="
     !read(11,'(A7,F4.6)')  bfr, lambda ! "lambda"
@@ -37,9 +39,10 @@ contains
     dt = 1.e-4
     dx = Lx/(Nx+1)
     dy = Ly/(Ny+1)
+    dz = Lz/(Ny+1)
 
-    allocate(U(Nx*Ny), rhs(Nx*Ny), U0(Nx*Ny), eta(Nx*Ny))
-    allocate(Cd(Nx*Ny), Cx((Nx-1)*Ny), Cy(Nx*(Ny-1)))
+    allocate(U(Nx*Ny*Nz), rhs(Nx*Ny*Nz), U0(Nx*Ny*Nz), eta(Nx*Ny*Nz))
+    allocate(Cd(Nx*Ny*Nz), Cx((Nx-1)*Ny*Nz), Cy(Nx*(Ny-1)*Nz), Cz(Nx*Ny*(Nz-1)))
 
     rhs = 0.
     eta = 0.
@@ -52,7 +55,7 @@ contains
     nb_fichiers = 100
 
     ! MATERIAU
-    allocate(rho(Nx*Ny),   rhocp(Nx*Ny),    lambda(Nx*Ny))
+    allocate(rho(Nx*Ny*Nz),   rhocp(Nx*Ny*Nz),    lambda(Nx*Ny*Nz))
     allocate(cp_Si(1,2)    , cp_Si3N4(1,2)    , cp_N2(1,2)    , cp_fibre(1,2)    )
     allocate(lambda_Si(1,2), lambda_Si3N4(1,2), lambda_N2(1,2), lambda_fibre(1,2))
 
