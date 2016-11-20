@@ -15,7 +15,7 @@ F90 = gfortran
 F90FLAGS = -O3 -march=native
 #F90FLAGS = -O3 -march=native -ftz -parallel
 #F90FLAGS = -O3 -march=native -ffpe-trap=invalid
-#F90FLAGS = -O0 -pedantic -Wall -ffpe-trap=invalid,zero,overflow,underflow -g -fcheck=all -fbacktrace -fdump-core
+F90FLAGS = -O0 -pedantic -Wall -ffpe-trap=invalid,zero,overflow,underflow -g -fcheck=all -fbacktrace -fdump-core
 #F90FLAGS = -g -O0 -traceback -check all -ftrapuv -fpe0 -qopenmp
 #LDFLAGS = -parallel
 LDFLAGS =

@@ -8,17 +8,20 @@ program main
 
   integer  :: iter
 
-  call fillPoro("IMAGE_crop.mat","IMAGE_crop2.mat") ! Remplit fibre(porox/y/z)
-  call writeFibreVtk(Poro,porox,poroy,poroz)
-
-  call fillOrientation("IMAGE_crop.or")
-
+  ! call fillPoro("IMAGE_crop.mat","IMAGE_crop2.mat") ! Remplit fibre(porox/y/z)
+  ! call writeFibreVtk(Poro,porox,poroy,poroz)
+  !
+  ! call fillOrientation("IMAGE_crop.or")
+  !
   call initialisation("param.dat")
+  call write3dVtk(U,Nx,Ny,Nz,  dx,dy,dz, 0)
+
   call creation_matrice()
+
 
   !print *, "rho cp lambda dt Tad",rho,cp,lambda,dt,Tad
 
-  call printvector(U0,0)
+  ! call printvector(U0,0)
 
   write(*,*) dx*(Nx+1),dx,Nx
   !*************Marche en temps*********************
@@ -36,9 +39,9 @@ program main
      call Gradient_conjugue(U,rhs,epsilon) !V+chi
 
      if(modulo(iter*nb_fichiers,Niter) == 0) then
-        call printvector(U, iter*nb_fichiers/Niter)
-        call writeVtk(U, Nx, Ny, dx, dy, iter*nb_fichiers/Niter)
-
+        ! call printvector(U, iter*nb_fichiers/Niter)
+        ! call writeVtk(U, Nx, Ny, dx, dy, iter*nb_fichiers/Niter)
+        call write3dVtk(U, Nx,Ny,Nz, dx,dy,dz, iter*nb_fichiers/Niter)
      end if
 
   end do

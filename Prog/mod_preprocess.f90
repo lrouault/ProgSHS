@@ -75,7 +75,7 @@ contains
     cp_fibre = reshape((/298., 228./),(/1,2/))
     lambda_fibre = reshape((/298., 22./),(/1,2/))
 
-    allocate(fraction_vol(Nx*Ny,3))! (/Si,N2,fibre/)
+    allocate(fraction_vol(Nx*Ny*Nz,3))! (/Si,N2,fibre/)
     fraction_vol(:,3) = 0.1
     fraction_vol(:,1) = 0.76*(1-fraction_vol(:,3)) ! 0.76 CFC
     fraction_vol(:,2) = 1.-fraction_vol(:,1)-fraction_vol(:,3)
