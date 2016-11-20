@@ -94,6 +94,80 @@ contains
 
   end subroutine writeVtk
 
+
+  subroutine  write3dVtk(U, Numx,Numy,Numz, deltax,deltay,deltaz, N)
+
+    integer,intent(in)                            :: Numx,Numy,Numz, N
+    real(PR)                                      :: deltax,deltay,deltaz
+    real(PR),dimension(Numx*Numy*Numz),intent(in) :: U
+    integer                             :: i, j, k, num
+    character(len=20)                   :: F_NAME
+    character(len=40)                   :: s1, s2, s3, s4, s5, s
+
+    F_NAME='fichier/T'
+    write(F_NAME (10:14),'(I4.4)') N
+    F_NAME(15:18)= '.vtk'
+
+    open(unit=2, file=F_NAME, action="write")
+
+    write(2,'(a)')       "# vtk DataFile Version 2.0"
+    write(2,'(a)')       "Titre"
+    write(2,'(a)')       "ASCII"
+    write(2,'(a)')       "DATASET STRUCTURED_POINTS"
+    write(s1,'(I4)')     Numx
+    write(s2,'(I4)')     Numy
+    write(s3,'(I4)')     Numz
+    write(2,'(a)')       "DIMENSIONS " // adjustl(trim(s1)) // adjustl(trim(s2)) // adjustl(trim(s3))
+    write(2,'(a)')       "ORIGIN 0.0 0.0 0.0"
+    write(s1,'(F20.10)')  deltax !dx
+    write(s2,'(F20.10)')  deltay !dx
+    write(s3,'(F20.10)')  deltaz
+    write(2,'(a)')       "SPACING " // adjustl(trim(s1)) // adjustl(trim(s2)) // adjustl(trim(s3))
+    write(s5,'(I8)')     (Numx*Numy*Numz)
+    write(2,'(a)')       "POINT_DATA " // adjustl(trim(s5))
+    write(2,'(a)')       "SCALARS Temperature double"
+    write(2,'(a)')       "LOOKUP_TABLE default"
+
+    do k = 1,Numz
+      do j = 1,Numy
+        do i = 1,Numx
+          num=(k-1)*Nx*Ny + (j-1)*Nx + i
+
+          if(modulo(j,10) == 0) then
+            write(2,'(/)',advance='no')
+          end if
+          s = ""
+          write(s,'(F20.10)')         U(num)
+          write(2,'(a)',advance='no') adjustl(trim(s)) // " "
+        enddo
+      end do
+    end do
+
+    write(2,'(a)')       "SCALARS Eta double"
+    write(2,'(a)')       "LOOKUP_TABLE default"
+
+    do k = 1,Numz
+      do j = 1,Numy
+        do i = 1,Numx
+          num=(k-1)*Nx*Ny + (j-1)*Nx + i
+
+          if(modulo(j,10) == 0) then
+            write(2,'(/)',advance='no')
+          end if
+          s = ""
+          write(s,'(F20.10)')         eta(num)
+          write(2,'(a)',advance='no') adjustl(trim(s)) // " "
+        enddo
+      end do
+    end do
+
+
+    close(2)
+
+    print*, "SVG -> ", F_NAME
+  end subroutine write3dVtk
+
+
   subroutine  writeFibreVtk(U, porox,poroy,poroz)
 
     integer,intent(in)                  :: porox,poroy,poroz
@@ -201,16 +275,16 @@ contains
 
   subroutine Gradient_conjugue(X,b,eps)
     implicit none
-    real(PR),dimension(Nx*Ny) :: x
-    real(PR),dimension(Nx*Ny) :: b
-    real(PR)                  :: eps
+    real(PR),dimension(Nx*Ny*Nz) :: x
+    real(PR),dimension(Nx*Ny*Nz) :: b
+    real(PR)                     :: eps
 
-    real(PR),dimension(Nx*Ny) :: residu,p,Ap
-    real(PR)                  :: norm_prec_c,norm_c,norm_rhs,App,err
-    integer                   :: n,nb_iter
+    real(PR),dimension(Nx*Ny*Nz) :: residu,p,Ap
+    real(PR)                     :: norm_prec_c,norm_c,norm_rhs,App,err
+    integer                      :: n,nb_iter
 
     ! Initialisation des variables
-    n=Nx*Ny
+    n=Nx*Ny*Nz
 
     residu=b-Matmula(x)
     norm_c = dot_product(residu,residu)
@@ -241,32 +315,43 @@ contains
 
   function Matmula(U)
     implicit none
-    real(PR),dimension(Nx*Ny) :: U,Matmula
-    integer:: i,j,k
+    real(PR),dimension(Nx*Ny*Nz) :: U,Matmula
+    integer:: i,j,k, num
 
     Matmula=0
-    do j= 1,Ny
-       do i=1,Nx
-          k=(j-1)*Nx+i
+    do k= 1,Ny
+      do j= 1,Ny
+        do i=1,Nx
+          num=(k-1)*Nx*Ny + (j-1)*Nx + i
+
+          ! Cz gauche
+          if(k/=1)then
+            Matmula(num)=Matmula(num)+Cz(num-Nx*Ny)*U(num-Nx*Ny)  !!
+          end if
           ! Cy gauche
           if(j/=1)then
-             Matmula(k)=Matmula(k)+Cy(k-Nx)*U(k-Nx)  !!
+            Matmula(num)=Matmula(num)+Cy(num-k*Nx)*U(num-Nx)  !!
           end if
           ! Cx gauche
           if(i/=1)then
-             Matmula(k)=Matmula(k)+Cx(k-j)*U(k-1)    !!
+            Matmula(num)=Matmula(num)+Cx(num-j-(k-1)*Ny)*U(num-1)    !!
           end if
           ! Cd
-          Matmula(k)=Matmula(k)+Cd(k)*U(k)
+          Matmula(num)=Matmula(num)+Cd(num)*U(num)
           ! Cx droite
           if(i/=Nx)then
-             Matmula(k)=Matmula(k)+Cx(k-j+1)*U(k+1)    !!
+            Matmula(num)=Matmula(num)+Cx(num-(j-1)-(k-1)*Ny)*U(num+1)    !!
           end if
           ! Cy droite
           if(j/=Ny)then
-             Matmula(k)=Matmula(k)+Cy(k)*U(k+Nx)  !!
+            Matmula(num)=Matmula(num)+Cy(num-(k-1)*Nx)*U(num+Nx)  !!
           end if
-       end do
+          ! Cz droite
+          if(k/=Nz)then
+            Matmula(num)=Matmula(num)+Cz(num)*U(num+Nx*Ny)  !!
+          end if
+        end do
+      end do
     end do
   end function Matmula
 

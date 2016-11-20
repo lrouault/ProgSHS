@@ -5,9 +5,9 @@ module donnees
   integer, parameter :: PR=Selected_real_kind(12,60) !12,60
 
   ! Maillage
-  integer   :: Nx, Ny
+  integer   :: Nx, Ny, Nz
   integer   :: Niter, Ndisplay
-  real(PR)  :: Lx, Ly, dx, dy, x, y
+  real(PR)  :: Lx, Ly, Lz, dx, dy, dz, x, y, z
   real(PR)  :: time, dt, tmax
 
   ! Thermique
@@ -19,16 +19,15 @@ module donnees
 
   ! Modèle
   real(PR), dimension(:), allocatable :: U, U0, rhs, Fm, eta, chi, eta0
-  real(PR)                            :: D, a, b, c, epsilon
+  real(PR)                            :: epsilon
   real(PR), dimension(:), allocatable :: Cd
-  real(PR), dimension(:), allocatable :: Cx
-  real(PR), dimension(:), allocatable :: Cy
+  real(PR), dimension(:), allocatable :: Cx, Cy, Cz
 
   integer :: nb_fichiers
 
   ! Materiau
   real(PR),dimension(:,:),allocatable :: fraction_vol ! (/Si,N2,fibre/)
-  real(PR)                          :: rho_Si, rho_Si3N4, rho_N2, rho_fibre
+  real(PR)                            :: rho_Si, rho_Si3N4, rho_N2, rho_fibre
   real(PR),dimension(:,:),allocatable :: cp_Si, cp_Si3N4, cp_N2, cp_fibre
   real(PR),dimension(:,:),allocatable :: lambda_Si, lambda_Si3N4, lambda_N2, lambda_fibre
 
