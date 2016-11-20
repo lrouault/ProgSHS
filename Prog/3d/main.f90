@@ -1,3 +1,13 @@
+!> @mainpage Accueil Doxygen
+!!
+!! @section Introduction
+!! Ce document décrit les sources du code resolvant le probleme ..
+!!
+!! One can add diagrams to the document.  For example,
+!! The following diagram shows the breakdown of the entire XYZ model.
+
+
+
 program main
   use donnees
   use mod_preprocess

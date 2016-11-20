@@ -1,3 +1,5 @@
+!> Gere l'initialisation du probleme.
+
 module mod_preprocess
   USE, INTRINSIC :: ISO_C_BINDING, ONLY: C_CHAR,C_INT32_T,C_FLOAT
   use donnees

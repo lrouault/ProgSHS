@@ -1,3 +1,5 @@
+!> Déclaration de toutes las variables globales utilisées dans le programme
+
 module donnees
 
   implicit none
@@ -5,8 +7,11 @@ module donnees
   integer, parameter :: PR=Selected_real_kind(12,60) !12,60
 
   ! Maillage
-  integer   :: Nx, Ny, Nz
-  integer   :: Niter, Ndisplay
+  integer   :: Nx !< Nombre de points dans la direction x
+  integer   :: Ny !< Nombre de points dans la direction y
+  integer   :: Nz !< Nombre de points dans la direction z
+  integer   :: Niter 
+  integer   :: Ndisplay !< Frequence de sauvegarde des solutions
   real(PR)  :: Lx, Ly, Lz, dx, dy, dz, x, y, z
   real(PR)  :: time, dt, tmax
 

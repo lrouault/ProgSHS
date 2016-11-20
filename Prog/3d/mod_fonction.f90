@@ -1,3 +1,5 @@
+!> Déclaration de fonctions de base utilisees par le programme
+
 module mod_fonction
   use donnees
 
@@ -8,6 +10,10 @@ contains
   !*******************************************************!
   !*******************************************************!
 
+
+  !> Calcul la norme d'un vecteur.
+  !! @param[in] R
+  !! @return La norme du vecteur
   function norme(R) ! norme euclidienne
 
     implicit none
@@ -26,6 +32,14 @@ contains
   !*******************************************************!
   !*******************************************************!
 
+  !> Permet d'afficher une matrice carree n*n ligne par ligne.
+  !!
+  !! L'impression de la matrice est precede par l'affichage du parametre
+  !! d'entree ch. Il s'en suit une lecture de la matrice ligne aprés ligne sans
+  !! formatage spécial.
+  !! @param[in] A matrice de taille n*n
+  !! @param[in] n taille de la matrice
+  !! @param[in] ch chaine de caractere imprimer avant la matrice
   subroutine printmat(A,n,ch)
 
     integer,intent(in)             :: n
@@ -43,6 +57,11 @@ contains
   !*******************************************************!
   !*******************************************************!
 
+  !> Ecrit au format vtk ...
+  !! @param[in] U
+  !! @param[in] Nx,Ny
+  !! @param[in] dx,dy
+  !! @param[in] N
   subroutine  writeVtk(U, Nx, Ny, dx, dy, N)
 
     integer,intent(in)                   :: Nx, Ny, N
