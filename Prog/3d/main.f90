@@ -3,9 +3,8 @@
 !! @section Introduction
 !! Ce document décrit les sources du code resolvant le probleme ..
 !!
-!! One can add diagrams to the document.  For example,
-!! The following diagram shows the breakdown of the entire XYZ model.
-
+!! @section Information
+!! Pour plus d'informations regarder les pages documentations du site.
 
 
 program main

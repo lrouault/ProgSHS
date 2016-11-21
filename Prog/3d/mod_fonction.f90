@@ -32,7 +32,7 @@ contains
   !*******************************************************!
   !*******************************************************!
 
-  !> Permet d'afficher une matrice carree n*n ligne par ligne.
+  !> @brief Permet d'afficher une matrice carree n*n ligne par ligne.
   !!
   !! L'impression de la matrice est precede par l'affichage du parametre
   !! d'entree ch. Il s'en suit une lecture de la matrice ligne aprés ligne sans
@@ -57,7 +57,9 @@ contains
   !*******************************************************!
   !*******************************************************!
 
-  !> Ecrit au format vtk ...
+  !> @brief Ecrit au format vtk ...
+  !!
+  !!..........
   !! @param[in] U
   !! @param[in] Nx,Ny
   !! @param[in] dx,dy
@@ -110,10 +112,15 @@ contains
     end do
 
     close(2)
-
   end subroutine writeVtk
 
-
+  !> @brief Ecrit au format vtk ...
+  !!
+  !!..........
+  !! @param[in] U
+  !! @param[in] Numx,Numy,Numz
+  !! @param[in] deltax,deltay,deltaz
+  !! @param[in] N
   subroutine  write3dVtk(U, Numx,Numy,Numz, deltax,deltay,deltaz, N)
 
     integer,intent(in)                            :: Numx,Numy,Numz, N
@@ -186,7 +193,13 @@ contains
     print*, "SVG -> ", F_NAME
   end subroutine write3dVtk
 
-
+  !> @brief Ecrit au format vtk ...
+  !!
+  !!..........
+  !! @param[in] U
+  !! @param[in] Nx,Ny
+  !! @param[in] dx,dy
+  !! @param[in] N
   subroutine  writeFibreVtk(U, porox,poroy,poroz)
 
     integer,intent(in)                  :: porox,poroy,poroz
@@ -237,6 +250,13 @@ contains
   !*******************************************************!
   !*******************************************************!
 
+  !> @brief Ecrit au format dat...
+  !!
+  !!..........
+  !! @param[in] U
+  !! @param[in] Nx,Ny
+  !! @param[in] dx,dy
+  !! @param[in] N
   subroutine printvector(U, Num)
 
     integer,intent(in)                  ::  Num
@@ -291,7 +311,13 @@ contains
   !*******************************************************!
   !*******************************************************!
 
-
+  !> @brief Resout le systeme lineaire Ax=b
+  !!
+  !!..........
+  !! @param[in] U
+  !! @param[in] Nx,Ny
+  !! @param[in] dx,dy
+  !! @param[in] N
   subroutine Gradient_conjugue(X,b,eps)
     implicit none
     real(PR),dimension(Nx*Ny*Nz) :: x
@@ -331,7 +357,10 @@ contains
 
   end subroutine Gradient_conjugue
 
-
+  !> @brief Effectue le produit matrice vecteur Au
+  !!
+  !!..........
+  !! @param[in] U
   function Matmula(U)
     implicit none
     real(PR),dimension(Nx*Ny*Nz) :: U,Matmula
@@ -374,9 +403,10 @@ contains
     end do
   end function Matmula
 
+  !> @brief Interpole la valeur (col 2) de tab en fonction de la la valeur voulue (col 1)
+  !!
+  !!..........
   function interp(Tab,val)
-    ! Interpole la valeur (col 2) de tab
-    ! en fonction de la la valeur voulue (col 1)
     implicit none
     real(PR), dimension(:,:) :: Tab
     real(PR)                 :: val, interp
@@ -410,7 +440,9 @@ contains
   ! Delta = diag (Dperp, Dperp, Dparall)
   !
 
-  ! Recupere la direction des fibres pour le point (i,j,k)
+  !> @brief Recupere la direction des fibres pour le point (i,j,k)
+  !!
+  !!..........
   subroutine getdirfib(pos,dirfib)
     integer,dimension(3),intent(in) :: pos ! (i,j,k)
     integer,dimension(3),intent(out) :: dirfib
@@ -420,7 +452,7 @@ contains
     dirfib(3) = Orien(pos(1),pos(2),pos(3),3)
   end subroutine getdirfib
 
-  ! Tenseur local de conductivite selon (x,y,z)
+  !> @brief Tenseur local de conductivite selon (x,y,z)
   subroutine difglo(difpa, difpe, dirfib, MatD)
     real(PR)                           :: difpa, difpe
     real(PR), dimension(3), intent(inout) :: dirfib
@@ -460,7 +492,7 @@ contains
   end subroutine difglo
 
 
-  ! /* Creation d'une matrice a partir de trois vecteurs colonnes */
+  !> @brief Creation d'une matrice a partir de trois vecteurs colonnes
   subroutine coltomat(vec1,vec2,vec3,Mat)
     real(PR),dimension(3,3), intent(out) :: Mat
     real(PR),dimension(3), intent(in) :: vec1, vec2, vec3
@@ -477,7 +509,7 @@ contains
   end subroutine coltomat
 
 
-  ! /* cree une bond (base) A, B, V a partir d'une direction V donnee normee */
+  !> @brief cree une bond (base) A, B, V a partir d'une direction V donnee normee
   subroutine cree_mat_pass(dir,per1,per2)
     real(PR),dimension(3),intent(in)  :: dir
     real(PR),dimension(3),intent(out) :: per1, per2
@@ -500,7 +532,7 @@ contains
   end subroutine cree_mat_pass
 
 
-  ! /* inverse d'une matrice de determinant unite formee par 3 vecteurs unites */
+  !> @brief inverse d'une matrice de determinant unite formee par 3 vecteurs unites
   subroutine inv_mat_pass(vec1,vec2,vec3,inv)
     real(PR),dimension(3,3), intent(out) :: inv
     real(PR),dimension(3), intent(in) :: vec1, vec2, vec3
@@ -519,7 +551,7 @@ contains
   end subroutine inv_mat_pass
 
 
-  ! /* Produit vectoriel AxB */
+  !> @brief Produit vectoriel AxB
   subroutine vec_crotz(vec1,vec2, res)
     real(PR),dimension(3) :: res
     real(PR),dimension(3) :: vec1, vec2
@@ -530,7 +562,7 @@ contains
   end subroutine vec_crotz
 
 
-  ! /* Retourne le vecteur norme */
+  !> @brief Retourne le vecteur norme
   subroutine vec_norm(vec)
     real(PR), dimension(3), intent(inout) :: vec
     real(PR)                              :: norme
@@ -544,7 +576,7 @@ contains
   end subroutine vec_norm
 
 
-  ! /* Produit de deux matrices 3*3 */
+  !> @brief Produit de deux matrices 3*3 
   subroutine prodmat(A,B,res)
     real(PR), dimension(3,3), intent(in) :: A,B
     real(PR), dimension(3,3), intent(out) :: res

@@ -7,6 +7,7 @@ module mod_physique
 
 contains
 
+  !> @brief Creer la matrice de discretisation
   subroutine creation_matrice()
     !Cd = rho*cp + (2.*lambda*dt)/(dx**2) + (2.*lambda*dt)/(dy**2)
     !Cx = -(lambda*dt)/(dx**2)
@@ -48,6 +49,7 @@ contains
     enddo
   end subroutine creation_matrice
 
+  !> @brief Construit les conditions limites
   function cd_lim()
     integer :: i,j,k, num
     real(PR),dimension(Nx*Ny*Nz) :: cd_lim
@@ -88,6 +90,7 @@ contains
     ! end do
   end function cd_lim
 
+  !> @brief Implique une condition de chauffe
   function chauffage()
     real(PR),dimension(Nx*Ny*Nz) :: chauffage
     integer::i,j
@@ -113,6 +116,7 @@ contains
 
   end function chauffage
 
+  !> @brief Calcule le terme d'energie de la reaction chimique
   function eq_arrhenius()
     integer :: i
     !integer :: p
@@ -137,7 +141,7 @@ contains
   end function eq_arrhenius
 
 
-  ! Calcul des differentes proprietes des materiaux
+  !> @brief Calcul des differentes proprietes des materiaux
   subroutine c_rho()
     ! Calule rhocp pur chaque maille
     integer  :: i
@@ -149,9 +153,8 @@ contains
     end do
   end subroutine c_rho
 
-
+  !> @brief Calule rhocp pour chaque maille
   subroutine c_rhocp()
-    ! Calule rhocp pour chaque maille
     integer  :: i
 
     do i = 1,Nx*Ny*Nz
@@ -162,9 +165,8 @@ contains
     end do
   end subroutine c_rhocp
 
-
+  !> @brief Calul lambda pour chaque maille (isotrope pour le moment)
   subroutine c_lambda()
-    ! Calule lambda pour chaque maille (isotrope pour le moment)
     integer  :: i
 
     do i = 1,Nx*Ny*Nz
@@ -176,9 +178,8 @@ contains
     end do
   end subroutine c_lambda
 
-
+  !> @brief Calcul du flux en lambda entre caseles mailles i et j
   function f_lambda(i,j)
-    ! Calcul du flux en lambda entre caseles mailles i et j
     integer  :: i,j
     real(PR) :: f_lambda
 

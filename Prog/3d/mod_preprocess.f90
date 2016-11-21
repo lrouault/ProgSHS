@@ -9,6 +9,7 @@ module mod_preprocess
 
 contains
 
+  !> @brief Initialise toutes les variables
   subroutine initialisation(filename)
     character(len=*), intent(in) :: filename
     character(len=3)             :: bfr ! Variable poubelle
@@ -88,6 +89,7 @@ contains
 !*******************************************************!
 !*******************************************************!
 
+  !> @brief Désalloue les différents tableaux
   subroutine fin()
 
     deallocate(U, rhs, U0, eta)
@@ -101,6 +103,7 @@ contains
   !*******************************************************!
   !*******************************************************!
 
+  !> @brief Remplit la porosite du domaine (fibres)
   subroutine fillPoro(F_NAME,F_NAME2)
     character(len=*),intent(in)                   :: F_NAME,F_NAME2
     !CHARACTER(KIND=C_CHAR)  :: data2
@@ -128,6 +131,7 @@ contains
     print*, "Remplissage des porosite OK"
   end subroutine fillPoro
 
+  !> @brief Remplit l'orientation des fibres
   subroutine fillOrientation(F_NAME)
     character(len=*),intent(in)                   :: F_NAME
     integer(KIND=C_INT32_T) :: data_int

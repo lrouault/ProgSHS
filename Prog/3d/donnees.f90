@@ -10,13 +10,24 @@ module donnees
   integer   :: Nx !< Nombre de points dans la direction x
   integer   :: Ny !< Nombre de points dans la direction y
   integer   :: Nz !< Nombre de points dans la direction z
-  integer   :: Niter 
+  integer   :: Niter
   integer   :: Ndisplay !< Frequence de sauvegarde des solutions
-  real(PR)  :: Lx, Ly, Lz, dx, dy, dz, x, y, z
-  real(PR)  :: time, dt, tmax
+  real(PR)  :: Lx !< Dimension selon x
+  real(PR)  :: Ly !< Dimension selon y
+  real(PR)  :: Lz !< Dimension selon z
+  real(PR)  :: dx !< Pas d'espace principale en x
+  real(PR)  :: dy !< Pas d'espace principale en y
+  real(PR)  :: dz !< Pas d'espace principale en z
+  real(PR)  :: x
+  real(PR)  :: y
+  real(PR)  :: z
+  real(PR)  :: time !< Temps du calcul
+  real(PR)  :: dt !< Pas de temps pour les calculs
+  real(PR)  :: tmax !< Condition d'arret du calcul en temps
 
   ! Thermique
-  real(PR)  :: Text, Tad
+  real(PR)  :: Text !< Temperature initiale
+  real(Pr)  :: Tad
   !real(PR)  :: rho, cp, lambda
   real(PR),dimension(:),allocatable   :: rho, rhocp, lambda
   real(PR)  :: h, flux

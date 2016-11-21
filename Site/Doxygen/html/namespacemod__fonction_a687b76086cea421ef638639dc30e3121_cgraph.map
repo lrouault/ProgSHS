@@ -1,8 +1,8 @@
 <map id="mod_fonction::difglo" name="mod_fonction::difglo">
-<area shape="rect" id="node2" href="$namespacemod__fonction.html#a4d1143c408824825477d3e48b8dc33f9" title="mod_fonction::vec_norm" alt="" coords="429,5,595,32"/>
-<area shape="rect" id="node3" href="$namespacemod__fonction.html#a15f392616c74da83dd70d160f0f6f458" title="mod_fonction::cree\l_mat_pass" alt="" coords="220,53,353,94"/>
-<area shape="rect" id="node5" href="$namespacemod__fonction.html#abb74ac4bf37940612469a87d28b941ca" title="mod_fonction::coltomat" alt="" coords="207,119,366,145"/>
-<area shape="rect" id="node6" href="$namespacemod__fonction.html#adb67f41abfa8983358cddaa27c098249" title="mod_fonction::inv_mat_pass" alt="" coords="192,169,381,196"/>
-<area shape="rect" id="node7" href="$namespacemod__fonction.html#a9aa1c01c8254830d4ee6500a21c03b78" title="mod_fonction::prodmat" alt="" coords="209,220,364,247"/>
-<area shape="rect" id="node4" href="$namespacemod__fonction.html#aabd420ff9cf5d5624ef071b7a504ad17" title="mod_fonction::vec_crotz" alt="" coords="429,60,595,87"/>
+<area shape="rect" id="node2" href="$namespacemod__fonction.html#a4d1143c408824825477d3e48b8dc33f9" title="Retourne le vecteur norme. " alt="" coords="429,5,595,32"/>
+<area shape="rect" id="node3" href="$namespacemod__fonction.html#a15f392616c74da83dd70d160f0f6f458" title="cree une bond (base) A, B, V a partir d&#39;une direction V donnee normee " alt="" coords="220,53,353,94"/>
+<area shape="rect" id="node5" href="$namespacemod__fonction.html#abb74ac4bf37940612469a87d28b941ca" title="Creation d&#39;une matrice a partir de trois vecteurs colonnes. " alt="" coords="207,119,366,145"/>
+<area shape="rect" id="node6" href="$namespacemod__fonction.html#adb67f41abfa8983358cddaa27c098249" title="inverse d&#39;une matrice de determinant unite formee par 3 vecteurs unites " alt="" coords="192,169,381,196"/>
+<area shape="rect" id="node7" href="$namespacemod__fonction.html#a9aa1c01c8254830d4ee6500a21c03b78" title="Produit de deux matrices 3*3. " alt="" coords="209,220,364,247"/>
+<area shape="rect" id="node4" href="$namespacemod__fonction.html#aabd420ff9cf5d5624ef071b7a504ad17" title="Produit vectoriel AxB. " alt="" coords="429,60,595,87"/>
 </map>

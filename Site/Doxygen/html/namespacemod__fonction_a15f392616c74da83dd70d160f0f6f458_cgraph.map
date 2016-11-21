@@ -1,4 +1,4 @@
 <map id="mod_fonction::cree_mat_pass" name="mod_fonction::cree_mat_pass">
-<area shape="rect" id="node2" href="$namespacemod__fonction.html#aabd420ff9cf5d5624ef071b7a504ad17" title="mod_fonction::vec_crotz" alt="" coords="187,5,352,32"/>
-<area shape="rect" id="node3" href="$namespacemod__fonction.html#a4d1143c408824825477d3e48b8dc33f9" title="mod_fonction::vec_norm" alt="" coords="187,56,352,83"/>
+<area shape="rect" id="node2" href="$namespacemod__fonction.html#aabd420ff9cf5d5624ef071b7a504ad17" title="Produit vectoriel AxB. " alt="" coords="187,5,352,32"/>
+<area shape="rect" id="node3" href="$namespacemod__fonction.html#a4d1143c408824825477d3e48b8dc33f9" title="Retourne le vecteur norme. " alt="" coords="187,56,352,83"/>
 </map>
