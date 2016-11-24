@@ -13,6 +13,7 @@ contains
   subroutine initialisation(filename)
     character(len=*), intent(in) :: filename
     character(len=3)             :: bfr ! Variable poubelle
+    integer                      :: i,j,k , num
 
     open(11, file=filename, action="read", status="old")
     read(11,'(A3,I6)')    bfr, Nx     ! "Nx="
@@ -37,7 +38,7 @@ contains
     k0      = 6.2e17 !2.0e+4
     Q       = 287.e+3 !626e+3
 
-    flux = 7.e+6
+    flux = 11.e+6
 
     dt = 1.e-4
     dx = Lx/(Nx+1)
@@ -74,12 +75,27 @@ contains
     cp_N2    = reshape((/298., 228./),(/1,2/))
     lambda_N2    = reshape((/298., 22./),(/1,2/))
 
-    rho_fibre = 1600.
-    cp_fibre = reshape((/298., 228./),(/1,2/))
-    lambda_fibre = reshape((/298., 22./),(/1,2/))
+    ! rho_fibre = 1600.
+    ! cp_fibre = reshape((/298., 228./),(/1,2/))
+    ! lambda_fibre = reshape((/298., 22./),(/1,2/))
+    ! Laine de verre
+    rho_fibre = 35.
+    cp_fibre = reshape((/298., 1030./),(/1,2/))
+    lambda_fibre = reshape((/298., 0.039/),(/1,2/))
 
     allocate(fraction_vol(Nx*Ny*Nz,3))! (/Si,N2,fibre/)
-    fraction_vol(:,3) = 0.1
+    do i = 1,Nx
+      do j = 1,Ny
+        do k = 1,Nz
+          num=(k-1)*Nx*Ny + (j-1)*Nx + i
+          if (j<=Ny/2)then
+            fraction_vol(num,3) = 0.01
+          else
+            fraction_vol(num,3) = 0.
+          end if
+        end do
+      end do
+    end do
     fraction_vol(:,1) = 0.76*(1-fraction_vol(:,3)) ! 0.76 CFC
     fraction_vol(:,2) = 1.-fraction_vol(:,1)-fraction_vol(:,3)
 

@@ -334,7 +334,7 @@ contains
     residu=b-Matmula(x)
     norm_c = dot_product(residu,residu)
     norm_prec_c=norm_c
-    norm_rhs = dot_product(rhs,rhs)
+    norm_rhs = dot_product(b,b)
     p=residu
 
     err = eps*norm_rhs !norm_c/norm_rhs >= eps
@@ -342,7 +342,7 @@ contains
     ! Boucle
     nb_iter=0
     do while ((norm_c >=  err).and.(nb_iter<10000))
-
+      !print*, dot_product(p,p)
        Ap = Matmula(p)
        App = dot_product(Ap,p)
        x=x+(norm_c/App)*p
@@ -576,7 +576,7 @@ contains
   end subroutine vec_norm
 
 
-  !> @brief Produit de deux matrices 3*3 
+  !> @brief Produit de deux matrices 3*3
   subroutine prodmat(A,B,res)
     real(PR), dimension(3,3), intent(in) :: A,B
     real(PR), dimension(3,3), intent(out) :: res
