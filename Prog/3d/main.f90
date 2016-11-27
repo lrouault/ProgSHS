@@ -17,8 +17,9 @@ program main
 
   integer  :: iter
 
-  ! call fillPoro("IMAGE_crop.mat","IMAGE_crop2.mat") ! Remplit fibre(porox/y/z)
-  ! call writeFibreVtk(Poro,porox,poroy,poroz)
+  call fillPoro("IMAGE_crop.mat","IMAGE_crop2.mat") ! Remplit fibre(porox/y/z)
+  call writeFibreVtk(Poro,porox,poroy,poroz)
+  print*, porox,poroy,poroz
   !
   ! call fillOrientation("IMAGE_crop.or")
   !

@@ -76,8 +76,8 @@ contains
 
 
     F_NAME='fichier/T'
-    write(F_NAME (10:14),'(I4.4)') N
-    F_NAME(15:18)= '.vtk'
+    write(F_NAME (10:13),'(I4.4)') N
+    F_NAME(14:17)= '.vtk'
 
 
     open(unit=2, file=F_NAME, action="write")
@@ -131,8 +131,8 @@ contains
     character(len=40)                   :: s1, s2, s3, s4, s5, s
 
     F_NAME='fichier/T'
-    write(F_NAME (10:14),'(I4.4)') N
-    F_NAME(15:18)= '.vtk'
+    write(F_NAME (10:13),'(I4.4)') N
+    F_NAME(14:17)= '.vtk'
 
     open(unit=2, file=F_NAME, action="write")
 
@@ -366,11 +366,14 @@ contains
     real(PR),dimension(Nx*Ny*Nz) :: U,Matmula
     integer:: i,j,k, num
 
+
     Matmula=0
-    do k= 1,Ny
+    do k= 1,Nz
       do j= 1,Ny
         do i=1,Nx
           num=(k-1)*Nx*Ny + (j-1)*Nx + i
+          ! print*, "---",Nx,Ny,Nz
+          ! print*, i,j,k,num
 
           ! Cz gauche
           if(k/=1)then

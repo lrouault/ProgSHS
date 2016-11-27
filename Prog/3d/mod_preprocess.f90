@@ -43,7 +43,7 @@ contains
     dt = 1.e-4
     dx = Lx/(Nx+1)
     dy = Ly/(Ny+1)
-    dz = Lz/(Ny+1)
+    dz = Lz/(Nz+1)
 
     allocate(U(Nx*Ny*Nz), rhs(Nx*Ny*Nz), U0(Nx*Ny*Nz), eta(Nx*Ny*Nz))
     allocate(Cd(Nx*Ny*Nz), Cx((Nx-1)*Ny*Nz), Cy(Nx*(Ny-1)*Nz), Cz(Nx*Ny*(Nz-1)))
@@ -79,23 +79,69 @@ contains
     ! cp_fibre = reshape((/298., 228./),(/1,2/))
     ! lambda_fibre = reshape((/298., 22./),(/1,2/))
     ! Laine de verre
-    rho_fibre = 35.
-    cp_fibre = reshape((/298., 1030./),(/1,2/))
-    lambda_fibre = reshape((/298., 0.039/),(/1,2/))
+    rho_fibre = 1000.
+    cp_fibre = reshape((/298., 500./),(/1,2/))
+    lambda_fibre = reshape((/298., 10./),(/1,2/))
+    ! ! Laine de verre
+    ! rho_fibre = 35.
+    ! cp_fibre = reshape((/298., 1030./),(/1,2/))
+    ! lambda_fibre = reshape((/298., 0.039/),(/1,2/))
 
     allocate(fraction_vol(Nx*Ny*Nz,3))! (/Si,N2,fibre/)
     do i = 1,Nx
       do j = 1,Ny
         do k = 1,Nz
           num=(k-1)*Nx*Ny + (j-1)*Nx + i
-          if (j<=Ny/2)then
-            fraction_vol(num,3) = 0.01
+          ! Partie superieur en fibre
+          if (i<=Nx/2)then
+            fraction_vol(num,3) = 1.
           else
             fraction_vol(num,3) = 0.
           end if
+
+          ! 5 bandes
+          if (i<=Nx/5)then
+            fraction_vol(num,3) = 1.
+          elseif (i<=2*Nx/5)then
+            fraction_vol(num,3) = 0.
+          elseif (i<=3*Nx/5)then
+            fraction_vol(num,3) = 1.
+          elseif (i<=4*Nx/5)then
+            fraction_vol(num,3) = 0.
+          else
+            fraction_vol(num,3) = 1.
+          end if
+
+          ! 5 bandes *2
+          if (i<=Nx/5 .and. k<=Nz/2)then
+            fraction_vol(num,3) = 1.
+          elseif (i<=2*Nx/5.and. k<=Nz/2)then
+            fraction_vol(num,3) = 0.
+          elseif (i<=3*Nx/5.and. k<=Nz/2)then
+            fraction_vol(num,3) = 1.
+          elseif (i<=4*Nx/5.and. k<=Nz/2)then
+            fraction_vol(num,3) = 0.
+          elseif (i<=Nx.and. k<=Nz/2)then
+            fraction_vol(num,3) = 1.
+          elseif (i<=Nx/5)then
+            fraction_vol(num,3) = 0.
+          elseif (i<=2*Nx/5)then
+            fraction_vol(num,3) = 1.
+          elseif (i<=3*Nx/5)then
+            fraction_vol(num,3) = 0.
+          elseif (i<=4*Nx/5)then
+            fraction_vol(num,3) = 1.
+          else
+            fraction_vol(num,3) = 0.
+          end if
+
+
+          ! Fibre
+          ! fraction_vol(num,3) = Poro(i,j,k)/256.
         end do
       end do
     end do
+
     fraction_vol(:,1) = 0.76*(1-fraction_vol(:,3)) ! 0.76 CFC
     fraction_vol(:,2) = 1.-fraction_vol(:,1)-fraction_vol(:,3)
 
