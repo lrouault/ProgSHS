@@ -7,6 +7,7 @@ module mod_physique
 
 contains
 
+  !> @brief Creer la matrice de discretisation
   subroutine creation_matrice()
     !Cd = rho*cp + (2.*lambda*dt)/(dx**2) + (2.*lambda*dt)/(dy**2)
     !Cx = -(lambda*dt)/(dx**2)
@@ -48,6 +49,7 @@ contains
     enddo
   end subroutine creation_matrice
 
+  !> @brief Construit les conditions limites
   function cd_lim()
     integer :: i,j,k, num
     real(PR),dimension(Nx*Ny*Nz) :: cd_lim
@@ -88,9 +90,10 @@ contains
     ! end do
   end function cd_lim
 
+  !> @brief Implique une condition de chauffe
   function chauffage()
     real(PR),dimension(Nx*Ny*Nz) :: chauffage
-    integer::i,j
+    integer::i,j,k
 
     if(eta((Ny/2)*Nx+2)==1.)then
       flux = 0.
@@ -98,21 +101,31 @@ contains
 
     chauffage = 0.
     !chauffage((Ny/2)*Nx+1) = -Cx((Ny/2)*Nx+1)*flux*dx/lambda((Ny/2)*Nx+1)
+    ! do i=1,Nx
+    !   do j=1,Ny
+    !     ! Répartition du chauffage à gauche -> 100% au milieu, 0% en y=0 et y=Ly
+    !     ! Fonction quadratique -(y/Ly)**2+(y/Ly)
+    !     !2D  face xy
+    !     chauffage((j-1)*Nx + i) = -Cx((j-1)*Nx+i)*flux*dx/lambda((j-1)*Nx+i) &
+    !     *16*(j*dy)*(j*dy-Ly)*(i*dx)*(i*dx-Lx)/(Lx**2*Ly**2)
+    !     ! Fonction linéaire -|y-Ly/2|/(Ly/2) + 1 (valeur absolue)
+    !     !2D chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-2*abs(j*dy-Ly/2)/Ly+1)*dx/lambda((j-1)*Nx+1)
+    !   end do
+    ! end do
     do i=1,Nx
-      do j=1,Ny
-        ! Répartition du chauffage à gauche -> 100% au milieu, 0% en y=0 et y=Ly
-        ! Fonction quadratique -(y/Ly)**2+(y/Ly)
-        !2D  chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-(j*dy/Ly)**2+j*dy/Ly)*dx/lambda((j-1)*Nx+1)
-        chauffage((j-1)*Nx + i) = -Cx((j-1)*Nx+i)*flux*dx/lambda((j-1)*Nx+i) &
-        *16*(j*dy)*(j*dy-Ly)*(i*dx)*(i*dx-Lx)/(Lx**2*Ly**2)
+      do k=1,Nz
+        !2D  face xz
+        ! chauffage((k-1)*Nx*Ny + i) = -Cx((k-1)*Nx*Ny + i)*flux*dx/lambda((k-1)*Nx*Ny + i) &
+        ! *16*(k*dz)*(k*dz-Lz)*(i*dx)*(i*dx-Lx)/(Lx**2*Lz**2)
+        ! chauffe pleine
+        chauffage((k-1)*Nx*Ny + i) = -Cx((k-1)*Nx*Ny + i)*flux*dx/lambda((k-1)*Nx*Ny + i)
 
-        ! Fonction linéaire -|y-Ly/2|/(Ly/2) + 1 (valeur absolue)
-        !2D chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-2*abs(j*dy-Ly/2)/Ly+1)*dx/lambda((j-1)*Nx+1)
       end do
     end do
 
   end function chauffage
 
+  !> @brief Calcule le terme d'energie de la reaction chimique
   function eq_arrhenius()
     integer :: i
     !integer :: p
@@ -137,7 +150,7 @@ contains
   end function eq_arrhenius
 
 
-  ! Calcul des differentes proprietes des materiaux
+  !> @brief Calcul des differentes proprietes des materiaux
   subroutine c_rho()
     ! Calule rhocp pur chaque maille
     integer  :: i
@@ -149,9 +162,8 @@ contains
     end do
   end subroutine c_rho
 
-
+  !> @brief Calule rhocp pour chaque maille
   subroutine c_rhocp()
-    ! Calule rhocp pour chaque maille
     integer  :: i
 
     do i = 1,Nx*Ny*Nz
@@ -162,9 +174,8 @@ contains
     end do
   end subroutine c_rhocp
 
-
+  !> @brief Calul lambda pour chaque maille (isotrope pour le moment)
   subroutine c_lambda()
-    ! Calule lambda pour chaque maille (isotrope pour le moment)
     integer  :: i
 
     do i = 1,Nx*Ny*Nz
@@ -176,9 +187,8 @@ contains
     end do
   end subroutine c_lambda
 
-
+  !> @brief Calcul du flux en lambda entre caseles mailles i et j
   function f_lambda(i,j)
-    ! Calcul du flux en lambda entre caseles mailles i et j
     integer  :: i,j
     real(PR) :: f_lambda
 

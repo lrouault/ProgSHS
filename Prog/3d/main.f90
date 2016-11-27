@@ -3,9 +3,8 @@
 !! @section Introduction
 !! Ce document décrit les sources du code resolvant le probleme ..
 !!
-!! One can add diagrams to the document.  For example,
-!! The following diagram shows the breakdown of the entire XYZ model.
-
+!! @section Information
+!! Pour plus d'informations regarder les pages documentations du site.
 
 
 program main
@@ -18,8 +17,9 @@ program main
 
   integer  :: iter
 
-  ! call fillPoro("IMAGE_crop.mat","IMAGE_crop2.mat") ! Remplit fibre(porox/y/z)
-  ! call writeFibreVtk(Poro,porox,poroy,poroz)
+  call fillPoro("IMAGE_crop.mat","IMAGE_crop2.mat") ! Remplit fibre(porox/y/z)
+  call writeFibreVtk(Poro,porox,poroy,poroz)
+  print*, porox,poroy,poroz
   !
   ! call fillOrientation("IMAGE_crop.or")
   !
