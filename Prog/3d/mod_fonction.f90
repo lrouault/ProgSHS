@@ -125,72 +125,93 @@ contains
 
     integer,intent(in)                            :: Numx,Numy,Numz, N
     real(PR)                                      :: deltax,deltay,deltaz
-    real(PR),dimension(Numx*Numy*Numz),intent(in) :: U
-    integer                             :: i, j, k, num
+    real(PR),dimension(num1:numN),intent(in) :: U
+    integer                             :: i, j, k, num, ideb, ifin
     character(len=20)                   :: F_NAME
     character(len=40)                   :: s1, s2, s3, s4, s5, s
+    real(PR),dimension(Numx*Numy*Numz) :: X,chimie
 
-    F_NAME='fichier/T'
-    write(F_NAME (10:13),'(I4.4)') N
-    F_NAME(14:17)= '.vtk'
+    if(Me/=0)then
+       call MPI_SEND(U(num1:numN),numN-num1+1,MPI_REAL8,0,100,MPI_COMM_WORLD,statinfo)
+       call MPI_SEND(eta(num1:numN),numN-num1+1,MPI_REAL8,0,102,MPI_COMM_WORLD,statinfo)
+       
+    end if
+    if(Me==0)then
+       X(num1:numN) = U
+       chimie(num1:numN) = eta
+       do i=1,Np-1
+          call charge(Nz,Np,i,ideb,ifin)
+          call MPI_RECV(X((ideb-1)*Nx*Ny+1:ifin*Nx*Ny),&
+               Nx*Ny*(ifin-ideb+1),MPI_REAL8,i,100,MPI_COMM_WORLD,status,statinfo)
+          call MPI_RECV(chimie((ideb-1)*Nx*Ny+1:ifin*Nx*Ny),&
+               Nx*Ny*(ifin-ideb+1),MPI_REAL8,i,102,MPI_COMM_WORLD,status,statinfo)
+       end do
+    end if
 
-    open(unit=2, file=F_NAME, action="write")
+    if(Me==0)then
+       F_NAME='fichier/T'
+       write(F_NAME (10:13),'(I4.4)') N
+       F_NAME(14:17)= '.vtk'
 
-    write(2,'(a)')       "# vtk DataFile Version 2.0"
-    write(2,'(a)')       "Titre"
-    write(2,'(a)')       "ASCII"
-    write(2,'(a)')       "DATASET STRUCTURED_POINTS"
-    write(s1,'(I4)')     Numx
-    write(s2,'(I4)')     Numy
-    write(s3,'(I4)')     Numz
-    write(2,'(a)')       "DIMENSIONS " // adjustl(trim(s1)) // adjustl(trim(s2)) // adjustl(trim(s3))
-    write(2,'(a)')       "ORIGIN 0.0 0.0 0.0"
-    write(s1,'(F20.10)')  deltax !dx
-    write(s2,'(F20.10)')  deltay !dx
-    write(s3,'(F20.10)')  deltaz
-    write(2,'(a)')       "SPACING " // adjustl(trim(s1)) // adjustl(trim(s2)) // adjustl(trim(s3))
-    write(s5,'(I8)')     (Numx*Numy*Numz)
-    write(2,'(a)')       "POINT_DATA " // adjustl(trim(s5))
-    write(2,'(a)')       "SCALARS Temperature double"
-    write(2,'(a)')       "LOOKUP_TABLE default"
+       open(unit=2, file=F_NAME, action="write")
 
-    do k = 1,Numz
-      do j = 1,Numy
-        do i = 1,Numx
-          num=(k-1)*Nx*Ny + (j-1)*Nx + i
-
-          if(modulo(j,10) == 0) then
-            write(2,'(/)',advance='no')
-          end if
-          s = ""
-          write(s,'(F20.10)')         U(num)
-          write(2,'(a)',advance='no') adjustl(trim(s)) // " "
-        enddo
-      end do
-    end do
-
-    write(2,'(a)')       "SCALARS Eta double"
-    write(2,'(a)')       "LOOKUP_TABLE default"
-
-    do k = 1,Numz
-      do j = 1,Numy
-        do i = 1,Numx
-          num=(k-1)*Nx*Ny + (j-1)*Nx + i
-
-          if(modulo(j,10) == 0) then
-            write(2,'(/)',advance='no')
-          end if
-          s = ""
-          write(s,'(F20.10)')         eta(num)
-          write(2,'(a)',advance='no') adjustl(trim(s)) // " "
-        enddo
-      end do
-    end do
+       write(2,'(a)')       "# vtk DataFile Version 2.0"
+       write(2,'(a)')       "Titre"
+       write(2,'(a)')       "ASCII"
+       write(2,'(a)')       "DATASET STRUCTURED_POINTS"
+       write(s1,'(I4)')     Numx
+       write(s2,'(I4)')     Numy
+       write(s3,'(I4)')     Numz
+       write(2,'(a)')       "DIMENSIONS " // adjustl(trim(s1)) // adjustl(trim(s2)) // adjustl(trim(s3))
+       write(2,'(a)')       "ORIGIN 0.0 0.0 0.0"
+       write(s1,'(F20.10)')  deltax !dx
+       write(s2,'(F20.10)')  deltay !dx
+       write(s3,'(F20.10)')  deltaz
+       write(2,'(a)')       "SPACING " // adjustl(trim(s1)) // adjustl(trim(s2)) // adjustl(trim(s3))
+       write(s5,'(I8)')     (Numx*Numy*Numz)
+       write(2,'(a)')       "POINT_DATA " // adjustl(trim(s5))
+       write(2,'(a)')       "SCALARS Temperature double"
+       write(2,'(a)')       "LOOKUP_TABLE default"
 
 
-    close(2)
+       do k = 1,Numz
+          do j = 1,Numy
+             do i = 1,Numx
+                num = (k-1)*Nx*Ny + (j-1)*Nx + i
 
-    print*, "SVG -> ", F_NAME
+                if(modulo(j,10) == 0) then
+                   write(2,'(/)',advance='no')
+                end if
+                s = ""
+                write(s,'(F20.10)')         X(num)
+                write(2,'(a)',advance='no') adjustl(trim(s)) // " "
+             enddo
+          end do
+       end do
+
+       write(2,'(a)')       "SCALARS Eta double"
+       write(2,'(a)')       "LOOKUP_TABLE default"
+
+       do k = 1,Numz
+          do j = 1,Numy
+             do i = 1,Numx
+                num = (k-1)*Nx*Ny + (j-1)*Nx + i
+
+                if(modulo(j,10) == 0) then
+                   write(2,'(/)',advance='no')
+                end if
+                s = ""
+                write(s,'(F20.10)')         chimie(num)
+                write(2,'(a)',advance='no') adjustl(trim(s)) // " "
+             enddo
+          end do
+       end do
+
+
+       close(2)
+
+       print*, "SVG -> ", F_NAME
+    end if
   end subroutine write3dVtk
 
   !> @brief Ecrit au format vtk ...
@@ -257,51 +278,63 @@ contains
   !! @param[in] Nx,Ny
   !! @param[in] dx,dy
   !! @param[in] N
-  subroutine printvector(U, Num)
+  subroutine printvector(X, Y, N)
 
-    integer,intent(in)                  ::  Num
-    real(PR),dimension(Nx*Ny),intent(in) :: U
-    integer                             :: i, j
-    character(len=20)                   :: F_NAME
+    integer,intent(in)                               :: N
+    real(PR),dimension((k1-1)*Nx*Ny+1:kN*Nx*Ny),intent(in) :: X,Y
+    integer                                          :: i, j
+    character(len=20)                                :: F_NAME
 
-    if (Num<10) then
+    if (N<10) then
        F_NAME='fichier/T'
-       write(F_NAME (10:10),'(I1)') Num
-       F_NAME(11:14)= '.dat'
-
-    elseif ((Num>=10).and.(Num<100)) then
-       F_NAME='fichier/T'
-       write(F_NAME (10:11),'(I2)') Num
-       F_NAME(12:15)= '.dat'
-
-    elseif ((Num>=100).and.(Num<1000)) then
-       F_NAME='fichier/T'
-       write(F_NAME (10:12),'(I3)') Num
+       write(F_NAME (10:10),'(I1)') N
+       F_NAME(11:11)='P'
+       write(F_NAME (12:12),'(I1)') Me
        F_NAME(13:16)= '.dat'
 
-    else if ((Num>=1000).and.(Num<10000)) then
+    elseif ((N>=10).and.(N<100)) then
        F_NAME='fichier/T'
-       write(F_NAME (10:13),'(I4)') Num
+       write(F_NAME (10:11),'(I2)') N
+       F_NAME(12:12)='P'
+       write(F_NAME (13:13),'(I1)') Me
        F_NAME(14:17)= '.dat'
 
-    else if ((Num>=10000).and.(Num<100000)) then
+    elseif ((N>=100).and.(N<1000)) then
        F_NAME='fichier/T'
-       write(F_NAME (10:14),'(I5)') Num
+       write(F_NAME (10:12),'(I3)') N
+       F_NAME(13:13)='P'
+       write(F_NAME (14:14),'(I1)') Me
        F_NAME(15:18)= '.dat'
+
+    else if ((N>=1000).and.(N<10000)) then
+       F_NAME='fichier/T'
+       write(F_NAME (10:13),'(I4)') N
+       F_NAME(14:14)='P'
+       write(F_NAME (15:15),'(I1)') Me
+       F_NAME(16:19)= '.dat'
+
+    else if ((N>=10000).and.(N<100000)) then
+       F_NAME='fichier/T'
+       write(F_NAME (10:14),'(I5)') N
+       F_NAME(15:15)='P'
+       write(F_NAME (16:16),'(I1)') Me
+       F_NAME(17:20)= '.dat'
     end if
 
     open(unit=2, file=F_NAME, action="write")
 
     do i=1,Nx
        do j=1,Ny
-          write(2,*) i*dx, j*dy, U((j-1)*Nx+i), eta((j-1)*Nx+i)
+          write(2,*) i*dx, j*dy, X((j-1)*Nx+i), Y((j-1)*Nx+i)
        end do
        write(2,*)
     end do
 
     close(2)
 
-    print*, 'SVG numero: ',Num
+    if(Me==0) then
+       print*, 'SVG numero: ',N
+    end if
 
   end subroutine printvector
 
@@ -320,38 +353,79 @@ contains
   !! @param[in] N
   subroutine Gradient_conjugue(X,b,eps)
     implicit none
-    real(PR),dimension(Nx*Ny*Nz) :: x
-    real(PR),dimension(Nx*Ny*Nz) :: b
+    real(PR),dimension(num1:numN) :: x
+    real(PR),dimension(num1:numN) :: b
     real(PR)                     :: eps
 
-    real(PR),dimension(Nx*Ny*Nz) :: residu,p,Ap
-    real(PR)                     :: norm_prec_c,norm_c,norm_rhs,App,err
+    integer,parameter :: NitMax = 100000
+
+    real(PR),dimension(num1:numN) :: residu,Ap
+    real(PR),dimension(num1-Nx*Ny:numN+Nx*Ny) :: p,x_r
+    real(PR)                     :: norm_r0,norm_r,norm_rtotal,norm_b,norm_btot,App,App_total,err
     integer                      :: n,nb_iter
+    integer,dimension(MPI_STATUS_SIZE) :: status
 
-    ! Initialisation des variables
-    n=Nx*Ny*Nz
+    
+    x_r = 0.
 
-    residu=b-Matmula(x)
-    norm_c = dot_product(residu,residu)
-    norm_prec_c=norm_c
-    norm_rhs = dot_product(b,b)
-    p=residu
+    if(Me<Np-1) then ! pas optimisé
+       call MPI_SEND(x(numN-Nx*Ny+1:numN),Nx*Ny,mpi_real8,Me+1,101,MPI_COMM_WORLD,statinfo) 
+    end if
+    if(Me>0) then
+       call MPI_RECV(x_r(num1-Nx*Ny:num1-1),Nx*Ny,mpi_real8,Me-1,101,MPI_COMM_WORLD,status,statinfo)
+       call MPI_SEND(x(num1:num1+Nx*Ny-1),Nx*Ny,mpi_real8,Me-1,101,MPI_COMM_WORLD,statinfo)
+    end if
+    if(Me<Np-1) then
+       call MPI_RECV(x_r(numN+1:numN+Nx*Ny),Nx*Ny,mpi_real8,me+1,101,MPI_COMM_WORLD,status,statinfo)
+    end if
+    
+    x_r(num1:numN) = x
+    residu  = b - Matmula(x_r)
+    p(num1:numN) = residu
 
-    err = eps*norm_rhs !norm_c/norm_rhs >= eps
+    !Calcul de la norme et l envoie a tout le monde
+    norm_r = dot_product(residu,residu)
+    call MPI_ALLREDUCE(norm_r,norm_rtotal,1,mpi_real8,MPI_SUM,MPI_COMM_WORLD,statinfo)
+    norm_r0 = norm_rtotal
+    !norm_b  = norm_rtotal
+    norm_b = dot_product(b,b)
+    call MPI_ALLREDUCE(norm_b,norm_btot,1,mpi_real8,MPI_SUM,MPI_COMM_WORLD,statinfo)
+    err = norm_btot*eps**2
 
-    ! Boucle
-    nb_iter=0
-    do while ((norm_c >=  err).and.(nb_iter<10000))
-      !print*, dot_product(p,p)
+    ! Boucle 
+    nb_iter=1
+    do while ((norm_rtotal >=  err).and.(nb_iter<NitMax))
+
+       !Reconstruction de p(i1-Nx:in+Nx)
+       if(Me<Np-1) then
+          call MPI_SEND(p(numN-Nx*Ny+1:numN),Nx*Ny,mpi_real8,Me+1,101,MPI_COMM_WORLD,statinfo)
+       end if
+       if(Me>0) then
+          call MPI_RECV(p(num1-Nx*Ny:num1-1),Nx*Ny,mpi_real8,Me-1,101,MPI_COMM_WORLD,status,statinfo)
+          call MPI_SEND(p(num1:num1+Nx*Ny-1),Nx*Ny,mpi_real8,Me-1,101,MPI_COMM_WORLD,statinfo)
+       end if
+       if(Me<Np-1) then
+          call MPI_RECV(p(numN+1:numN+Nx*Ny),Nx*Ny,mpi_real8,me+1,101,MPI_COMM_WORLD,status,statinfo)
+       end if
+       
        Ap = Matmula(p)
-       App = dot_product(Ap,p)
-       x=x+(norm_c/App)*p
-       residu=residu-(norm_c/App)*Ap
-       norm_c = dot_product(residu,residu)
-       p=residu+(norm_c/norm_prec_c)*p
+       
+       ! Calcul de App_total
+       App = dot_product(Ap,p(num1:numN))
+       call MPI_ALLREDUCE(App,App_total,1,mpi_real8,MPI_SUM,MPI_COMM_WORLD,statinfo)
 
-       norm_prec_c=norm_c
-       nb_iter=nb_iter+1
+       x = x + (norm_rtotal/App_total)*p(num1:numN)
+
+       residu = residu-(norm_rtotal/App_total)*Ap
+
+       ! Calcul de la norme du residu
+       norm_r = dot_product(residu,residu)!Norme par partie
+       call MPI_ALLREDUCE(norm_r,norm_rtotal,1,mpi_real8,MPI_SUM,MPI_COMM_WORLD,statinfo)
+       
+       p(num1:numN) = residu + (norm_rtotal/norm_r0)*p(num1:numN)
+
+       norm_r0 = norm_rtotal
+       nb_iter = nb_iter + 1
        iteration = iteration + 1
     end do
 
@@ -363,12 +437,13 @@ contains
   !! @param[in] U
   function Matmula(U)
     implicit none
-    real(PR),dimension(Nx*Ny*Nz) :: U,Matmula
+    real(PR),dimension(num1-Nx*Ny:numN+Nx*Ny) :: U
+    real(PR),dimension(num1:numN)             :: Matmula
     integer:: i,j,k, num
 
 
     Matmula=0
-    do k= 1,Nz
+    do k= k1,kN
       do j= 1,Ny
         do i=1,Nx
           num=(k-1)*Nx*Ny + (j-1)*Nx + i
@@ -377,29 +452,29 @@ contains
 
           ! Cz gauche
           if(k/=1)then
-            Matmula(num)=Matmula(num)+Cz(num-Nx*Ny)*U(num-Nx*Ny)  !!
+            Matmula(num) = Matmula(num) + Cz(num-Nx*Ny)*U(num-Nx*Ny)  !!
           end if
           ! Cy gauche
           if(j/=1)then
-            Matmula(num)=Matmula(num)+Cy(num-k*Nx)*U(num-Nx)  !!
+            Matmula(num) = Matmula(num) + Cy(num-k*Nx)*U(num-Nx)  !!
           end if
           ! Cx gauche
           if(i/=1)then
-            Matmula(num)=Matmula(num)+Cx(num-j-(k-1)*Ny)*U(num-1)    !!
+            Matmula(num) = Matmula(num) + Cx(num-j-(k-1)*Ny)*U(num-1)    !!
           end if
           ! Cd
-          Matmula(num)=Matmula(num)+Cd(num)*U(num)
+          Matmula(num)   = Matmula(num) + Cd(num)*U(num)
           ! Cx droite
           if(i/=Nx)then
             Matmula(num)=Matmula(num)+Cx(num-(j-1)-(k-1)*Ny)*U(num+1)    !!
           end if
           ! Cy droite
           if(j/=Ny)then
-            Matmula(num)=Matmula(num)+Cy(num-(k-1)*Nx)*U(num+Nx)  !!
+            Matmula(num) = Matmula(num) + Cy(num-(k-1)*Nx)*U(num+Nx)  !!
           end if
           ! Cz droite
           if(k/=Nz)then
-            Matmula(num)=Matmula(num)+Cz(num)*U(num+Nx*Ny)  !!
+            Matmula(num) = Matmula(num) + Cz(num)*U(num+Nx*Ny)  !!
           end if
         end do
       end do
@@ -586,6 +661,20 @@ contains
 
     res=matmul(A,B)
   end subroutine prodmat
+
+  subroutine charge(n,Np,me,k1,kN)
+    integer,intent(in)::n,Np,me
+    integer,intent(out)::k1,kN
+    integer::q
+    q=n/Np
+    if(me<mod(n,Np))then
+       k1=me*(q+1)+1
+       kN=(me+1)*(1+q)
+    else
+       k1=mod(n,Np)+1+me*q
+       kN=k1+q-1
+    end if
+  end subroutine charge
 
 
 

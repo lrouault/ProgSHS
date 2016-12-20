@@ -13,7 +13,7 @@ contains
   subroutine initialisation(filename)
     character(len=*), intent(in) :: filename
     character(len=3)             :: bfr ! Variable poubelle
-    integer                      :: i,j,k , num
+    integer                      :: i,j,k,num
 
     open(11, file=filename, action="read", status="old")
     read(11,'(A3,I6)')    bfr, Nx     ! "Nx="
@@ -25,6 +25,14 @@ contains
     !read(11,'(A4,F10.6)') bfr, rho    ! "rho="
     !read(11,'(A3,F10.6)') bfr, cp     ! "cp="
     !read(11,'(A7,F4.6)')  bfr, lambda ! "lambda"
+
+    ! Parallèle
+    call MPI_INIT(statinfo)
+    call MPI_COMM_RANK(MPI_COMM_WORLD,Me,statinfo)
+    call MPI_COMM_SIZE(MPI_COMM_WORLD,Np,statinfo)
+    call charge(Nz,Np,Me,k1,kN)
+    num1 = (k1-1)*Nx*Ny + 1
+    numN = kN*Nx*Ny
 
     tmax    = 1.
     Niter   = 10000
@@ -44,22 +52,23 @@ contains
     dx = Lx/(Nx+1)
     dy = Ly/(Ny+1)
     dz = Lz/(Nz+1)
+    
 
-    allocate(U(Nx*Ny*Nz), rhs(Nx*Ny*Nz), U0(Nx*Ny*Nz), eta(Nx*Ny*Nz))
-    allocate(Cd(Nx*Ny*Nz), Cx((Nx-1)*Ny*Nz), Cy(Nx*(Ny-1)*Nz), Cz(Nx*Ny*(Nz-1)))
-
+    allocate(U(num1:numN), rhs(num1:numN), U0(num1:numN), eta(num1:numN))
+    allocate(Cd(num1:numN), Cx((Nx-1)*Ny*Nz), Cy(Nx*(Ny-1)*Nz), Cz(Nx*Ny*(Nz-1)))
+    
     rhs = 0.
     eta = 0.
 
     ! Conditions initiales
 
     U0 = 298.
-    U=U0
+    U = U0
 
     nb_fichiers = 100
 
     ! MATERIAU
-    allocate(rho(Nx*Ny*Nz),   rhocp(Nx*Ny*Nz),    lambda(Nx*Ny*Nz))
+    allocate(rho(num1:numN),   rhocp(num1:numN),    lambda(num1:numN))
     allocate(cp_Si(1,2)    , cp_Si3N4(1,2)    , cp_N2(1,2)    , cp_fibre(1,2)    )
     allocate(lambda_Si(1,2), lambda_Si3N4(1,2), lambda_N2(1,2), lambda_fibre(1,2))
 
@@ -159,6 +168,7 @@ contains
     deallocate(cp_Si,     cp_Si3N4 ,    cp_N2 ,    cp_fibre )
     deallocate(lambda_Si, lambda_Si3N4, lambda_N2, lambda_fibre)
     deallocate(fraction_vol) ! (/Si,N2,fibre/)
+    call MPI_FINALIZE(statinfo)
 
   end subroutine fin
 

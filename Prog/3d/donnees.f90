@@ -3,6 +3,7 @@
 module donnees
 
   implicit none
+  include "mpif.h"
 
   integer, parameter :: PR=Selected_real_kind(12,60) !12,60
 
@@ -53,6 +54,10 @@ module donnees
   integer :: porox, poroy, poroz
 
   integer :: iteration
+
+  !Parallèle
+  integer :: statinfo,Np,Me,num1,numN,k1,kN
+  integer,dimension(MPI_STATUS_SIZE) :: status
 
 contains
 
