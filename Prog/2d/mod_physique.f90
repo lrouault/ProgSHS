@@ -14,93 +14,108 @@ contains
     call c_rho()
     call c_rhocp()
     call c_lambda()
-
     do i=1,Nx
-       do j=1,Ny
+       do j=j1,jN
           k=(j-1)*Nx+i
 
           Cd(k) = rhocp(k) !!  + (2.*lambda*dt)/(dx**2) + (2.*lambda*dt)/(dy**2)
-          if(i/=1)  Cd(k) = Cd(k) + dt/(dx**2)*f_lambda(k-1,k)
+          if(i/=1)  Cd(k) = Cd(k) + dt/(dx**2)*f_lambda(k,k-1)
           if(i/=Nx) Cd(k) = Cd(k) + dt/(dx**2)*f_lambda(k,k+1)
-          if(j/=1)  Cd(k) = Cd(k) + dt/(dy**2)*f_lambda(k-Nx,k)
-          if(j/=Ny) Cd(k) = Cd(k) + dt/(dy**2)*f_lambda(k,k+Nx)
+          if(j/=1)  Cd(k) = Cd(k) + dt/(dy**2)*f_lambda(k,k)!-Nx)
+          if(j/=Ny) Cd(k) = Cd(k) + dt/(dy**2)*f_lambda(k,k)!+Nx)
 
 
-          if(i/=Nx)then
-             Cx(k-j+1)  = -dt/(dx**2)*f_lambda(k,k+1)
-          end if
+          if(i/=Nx) Cx(k-j+1) = -dt/(dx**2)*f_lambda(k,k+1)
+          if(j/=Ny) Cy(k) = -dt/(dy**2)*f_lambda(k,k)!+Nx)
 
-          if(j/=Ny)then
-             Cy(k) = -dt/(dy**2)*f_lambda(k,k+Nx)
-          end if
        end do
     end do
+    
+    if(Me/=Np-1)then
+       call MPI_SEND(Cy(numN-Nx+1:numN),Nx,MPI_REAL8,Me+1,101,MPI_COMM_WORLD,statinfo)
+    end if
+    if(Me/=0)then
+       call MPI_RECV(Cy(num1-Nx:num1-1),Nx,MPI_REAL8,Me-1,101,MPI_COMM_WORLD,status,statinfo)
+    end if
+    
   end subroutine creation_matrice
 
   function cd_lim()
     integer :: i,j,k
-    real(PR),dimension(Nx*Ny) :: cd_lim
+    real(PR),dimension(num1:numN) :: cd_lim
 
     cd_lim = 0.
-
-    do i=1,Nx
-       k=i !bas
-       cd_lim(k) = cd_lim(k) + Cy(k)*h*dy*(U(k)-Text)/lambda(k)
-       
-       k=(Ny-1)*Nx+i !haut
-       cd_lim(k) = cd_lim(k) + Cy(k)*h*dy*(U(k)-Text)/lambda(k)
-    end do
+    if(j1==1) then 
+       do i = 1,Nx
+          k = i !bas
+          cd_lim(k) = cd_lim(k) + Cy(k)*h*dy*(U(k)-Text)/lambda(k)
+       end do
+    end if
+    if (jN==Ny) then 
+       do i = 1,Nx
+          k = (Ny-1)*Nx + i !haut
+          cd_lim(k) = cd_lim(k) + Cy(k-Nx)*h*dy*(U(k)-Text)/lambda(k)
+       end do
+    end if
     
-    do j=1,Ny
-       k=(j-1)*Nx+1 !gauche
-       cd_lim(k) = cd_lim(k) + Cx(k)*h*dx*(U(k)-Text)/lambda(k)
+    do j = j1,jN
+       k = (j-1)*Nx + 1 !gauche
+       cd_lim(k) = cd_lim(k) + Cx(k-j+1)*h*dx*(U(k)-Text)/lambda(k)
        
-       k=(j-1)*Nx+Nx !droite
-       cd_lim(k) = cd_lim(k) + Cx(k)*h*dx*(U(k)-Text)/lambda(k)
+       k = (j-1)*Nx + Nx !droite
+       cd_lim(k) = cd_lim(k) + Cx(k-j)*h*dx*(U(k)-Text)/lambda(k)
     end do
 
   end function cd_lim
 
   function chauffage()
-    real(PR),dimension(Nx*Ny) :: chauffage
-    integer::j
+    real(PR),dimension(num1:numN) :: chauffage
+    integer  :: j,k
+    real(PR) :: y
+    real(PR) :: norm_eta
 
-    if(eta((Ny/2)*Nx+2)==1.)then
-       flux = 0.
-    end if
-
+    !Arrêt du chauffage si la réaction est lancée
+    call MPI_ALLREDUCE(dot_product(eta,eta),norm_eta,1,MPI_REAL8,MPI_SUM,MPI_COMM_WORLD,statinfo)
+    !if(norm_eta>0.16 .and. flux/=0.) flux = 0.
+    
     chauffage = 0.
     !chauffage((Ny/2)*Nx+1) = -Cx((Ny/2)*Nx+1)*flux*dx/lambda((Ny/2)*Nx+1)
-    do j=1,Ny
+    do j=j1,jN
+       k = (j-1)*Nx + 1
+       y = j*dy
+
        ! Répartition du chauffage à gauche -> 100% au milieu, 0% en y=0 et y=Ly
-       ! Fonction quadratique -(y/Ly)**2+(y/Ly)
-       !chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-(j*dy/Ly)**2+j*dy/Ly)*dx/lambda((j-1)*Nx+1)
+       ! Fonction quadratique (y/Ly)*(1-y/Ly)
+       chauffage(k) = -Cx(k-j+1)*flux*(y*(1-y/Ly)/Ly)*dx/lambda(k)
 
        ! Fonction linéaire -|y-Ly/2|/(Ly/2) + 1 (valeur absolue)
-       chauffage((j-1)*Nx+1) = -Cx((j-1)*Nx+1)*flux*(-2*abs(j*dy-Ly/2)/Ly+1)*dx/lambda((j-1)*Nx+1)
-    end do    
+       !chauffage(k) = -Cx(k-j+1)*flux*(-2*abs(y-Ly/2)/Ly+1)*dx/lambda(k)
+
+       ! Chauffage uniforme
+       !chauffage(k) = -Cx(k-j+1)*flux*dx/lambda(k)
+    end do
     
   end function chauffage
 
   function eq_arrhenius()
-    integer :: i
+    integer :: k
     !integer :: p
-    real(PR),dimension(Nx*Ny)::eq_arrhenius
+    real(PR),dimension(num1:numN)::eq_arrhenius
 
     !p = 1
     eta0 = eta
 
-    do i = 1,Nx*Ny
-       coef   = -Ea/(R*U(i))
-       !if (coef<-700) coef=-700
+    do k = num1,numN
+       coef   = -Ea/(R*U(k))
+       if (coef<-700) coef=-700
 
        !implicite
-       eta(i) = (eta(i)+dt*k0*exp(coef)) / (1+k0*dt*exp(coef))
+       eta(k) = (eta(k)+dt*k0*exp(coef)) / (1+k0*dt*exp(coef))
 
        !explicite, ordre p
-       !eta(i) = eta(i) + dt*k0*exp(-Ea/(R*U(i)))*(1-eta(i))**p
-       
-       eq_arrhenius(i) = eta(i)-eta0(i)
+       !eta(k) = eta(k) + dt*k0*exp(-Ea/(R*U(k)))*(1-eta(k))**p
+
+       eq_arrhenius(k) = eta(k)-eta0(k)
     end do
 
   end function eq_arrhenius
@@ -108,50 +123,63 @@ contains
 
   ! Calcul des differentes proprietes des materiaux
   subroutine c_rho()
-      ! Calule rhocp pour chaque maille
-      integer  :: i
+    ! Calule rhocp pour chaque maille
+    integer  :: k
+    
+    do k = num1,numN
+       rho(k) = fraction_vol(k,1) * ((1.-eta(k))*rho_Si + eta(k)*rho_Si3N4) &
+            + fraction_vol(k,2) * rho_N2     &
+            + fraction_vol(k,3) * rho_fibre
+    end do
+  end subroutine c_rho
+  
+  
+  subroutine c_rhocp()
+    ! Calule rhocp pour chaque maille
+    integer  :: k
+    
+    do k = num1,numN
+       rhocp(k) = fraction_vol(k,1) * & !fraction_vol(i,k)* &
+            ((1.-eta(k))*rho_Si*interp(cp_Si,U(k)) + eta(k)*rho_Si3N4*interp(cp_Si3N4,U(k))) &
+            + fraction_vol(k,2) * rho_N2    * interp(cp_N2,U(k)) &
+            + fraction_vol(k,3) * rho_fibre * interp(cp_fibre,U(k))
+    end do
+  end subroutine c_rhocp
 
-      do i = 1,Nx*Ny
-         rho(i) = fraction_vol(i,1) * ((1.-eta(i))*rho_Si + eta(i)*rho_Si3N4) &
-              + fraction_vol(i,2) * rho_N2     &
-              + fraction_vol(i,3) * rho_fibre
-      end do
-    end subroutine c_rho
+  
+  subroutine c_lambda()
+    ! Calule lambda pour chaque maille (isotrope pour le moment)
+    integer  :: k
 
+    do k = num1,numN
+       lambda(k) = fraction_vol(k,1)/ &
+            ((1.-eta(k))*interp(lambda_Si,U(k)) + eta(k)*interp(lambda_Si3N4,U(k))) &
+            + fraction_vol(k,2)/interp(lambda_N2,U(k)) &
+            + fraction_vol(k,3)/interp(lambda_fibre,U(k))
+       lambda(k) = 1./lambda(k)
+    end do
+  end subroutine c_lambda
+  
 
-    subroutine c_rhocp()
-      ! Calule rhocp pour chaque maille
-      integer  :: i
+  function f_lambda(i,j)
+    ! Calcul du flux en lambda entre caseles mailles i et j
+    integer  :: i,j,tmp
+    real(PR) :: f_lambda
 
-      do i = 1,Nx*Ny
-         rhocp(i) = fraction_vol(i,1)* &
-              ((1.-eta(i))*rho_Si*interp(cp_Si,U(i)) + eta(i)*rho_Si3N4*interp(cp_Si3N4,U(i))) &
-              + fraction_vol(i,2) * rho_N2    * interp(cp_N2,U(i)) &
-              + fraction_vol(i,3) * rho_fibre * interp(cp_fibre,U(i))
-      end do
-    end subroutine c_rhocp
+    if(i<num1 .or. i>numN)then
+       tmp = i
+       i = j
+       j = tmp
+    end if       
 
+    if(j>=num1 .and. j<=numN)then
+       f_lambda = 2. / (1./lambda(i) + 1./lambda(j))
+    else if(j<num1)then ! lambda proc-1
+       
+    else !  j>numN        lambda proc+1
 
-    subroutine c_lambda()
-      ! Calule lambda pour chaque maille (isotrope pour le moment)
-      integer  :: i
-
-      do i = 1,Nx*Ny
-         lambda(i) = fraction_vol(i,1)/ &
-              ((1.-eta(i))*interp(lambda_Si,U(i)) + eta(i)*interp(lambda_Si3N4,U(i))) &
-              + fraction_vol(i,2)/interp(lambda_N2,U(i)) &
-              + fraction_vol(i,3)/interp(lambda_fibre,U(i))
-         lambda(i) = 1./lambda(i)
-      end do
-    end subroutine c_lambda
-
-
-    function f_lambda(i,j)
-      ! Calcul du flux en lambda entre caseles mailles i et j
-      integer  :: i,j
-      real(PR) :: f_lambda
-
-      f_lambda = 1. / (1./lambda(i) + 1./lambda(j))
-    end function f_lambda
-
+    end if
+    
+  end function f_lambda
+  
 end module mod_physique

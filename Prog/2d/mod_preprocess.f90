@@ -6,10 +6,10 @@ module mod_preprocess
   implicit none
 
 contains
-
+  
   subroutine initialisation(filename)
     character(len=*), intent(in) :: filename
-    character(len=3)             :: bfr ! Variable poubelle
+    character(len=3)             :: bfr ! Variable poubelle    
 
     open(11, file=filename, action="read", status="old")
     read(11,'(A3,I6)')    bfr, Nx     ! "Nx="
@@ -19,6 +19,15 @@ contains
     !read(11,'(A4,F10.6)') bfr, rho    ! "rho="
     !read(11,'(A3,F10.6)') bfr, cp     ! "cp="
     !read(11,'(A7,F4.6)')  bfr, lambda ! "lambda"
+
+    ! Parallèle
+    call MPI_INIT(statinfo)
+    call MPI_COMM_RANK(MPI_COMM_WORLD,Me,statinfo)
+    call MPI_COMM_SIZE(MPI_COMM_WORLD,Np,statinfo)
+    call charge(Ny,Np,Me,j1,jN)
+
+    num1 = (j1-1)*Nx + 1
+    numN = jN*Nx
 
     tmax    = 1.
     Niter   = 10000
@@ -38,38 +47,55 @@ contains
     dx = Lx/(Nx+1)
     dy = Ly/(Ny+1)
 
-    allocate(U(Nx*Ny), rhs(Nx*Ny), U0(Nx*Ny), eta(Nx*Ny))
-    allocate(Cd(Nx*Ny), Cx((Nx-1)*Ny), Cy(Nx*(Ny-1)))
+    allocate(               &
+         U  (num1:numN), &
+         rhs(num1:numN), &
+         eta(num1:numN))
+
+    allocate(              &
+         Cd(num1:numN), &
+         Cx(num1-j1+1:numN-jN))
+
+    if(j1 /= 1 .and. jN /= Ny) then
+       !allocate(Cy((j1-2)*Nx+1:jN*Nx))
+       allocate(Cy(num1-Nx:numN))
+    else if(j1 == 1 .and. jN /= Ny) then
+       allocate(Cy(num1:numN))
+    else if(j1 /= 1 .and. jN == Ny) then
+       allocate(Cy(num1-Nx:numN-Nx))
+    else !if(j1 == 1 .and. jN == Ny) then
+       allocate(Cy(Nx*(Ny-1)))
+    end if
 
     rhs = 0.
     eta = 0.
 
     ! Conditions initiales
 
-    U0 = 298.
-    U=U0
-
+    !U0 = 298.
+    U  = 298.
     nb_fichiers = 100
 
     ! MATERIAU
-    allocate(rho(Nx*Ny),   rhocp(Nx*Ny),    lambda(Nx*Ny))
+    allocate(rho(num1:numN),   rhocp(num1:numN), lambda(num1:numN))
+
     allocate(cp_Si(1,2)    , cp_Si3N4(1,2)    , cp_N2(1,2)    , cp_fibre(1,2)    )
     allocate(lambda_Si(1,2), lambda_Si3N4(1,2), lambda_N2(1,2), lambda_fibre(1,2))
 
-    rho_Si    = 1600.
-    cp_Si    = reshape((/298., 228./),(/1,2/))
+    rho_Si       = 1600.
+    cp_Si        = reshape((/298., 228./),(/1,2/))
     lambda_Si    = reshape((/298., 22./),(/1,2/))
 
-    rho_Si3N4 = 1600.
-    cp_Si3N4 = reshape((/298., 228./),(/1,2/))
+    rho_Si3N4    = 1600.
+    cp_Si3N4     = reshape((/298., 228./),(/1,2/))
     lambda_Si3N4 = reshape((/298., 22./),(/1,2/))
 
-    rho_N2    = 1600.
-    cp_N2    = reshape((/298., 228./),(/1,2/))
+    rho_N2       = 1600.
+    cp_N2        = reshape((/298., 228./),(/1,2/))
     lambda_N2    = reshape((/298., 22./),(/1,2/))
 
-    rho_fibre = 1600.
-    cp_fibre = reshape((/298., 228./),(/1,2/))
+    rho_fibre    = 1600.
+    cp_fibre     = reshape((/298., 228./),(/1,2/))
     lambda_fibre = reshape((/298., 22./),(/1,2/))
 
     allocate(fraction_vol(Nx*Ny,3))! (/Si,N2,fibre/)
@@ -77,19 +103,19 @@ contains
     fraction_vol(:,1) = 0.76*(1-fraction_vol(:,3)) ! 0.76 CFC
     fraction_vol(:,2) = 1.-fraction_vol(:,1)-fraction_vol(:,3)
 
-
   end subroutine initialisation
 
-!*******************************************************!
-!*******************************************************!
+  !*******************************************************!
+  !*******************************************************!
 
   subroutine fin()
-
-    deallocate(U, rhs, U0, eta)
-    deallocate(rho,   rhocp,    lambda)
-    deallocate(cp_Si,     cp_Si3N4 ,    cp_N2 ,    cp_fibre )
+    deallocate(U, rhs, eta)
+    deallocate(Cd,Cx,Cy)
+    deallocate(rho, rhocp, lambda)
+    deallocate(cp_Si    , cp_Si3N4    , cp_N2    , cp_fibre )
     deallocate(lambda_Si, lambda_Si3N4, lambda_N2, lambda_fibre)
     deallocate(fraction_vol) ! (/Si,N2,fibre/)
+    call MPI_FINALIZE(statinfo)
 
   end subroutine fin
 
