@@ -232,26 +232,21 @@ section
     margin-bottom: 20px;
 }
 
-article, aside
-{
-    text-align: justify;
-}
-
-article
-{
-    margin-right: 20px;
-    flex: 3;
-}
-
 .ico_categorie
 {
     vertical-align: middle;
     margin-right: 8px;
 }
 
-article p
+p
 {
-    font-size: 0.8em;
+    text-align:justify;
+    text-indent: 2em;
+    font-size: 1em;
+    line-height: 130%;
+/*    margin: 0;*/
+/*    font-family: times, "Times New Roman", serif;*/
+/*font-family: georgia, times, "Times New Roman", serif;*/
 }
 
 aside
