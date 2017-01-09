@@ -1,4 +1,4 @@
-﻿/* Définition des polices personnalisées */
+/* Définition des polices personnalisées */
 
 @font-face
 {
@@ -228,8 +228,9 @@ nav a:hover
 section
 {
     display: flex;
-    /*flex-direction: column;*/
-    margin-bottom: 20px;
+/*    flex-direction: column;*/
+    margin-left:320px;
+    
 }
 
 .ico_categorie
