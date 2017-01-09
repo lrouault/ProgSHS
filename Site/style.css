@@ -30,6 +30,7 @@ body
 {
     background: url('images/fond-site.jpg');
     font-family: 'Trebuchet MS', Arial, sans-serif;
+    font-size: 18px;
     color: #181818;
 }
 
@@ -122,16 +123,64 @@ nav a:hover
 
 /* Bannière */
 
-#banniere_image
+#banniere_image1
 {
     margin-top: 15px;
-    height: 100px;
+    /*height: 100px;*/
     border-radius: 5px;
     /* background: url('images/Tsiribihina.png') no-repeat; */
-	background: url('images/MADA32_0059.JPG') no-repeat;
+	/*background: url('images/MADA32_0059.JPG') no-repeat;*/
     position: relative;
     box-shadow: 0px 4px 4px #1c1a19;
     margin-bottom: 25px;
+    height:100px;
+    width:1100;
+    background-image:linear-gradient(to bottom, #729EBF 0%, #333A40 100%);
+}
+
+#banniere_image2
+{
+    margin-top: 15px;
+    /*height: 100px;*/
+    border-radius: 5px;
+    /* background: url('images/Tsiribihina.png') no-repeat; */
+	/*background: url('images/MADA32_0059.JPG') no-repeat;*/
+    position: relative;
+    box-shadow: 0px 4px 4px #1c1a19;
+    margin-bottom: 25px;
+    height:100px;
+    width:1100;
+    background-image:linear-gradient(to bottom, #FF0000 0%, #8B0000 100%);
+}
+
+#banniere_image3
+{
+    margin-top: 15px;
+    /*height: 100px;*/
+    border-radius: 5px;
+    /* background: url('images/Tsiribihina.png') no-repeat; */
+	/*background: url('images/MADA32_0059.JPG') no-repeat;*/
+    position: relative;
+    box-shadow: 0px 4px 4px #1c1a19;
+    margin-bottom: 25px;
+    height:100px;
+    width:1100;
+    background-image:linear-gradient(to bottom, #F6AD1A 0%, #9F391A 100%);
+}
+
+#banniere_image4
+{
+    margin-top: 15px;
+    /*height: 100px;*/
+    border-radius: 5px;
+    /* background: url('images/Tsiribihina.png') no-repeat; */
+	/*background: url('images/MADA32_0059.JPG') no-repeat;*/
+    position: relative;
+    box-shadow: 0px 4px 4px #1c1a19;
+    margin-bottom: 25px;
+    height:100px;
+    width:1100;
+    background-image:linear-gradient(to bottom, #CFFF6A 0%, #677F35 100%);
 }
 
 #banniere_description
@@ -140,14 +189,15 @@ nav a:hover
     top: 0;
     border-radius: 0px 0px 5px 5px;
     width: 99.5%;
-    height: 33px;
+    /*height: 33px;*/
     padding-top: 33px;
-    padding-left: 120px;
+    padding-left: 60px;
 /*    background-color: rgba(24,24,24,0.8);*/
     color: white;
     /*font-family: BallparkWeiner, serif;*/
-    font-family: Dayrom, serif;
-    font-size: 2em;
+    /*font-family: Dayrom, serif;*/
+    /*font-size: 1.5em;*/
+    font-size: 180%;
     text-shadow:5px 5px 10px black;
 
 }
