@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="style.css" />
-        <title>Acceuil</title>
+        <title>Règles de codage</title>
     </head>
     
     <body>
@@ -13,8 +13,6 @@
             LatexIT.add('p',true);
             LatexIT.add('li',true);
             </script>
-        
-        
         
         <div id="bloc_page">
             <header>
@@ -29,7 +27,8 @@
                 <div>
                     <ul id="menu-demo2">
                         <li><a href="index.html">Accueil</a></li>
-                        <li><a href="description.html">Description</a></li>
+                        <li><a href="description.html">Description</a>
+                        </li>
                         <li><a href="documentation.html">Documentation</a>
                             <ul>
                                 <li><a href="index.html">vide</a></li>
@@ -45,11 +44,10 @@
                         </li>
                     </ul>
                 </div>
-                
             </header>
             
             
-            <div id="banniere_image1">
+            <div id="banniere_image4">
                 <img />
                 
                 <div id="banniere_description">
@@ -59,36 +57,28 @@
             </div>
             
             
-            <!--
-             Here are my formulas
-             <div lang="latex">1+sin(x)^2+3</div>
-             <ul>
-             <li lang="latex">x^2+y^2+z^2</li>
-             <li>$a^2+b^2$ et $\rho$</li>
-             </ul> -->
+            <h2>.f90 en général :</h2>
             
-            <p>
-            &nbsp;
-            </p>
-            <p>
-            L'<a href="https://enseirb-matmeca.bordeaux-inp.fr/fr">ENSEIRB-MATMECA</a> (Ecole Nationale Supérieure d’Electronique, Informatique, Télécommunications, Mathématique et Mécanique de Bordeaux) est une école d’ingénieurs publique, formant des ingénieurs à fortes compétences scientifiques et techniques, prêts à répondre aux grands enjeux du monde numérique.</p>
+            Lister tous les modules importés (use … / use …)<br>
+            En commentaire en haut, description du module +liste des fonctions contenues<br>
+            Implicit none seulement en début de module<br>
+            Liste de variables avec espaces a, b, c, d<br>
             
-            <p>
-            Les travaux qui vont suivre ont été réalisé par Kévin Marchais, Ludovic Raymond et Laurent Rouault, étudiants à l'école, au cours d'un projet de troisième année. Ce projet porte sur la modélisation d'une synthèse auto-propageante à haute température aussi appelée SHS (Self sustaining High temperature Synthesis). L'objectif étant de simuler numériquement l'avancement d'un front de combustion dans un matériau fibreux. Tout au long de ce projet nous avons été encadré par Gérard Vignoles (<a href="http://www.lcts.u-bordeaux1.fr">LCTS</a>) et Julien Mathiaud (<a href="http://www.cea.fr">CEA</a>).
-            </p>
+            <h2>Modules :</h2>
+            Nommer mod_xxx.f90<br>
+            Un module par type de fonction ...<br>
             
-            <p>
-            Notre simulation sera effectuée sur un matériau fibreux dont la matrice contient 70% de poudre de Silicium et 30% de Diazote. Elle consiste à chauffer progressivement une face afin d'y faire démarer une réaction chimique exothermique. La propagation de cette réaction fera apparaitre un front de combustion et, une fois effectuée, changera les propriétés du matériau de base. Au final nous obtiendrons un nouveau matériau ayant la particularité de résister à de fortes températures.
-            </p>
+            <h2>Déclaration des variable :</h2>
+            Aligner au maximum les « :: » (avec des espaces autour)<br>
+            Dans une ligne, lister que les variables qui ont un rapport commun (ie propriété du matériau / données de discrétisation ...)<br>
+            Nom des variables en minuscules sauf pour les tableaux (première lettre en majusctule) et exeption (température T)<br>
+            integer, dim :: ab<br>
+            Variable i j k .. déclarer à la fin<br>
             
-            
-            <!--<center>-->
-            <!--    <img src="images/g.gif" alt="HTML5 Icon" style="width:640px;height:480px;" border="1px solid #181818"/>-->
-            <!--</center>-->
-            
-            
-            
-            
+            <h2>Fonction/Boucle/Condition :</h2>
+            Tout en minuscule (fonction aussi??)<br>
+            Séparation !****! entre les sub/fct<br>
+            Espace après le début et avant la fin d'une subroutine<br>
             
             
             <footer>
