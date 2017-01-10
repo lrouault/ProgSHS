@@ -190,11 +190,14 @@ nav a:hover
     color: white;
     /*font-family: BallparkWeiner, serif;*/
     /*font-family: Dayrom, serif;*/
-    font-size: 180%;
+    font-size: 80%;
     text-shadow:5px 5px 10px black;
     line-height: 1.2;
-    /*vertical-align: middle;*/
-    /*display: inline-block;*/
+    vertical-align: middle;
+    display: inline-block;
+    width: 100%;
+    /*padding-left: 20px;*/
+    /*padding-right: -20px;*/
 }
 
 /* Corps */
