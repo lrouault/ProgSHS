@@ -272,6 +272,13 @@ aside img
     margin-right: 5px;
 }
 
+#center_image{
+display: block;
+text-align: center;
+}
+#center_image a {
+  margin: 0px 15px;
+}
 /* Footer */
 
 footer
@@ -347,11 +354,13 @@ display:inline-block;
 /* display:-webkit-inline-flex */
 position:relative;
 border-radius:8px 8px 0 0;
+width: 206px;
 }
 #menu-demo2 ul li{
 display:inherit;
 /* display:-webkit-inline-flex */
 border-radius:0;
+text-align: center;
 }
 #menu-demo2 ul li:hover{
 border-radius:0;
@@ -425,7 +434,7 @@ background:#CFFF6A;
 text-decoration:none;
 display:block;
 /* padding:8px 32px; */
-padding:8px 52px;
+padding:8px;
 color:#fff;
 font-family:arial;
 }
