@@ -87,31 +87,57 @@ contains
     ! cp_fibre = reshape((/298., 1030./),(/1,2/))
     ! lambda_fibre = reshape((/298., 0.039/),(/1,2/))
 
+
+
+
+    ! allocate(cp_Si(10,2)    , cp_Si3N4(1,2)    , cp_N2(1,2)    , cp_fibre(1,2)    )
+    ! allocate(lambda_Si(1,2), lambda_Si3N4(1,2), lambda_N2(1,2), lambda_fibre(1,2))
+    !
+    ! rho_Si    = 1600.
+    ! cp_Si    = reshape((/300., 228. , 300., 228. ,500., 228. , 700., 228. , 900., 228. , 1100., 228. , 1300., 228. , 1500., 228. , 1700., 228. , 1900., 228. , /),(/1,2/),(/0./),(/2,1/))
+    ! lambda_Si    = reshape((/298., 22./),(/1,2/))
+    !
+    ! rho_Si3N4 = 1600.
+    ! cp_Si3N4 = reshape((/298., 228./),(/1,2/))
+    ! lambda_Si3N4 = reshape((/298., 22./),(/1,2/))
+    !
+    ! rho_N2    = 1600.
+    ! cp_N2    = reshape((/298., 228./),(/1,2/))
+    ! lambda_N2    = reshape((/298., 22./),(/1,2/))
+    !
+    ! rho_fibre = 1000.
+    ! cp_fibre = reshape((/298., 500./),(/1,2/))
+    ! lambda_fibre = reshape((/298., 10./),(/1,2/))
+
+
+
+
+
     allocate(fraction_vol(Nx*Ny*Nz,3))! (/Si,N2,fibre/)
     do i = 1,Nx
       do j = 1,Ny
         do k = 1,Nz
           num=(k-1)*Nx*Ny + (j-1)*Nx + i
-          ! Partie superieur en fibre
-          if (i<=Nx/2)then
-            fraction_vol(num,3) = 1.
-          else
-            fraction_vol(num,3) = 0.
-          end if
-
-          ! 5 bandes
-          if (i<=Nx/5)then
-            fraction_vol(num,3) = 1.
-          elseif (i<=2*Nx/5)then
-            fraction_vol(num,3) = 0.
-          elseif (i<=3*Nx/5)then
-            fraction_vol(num,3) = 1.
-          elseif (i<=4*Nx/5)then
-            fraction_vol(num,3) = 0.
-          else
-            fraction_vol(num,3) = 1.
-          end if
-
+          ! ! Partie superieur en fibre
+          ! if (i<=Nx/2)then
+          !   fraction_vol(num,3) = 1.
+          ! else
+          !   fraction_vol(num,3) = 0.
+          ! end if
+          !
+          ! ! 5 bandes
+          ! if (i<=Nx/5)then
+          !   fraction_vol(num,3) = 1.
+          ! elseif (i<=2*Nx/5)then
+          !   fraction_vol(num,3) = 0.
+          ! elseif (i<=3*Nx/5)then
+          !   fraction_vol(num,3) = 1.
+          ! elseif (i<=4*Nx/5)then
+          !   fraction_vol(num,3) = 0.
+          ! else
+          !   fraction_vol(num,3) = 1.
+          ! end if
+          !
           ! 5 bandes *2
           if (i<=Nx/5 .and. k<=Nz/2)then
             fraction_vol(num,3) = 1.
@@ -137,7 +163,9 @@ contains
 
 
           ! Fibre
-          ! fraction_vol(num,3) = Poro(i,j,k)/256.
+          ! fraction_vol(num,3) = Poro(i,j,k)/135.
+
+          ! 256 Pour image crop et 135 pour tex1_
         end do
       end do
     end do
@@ -192,6 +220,33 @@ contains
     close(102)
     print*, "Remplissage des porosite OK"
   end subroutine fillPoro
+
+  subroutine fillPoro2(F_NAME,sizex,sizey,sizez)
+    character(len=*),intent(in)                   :: F_NAME
+    character(kind=C_CHAR)      :: data2
+    integer,intent(in)         ::sizex,sizey,sizez
+    integer :: i,j,k
+
+    ! syntaxe complète
+    porox=sizex
+    poroy=sizey
+    poroz=sizez
+    allocate(Poro(porox,poroy,poroz))
+
+    open( 102 , file=F_NAME, form="unformatted", action="read", &
+    access="stream")
+    ! 1	FORMAT ( Z4 ) ! Format pour ecrire les caractere en hexadecimal
+    do k=1,poroz
+      do j=1,poroy
+        do i=1,porox
+          read(102) data2
+          Poro(i,j,k) = ichar(data2)
+        enddo
+      enddo
+    enddo
+    close(102)
+    print*, "Remplissage des porosite OK"
+  end subroutine fillPoro2
 
   !> @brief Remplit l'orientation des fibres
   subroutine fillOrientation(F_NAME)

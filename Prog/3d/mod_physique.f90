@@ -95,9 +95,9 @@ contains
     real(PR),dimension(Nx*Ny*Nz) :: chauffage
     integer::i,j,k
 
-    if(eta((Ny/2)*Nx+2)==1.)then
-      flux = 0.
-    end if
+    ! if(eta((Ny/2)*Nx+2)==1.)then
+    !   flux = 0.
+    ! end if
 
     chauffage = 0.
     !chauffage((Ny/2)*Nx+1) = -Cx((Ny/2)*Nx+1)*flux*dx/lambda((Ny/2)*Nx+1)

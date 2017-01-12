@@ -43,7 +43,15 @@ body
     margin: auto;
 }
 
-section h1, footer h1, nav a
+#bloc_page h1{
+  font-size: 1.3em;
+}
+
+#bloc_page h2{
+  font-size: 1.0em;
+}
+
+footer h1, nav a
 {
     font-family: Dayrom, serif;
     font-weight: normal;
@@ -54,7 +62,7 @@ section h1, footer h1, nav a
 
 header
 {
-    background: url('images/separateur.png') repeat-x bottom;
+    /*background: url('images/separateur.png') repeat-x bottom;*/
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -284,7 +292,7 @@ text-align: center;
 footer
 {
     display: flex;
-    background:  url('images/ico_top.png') no-repeat top center, url('images/separateur.png') repeat-x top, url('images/ombre.png') repeat-x top;
+    /*background:  url('images/ico_top.png') no-repeat top center, url('images/separateur.png') repeat-x top, url('images/ombre.png') repeat-x top;*/
     padding-top: 25px;
 }
 
