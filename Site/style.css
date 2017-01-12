@@ -229,12 +229,6 @@ section
     margin-left:0px;
 }
 
-.ico_categorie
-{
-    vertical-align: middle;
-    margin-right: 8px;
-}
-
 p
 {
     text-align:justify;
@@ -256,23 +250,6 @@ aside
     padding: 10px;
     color: white;
     font-size: 0.9em;
-}
-
-#fleche_bulle
-{
-    position: absolute;
-    top: 100px;
-    left: -12px;
-}
-
-#photo_zozor
-{
-    text-align: center;
-}
-
-#photo_zozor img
-{
-    border: 1px solid #181818;
 }
 
 aside img
@@ -308,21 +285,10 @@ footer h1
     font-size: 1.1em;
 }
 
-
-#tweet
-{
-    width: 28%;
-}
-
 #mes_photos
 {
    text-align: center;
    width: 98%;
-}
-
-#mes_amis
-{
-    width: 31%;
 }
 
 #mes_photos img
@@ -330,25 +296,6 @@ footer h1
     border: 1px solid #181818;
     margin-right: 2px;
 	display: center
-}
-
-#listes_amis
-{
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0;
-}
-
-#mes_amis ul
-{
-    list-style-image: url('images/ico_liensexterne.png');
-    padding-left: 2px;
-}
-
-#mes_amis a
-{
-    text-decoration: none;
-    color: #760001;
 }
 
 #menu-demo2, #menu-demo2 ul{
