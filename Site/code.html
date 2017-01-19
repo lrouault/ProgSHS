@@ -28,6 +28,9 @@
                     <ul id="menu-demo2">
                         <li><a href="index.html">Accueil</a></li>
                         <li><a href="description.html">Description</a>
+                            <ul>
+                                <li><a href="nomenclature.html">Nomenclature</a></li>
+                            </ul>
                         </li>
                         <li><a href="documentation.html">Documentation</a>
                             <ul>
@@ -58,29 +61,35 @@
             </div>
 
 
-            <h2>.f90 en général :</h2>
+            <h1>.f90 en général :</h1>
+            <ul>
+            <li>Lister tous les modules importés (use … / use …)</li>
+            <li>En commentaire en haut, description du module +liste des fonctions contenues</li>
+            <li>Implicit none seulement en début de module</li>
+            <li>Liste de variables avec espaces a, b, c, d</li>
+            </ul>
 
-            Lister tous les modules importés (use … / use …)<br>
-            En commentaire en haut, description du module +liste des fonctions contenues<br>
-            Implicit none seulement en début de module<br>
-            Liste de variables avec espaces a, b, c, d<br>
-
-            <h2>Modules :</h2>
-            Nommer mod_xxx.f90<br>
-            Un module par type de fonction ...<br>
-
-            <h2>Déclaration des variable :</h2>
-            Aligner au maximum les « :: » (avec des espaces autour)<br>
-            Dans une ligne, lister que les variables qui ont un rapport commun (ie propriété du matériau / données de discrétisation ...)<br>
-            Nom des variables en minuscules sauf pour les tableaux (première lettre en majusctule) et exeption (température T)<br>
-            integer, dim :: ab<br>
-            Variable i j k .. déclarer à la fin<br>
-
-            <h2>Fonction/Boucle/Condition :</h2>
-            Tout en minuscule (fonction aussi??)<br>
-            Séparation !****! entre les sub/fct<br>
-            Espace après le début et avant la fin d'une subroutine<br>
-
+            <h1>Modules :</h1>
+            <ul>
+            <li>Nommer mod_xxx.f90</li>
+            <li>Un module par type de fonction ...</li>
+            </ul>
+                
+            <h1>Déclaration des variable :</h1>
+            <ul>
+            <li>Aligner au maximum les « :: » (avec des espaces autour)</li>
+            <li>Dans une ligne, lister que les variables qui ont un rapport commun (ie propriété du matériau / données de discrétisation ...)</li>
+            <li>Nom des variables en minuscules sauf pour les tableaux (première lettre en majusctule) et exeption (température T)</li>
+            <li>integer, dim :: ab</li>
+            <li>Variable i j k .. déclarer à la fin</li>
+            </ul>
+                
+            <h1>Fonction/Boucle/Condition :</h1>
+            <ul>
+            <li>Tout en minuscule (fonction aussi??)</li>
+            <li>Séparation !****! entre les sub/fct</li>
+            <li>Espace après le début et avant la fin d'une subroutine</li>
+            </ul>
 
             <footer>
                 <!--

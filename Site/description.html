@@ -28,6 +28,9 @@
         <ul id="menu-demo2">
           <li><a href="index.html">Accueil</a></li>
           <li><a href="description.html">Description</a>
+              <ul>
+                  <li><a href="nomenclature.html">Nomenclature</a></li>
+              </ul>
           </li>
           <li><a href="documentation.html">Documentation</a>
               <ul>
@@ -66,10 +69,10 @@
 </div>
 
 
-<h2><br>Principes physico-chimiques<br/></h2>
+<h2>Principes physico-chimiques</h2>
 
 <p>
-Le principe du procédé SHS est basé sur la propagation d'une réaction chimique exothermique dans un matériau fibreux. Généralement cette méthode implique deux réactifs, le plus souvent sous forme de poudres uniforméménts mélangées. La matrice de notre matériau est composée de Silicium et de Diaxote, dans cet état, les réactifs ne sont pas thermodynamiquement stables. Par conséquent si nous les soumettons à une forte température, une réaction chimique se produira pour récupérer sa stabilité. Et le produit de cette réaction aura des propriétés thermodynamiques intéressantes. Nous étudierons donc la réaction suivante : <center><pre lang="latex">3Si + 2N_2 = Si_3 N_4 + \Delta_{r} H</pre></center> En plus du Nitrure de Silicium cette réaction dégagera une forte quantitée de chaleur. Ce dégagement de température permettra à la réaction de s'auto-alimenter et ainsi de se propager de manière autonome.
+Le principe du procédé SHS est basé sur la propagation d'une réaction chimique exothermique dans un matériau fibreux. Généralement cette méthode implique deux réactifs, le plus souvent sous forme de poudres uniforméménts mélangées. La matrice de notre matériau est composée de Silicium et de Diazote, dans cet état, les réactifs ne sont pas thermodynamiquement stables. Par conséquent si nous les soumettons à une forte température, une réaction chimique se produira pour récupérer sa stabilité. Et le produit de cette réaction aura des propriétés thermodynamiques intéressantes. Nous étudierons donc la réaction suivante : <center><pre lang="latex">3Si + 2N_2 = Si_3 N_4 + \Delta_{r} H</pre></center> En plus du Nitrure de Silicium cette réaction dégagera une forte quantitée de chaleur. Ce dégagement de température permettra à la réaction de s'auto-alimenter et ainsi de se propager de manière autonome.
 </p>
 <section id= "center_image">
     <a href="images/d1.PNG" onclick="window.open(this.href); return false;"><img src="images/d1.PNG" alt="Photographie" height="287" width="148" /></a>
@@ -80,19 +83,15 @@ Le principe du procédé SHS est basé sur la propagation d'une réaction chimiq
 L'ignition est obtenue par une augmentation de la température à l'une des extrémités. L'augmentation de la température, qui résulte de la réaction chimique exothermique, fournit l'énergie d'activation nécessaire pour répandre la réaction. Le processus se propage, on voit apparaitre le front de combustion. Cette réaction est appelée une réaction auto-induite, car elle se propage par elle-même après l'ignition. Une fois les réactifs consommés, la réaction s'arrête par elle-même et le produit refroidit. Un nouveau matériau est ainsi obtenu à partir du procédé SHS. Cependant certaines conditions sont requises pour que l'auto-induction de la réaction puisse se faire. En effet cette condition dépend de la température adiabatique, c'est à dire la température qui résulte du processus de combustion complet sans transfert de chaleur, et ne peut se faire tant qu'elle n'est pas atteinte.
 </p>
 
-<h2><br>Choix du modèle<br/></h2>
-<p>Tout d'abord il nous faut trouver l'équation de la chaleur qui régit notre système. C'est cette équation qui nous servira, par la suite, à modéliser numériquement notre problème, ce sera la base de notre code.
-<center><pre lang="latex">\rho c_{p} \frac{\partial T}{\partial t}=div(k_{eff} \nabla T) + \rho Q \phi(T,\eta)</pre> </center>
+<h2>Choix du modèle</h2>
+<p>Tout d'abord il nous faut trouver l'équation de la chaleur qui régit notre système. C'est cette équation qui nous servira, par la suite, à simuler numériquement notre problème. Cette équation est donnée par la première loi de la thermodynamique (loi de la conservation de l'énergie) à laquelle on a ajouté un terme découlant de la loi d'Arrhenius pour modéliser notre réaction chimique.
+<center><div lang="latex"> \rho c_{p} \frac{\partial T}{\partial t}=\text{div}(\lambda \nabla T) + \rho Q \Phi(T,\eta)</div> </center></p>
+<p>La description des variables présentes dans cette équation est donnée dans l'onglet <a href="nomenclature.html">Nomenclature</a>. Le terme $ \Phi(T,\eta) $ décrit le taux de progression de la loi d'Arrhenius
+<center><div lang="latex"> \Phi(T,\eta) = k_{0}(1-\eta)^{n}\text{exp}(-\frac{Ea}{RT}))</div></center>
 
 </p>
 <footer>
-  <!--
-  <div id="tweet">
-  <h1>Dernier voyage</h1>
-  <p>Miami - FLORIDE!</p>
-  <p>Fevrier 2016</p>
-</div>
--->
+
 <div id="mes_photos">
   <h1>Quelques résultats</h1>
   <p>
@@ -112,25 +111,6 @@ L'ignition est obtenue par une augmentation de la température à l'une des extr
   <div align='right'><FONT size="2pt"> Projet réalisé courant 2016/2017</FONT></div>
 </div>
 
-<!--
-<div id="mes_amis">
-<h1>Mes amis</h1>
-<div id="listes_amis">
-<ul>
-<li><a href="#">Pupi le lapin</a></li>
-<li><a href="#">Mr Baobab</a></li>
-<li><a href="#">Kaiwaii</a></li>
-<li><a href="#">Perceval.eu</a></li>
-</ul>
-<ul>
-<li><a href="#">Belette</a></li>
-<li><a href="#">Le concombre masqué</a></li>
-<li><a href="#">Ptit prince</a></li>
-<li><a href="#">Mr Fan</a></li>
-</ul>
-</div>
-</div>
--->
 </footer>
 </div>
 </body>

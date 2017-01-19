@@ -51,6 +51,10 @@ body
   font-size: 1.0em;
 }
 
+#bloc_page h3{
+    font-size: 0.8em;
+}
+
 footer h1, nav a
 {
     font-family: Dayrom, serif;
@@ -162,7 +166,7 @@ nav a:hover
     background-image:linear-gradient(to bottom, #FF0000 0%, #8B0000 100%);
 }
 
-#banniere_image3<!-- <p> -->
+#banniere_image3
 {
     margin-top: 15px;
     /*height: 100px;*/

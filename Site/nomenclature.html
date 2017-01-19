@@ -3,19 +3,17 @@
     <head>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="style.css" />
-        <title>Acceuil</title>
+        <title>Description</title>
     </head>
-
+    
     <body>
-
+        
         <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
         <script type="text/javascript">
             LatexIT.add('p',true);
             LatexIT.add('li',true);
             </script>
-
-
-
+        <!--<style> pre .latex {height: 40%;width:40%;}</style> -->
         <div id="bloc_page">
             <header>
                 <div id="titre_principal">
@@ -25,14 +23,14 @@
                     </div>
                     <!--<h2>rrrrtttt</h2>-->
                 </div>
-
+                
                 <div>
                     <ul id="menu-demo2">
                         <li><a href="index.html">Accueil</a></li>
                         <li><a href="description.html">Description</a>
-                        <ul>
-                            <li><a href="nomenclature.html">Nomenclature</a></li>
-                        </ul>
+                            <ul>
+                                <li><a href="nomenclature.html">Nomenclature</a></li>
+                            </ul>
                         </li>
                         <li><a href="documentation.html">Documentation</a>
                             <ul>
@@ -50,49 +48,37 @@
                         </li>
                     </ul>
                 </div>
-
             </header>
-
-
-            <div id="banniere_image1">
+            
+            <!-- <div id="banniere_image">
+             <a href="images/enseirb.png"><img src="images/img2.jpg" alt="Photographie" height="200" width="1100" /></a>
+             
+             <div id="banniere_description">
+             Modélisation du comportement d'un front dans un matériau fibreux
+             <a href="#" class="bouton_rouge">Télécharger <img src="images/flecheblanchedroite.png" alt="" /></a>
+             </div>
+             
+             </div> -->
+            <div id="banniere_image2">
                 <img />
-
+                
                 <div id="banniere_description">
                     <h1>Modélisation du comportement d'un front dans un matériau fibreux</h1>
                     <!--      <a href="telechargement.html" class="bouton_rouge">Télécharger <img src="images/flecheblanchedroite.png" alt="" /></a>-->
                 </div>
             </div>
-
-
-            <!--
-             Here are my formulas
-             <div lang="latex">1+sin(x)^2+3</div>
-             <ul>
-             <li lang="latex">x^2+y^2+z^2</li>
-             <li>$a^2+b^2$ et $\rho$</li>
-             </ul> -->
-
-            <p>
-            &nbsp;
-            </p>
-            <p>
-            L'<a href="https://enseirb-matmeca.bordeaux-inp.fr/fr">ENSEIRB-MATMECA</a> (Ecole Nationale Supérieure d’Electronique, Informatique, Télécommunications, Mathématique et Mécanique de Bordeaux) est une école d’ingénieurs publique, formant des ingénieurs à fortes compétences scientifiques et techniques, prêts à répondre aux grands enjeux du monde numérique.</p>
-
-            <p>
-            Les travaux qui vont suivre ont été réalisé par Kévin Marchais, Ludovic Raymond et Laurent Rouault, étudiants à l'école, au cours d'un projet de troisième année. Ce projet porte sur la modélisation d'une synthèse auto-propageante à haute température aussi appelée SHS (Self sustaining High temperature Synthesis). L'objectif étant de simuler numériquement l'avancement d'un front de combustion dans un matériau fibreux. Tout au long de ce projet nous avons été encadré par Gérard Vignoles (<a href="http://www.lcts.u-bordeaux1.fr">LCTS</a>) et Julien Mathiaud (<a href="http://www.cea.fr">CEA</a>).
-            </p>
-
-            <p>
-            Notre simulation sera effectuée sur un matériau fibreux dont la matrice contient 70% de poudre de Silicium et 30% de Diazote. Elle consiste à chauffer progressivement une face afin d'y faire démarer une réaction chimique exothermique. La propagation de cette réaction fera apparaitre un front de combustion et, une fois effectuée, changera les propriétés du matériau de base. Au final nous obtiendrons un nouveau matériau ayant la particularité de résister à de fortes températures.
-            </p>
-
-
-            <!--<center>-->
-            <!--    <img src="images/g.gif" alt="HTML5 Icon" style="width:640px;height:480px;" border="1px solid #181818"/>-->
-            <!--</center>-->
-
-
-
+        
+            <p> $\eta$ : Avancement de la réaction</p>
+            <p> $\Phi$ : Taux de progression de la loi d'Arrhenius [ $s^{-1}$]</p>
+            <p> $\rho$ : Masse volumique [ $kg.m^{-3}$]</p>
+            <p> $Cp$ : Capacité thermique à pression constante [ $J.K^{-1}.kg^{-1}$]</p>
+            <p> $Ea$ : Energie d'activation [ $J.mol^{-1}$]</p>
+            <p> $k0$ : Constante de vitesse [ $s^{-1}$]</p>
+            <p> $\lambda$ : Conductivité thermique [ $W.m^{-1}.K^{-1}$]</p>
+            <p> $Q$ : Enthalpie de la réaction [ $J.kg^{-1}$]</p>
+            <p> $R$ : Constante des gaz parfaits [ $J.mol^{-1}.K^{-1}$]</p>
+            <p> $T$ : Température [ $K$]</p>
+            <p> $t$ : Temps [ $s$]</p>
 
 
 
@@ -122,7 +108,7 @@
                     <div align='right'><FONT size="2pt">Tuteurs : Gérard Vignoles <I>LCTS</I> - Julien Mathiaud <I>CEA</I></FONT></div>
                     <div align='right'><FONT size="2pt"> Projet réalisé courant 2016/2017</FONT></div>
                 </div>
-
+                
                 <!--
                  <div id="mes_amis">
                  <h1>Mes amis</h1>
