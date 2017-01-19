@@ -59,11 +59,40 @@
                 </div>
             </div>
             <h1><br/>Parallèle<br/></h1>
-
+            
             <p>
             Le code de calcul que nous avons réalisé est destiné à être utilisé sur des modèles 3D avec une technique de raffinement de maillage adaptatif (AMR). Pour ces raisons, il est nécessaire de paralléliser et optimiser le code de manière à accélerer son exécution.
             </p>
+            
+            <h2> Découpe du maillage </h2>
+            <h3> 2D </h3>            
+            <p>
+              Pour paralléliser l'éxecution du code, nous utilisons la bibliothèque MPI. Il faut découper le maillage de sorte que chaque processus qui exécute le code ait la même charge de travail. On essaye donc de faire en sorte que chaque processus ait à traiter le même nombre de points de maillage.
+            </p>
+            <p>
+              Pour cela, il y a plusieurs solutions. On peut choisir de diviser le nombre total de points de maillage par le nombre de processus et répartir ces points entre les différents processus. Mais dans notre cas, puisque le code est destiné à fonctionner avec une technique d'AMR, nous découpons plutôt le maillage en bandes afin que chaque processus ait la même charge de travail étant donné qu'avec la technique d'AMR, certaines zones du maillage contiennent plus de points de maillages que d'autres. Voici un exemple ci-dessous qui montre comment est découpé le maillage en 2D où chaque couleur représente un processus différent.
+            </p>
+<section id= "center_image">
+            <figure>
+              <img src="images/para2d.png" alt="Parallèle 2D" height="500" width="800" />
+              <figcaption>Avancée de la simulation avec 4 processus</figcaption>
+            </figure>
+</section>
+            
+            <h3> 3D </h3>  
+            <p>
+              De la même façon qu'en 2D, on découpe le maillage 3D en bandes.
+            </p>
 
+            <h2> Efficacité du parallélisme </h2>
+            <p> 
+              Afin de tester l'efficacité de notre code sur des machines avec un grand nombre de processus, nous disposons d'un accès à la plateforme PlaFRIM.
+            </p>
+
+            <h2> Optimisation </h2>
+            <p>
+              Enfin, on peut optimiser le code en réduisant le nombre d'opérations par itération en utilisant gprof
+            </p>
 
             <!--
              Here are my formulas
