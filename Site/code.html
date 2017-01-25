@@ -8,11 +8,27 @@
 
     <body>
 
+      <!--  ***********Ancien script (petites images)*************
+                                  <div lang="latex"></div>
+                                  $$
+            ******************************************************
         <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
         <script type="text/javascript">
-            LatexIT.add('p',true);
-            LatexIT.add('li',true);
-            </script>
+        LatexIT.add('p',true);
+        LatexIT.add('li',true);
+        </script>
+        <style> pre .latex {height: 40%;width:40%;}</style> -->
+
+        <!--  ***********Nouveau script (petites images)*************
+                                    $$
+              ******************************************************-->
+
+              <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+              </script>
+              <script type="text/javascript"
+                src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+              </script>
 
         <div id="bloc_page">
             <header>
@@ -74,7 +90,7 @@
             <li>Nommer mod_xxx.f90</li>
             <li>Un module par type de fonction ...</li>
             </ul>
-                
+
             <h1>Déclaration des variable :</h1>
             <ul>
             <li>Aligner au maximum les « :: » (avec des espaces autour)</li>
@@ -83,7 +99,7 @@
             <li>integer, dim :: ab</li>
             <li>Variable i j k .. déclarer à la fin</li>
             </ul>
-                
+
             <h1>Fonction/Boucle/Condition :</h1>
             <ul>
             <li>Tout en minuscule (fonction aussi??)</li>

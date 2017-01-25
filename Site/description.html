@@ -8,12 +8,29 @@
 
 <body>
 
+<!--  ***********Ancien script (petites images)*************
+                            <div lang="latex"></div>
+                            $$
+      ******************************************************
   <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
   <script type="text/javascript">
   LatexIT.add('p',true);
   LatexIT.add('li',true);
   </script>
-  <!--<style> pre .latex {height: 40%;width:40%;}</style> -->
+  <style> pre .latex {height: 40%;width:40%;}</style> -->
+
+  <!--  ***********Nouveau script (petites images)*************
+                              $$
+        ******************************************************-->
+
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+        </script>
+        <script type="text/javascript"
+          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        </script>
+
+
   <div id="bloc_page">
     <header>
       <div id="titre_principal">
@@ -72,7 +89,7 @@
 <h2>Principes physico-chimiques</h2>
 
 <p>
-Le principe du procédé SHS est basé sur la propagation d'une réaction chimique exothermique dans un matériau fibreux. Généralement cette méthode implique deux réactifs, le plus souvent sous forme de poudres uniforméménts mélangées. La matrice de notre matériau est composée de Silicium et de Diazote, dans cet état, les réactifs ne sont pas thermodynamiquement stables. Par conséquent si nous les soumettons à une forte température, une réaction chimique se produira pour récupérer sa stabilité. Et le produit de cette réaction aura des propriétés thermodynamiques intéressantes. Nous étudierons donc la réaction suivante : <center><pre lang="latex">3Si + 2N_2 = Si_3 N_4 + \Delta_{r} H</pre></center> En plus du Nitrure de Silicium cette réaction dégagera une forte quantitée de chaleur. Ce dégagement de température permettra à la réaction de s'auto-alimenter et ainsi de se propager de manière autonome.
+Le principe du procédé SHS est basé sur la propagation d'une réaction chimique exothermique dans un matériau fibreux. Généralement cette méthode implique deux réactifs, le plus souvent sous forme de poudres uniforméménts mélangées. La matrice de notre matériau est composée de Silicium et de Diazote, dans cet état, les réactifs ne sont pas thermodynamiquement stables. Par conséquent si nous les soumettons à une forte température, une réaction chimique se produira pour récupérer sa stabilité. Et le produit de cette réaction aura des propriétés thermodynamiques intéressantes. Nous étudierons donc la réaction suivante : $$3Si + 2N_2 = Si_3 N_4 + \Delta_{r} H$$ En plus du Nitrure de Silicium cette réaction dégagera une forte quantitée de chaleur. Ce dégagement de température permettra à la réaction de s'auto-alimenter et ainsi de se propager de manière autonome.
 </p>
 <section id= "center_image">
     <a href="images/d1.PNG" onclick="window.open(this.href); return false;"><img src="images/d1.PNG" alt="Photographie" height="287" width="148" /></a>
@@ -85,9 +102,9 @@ L'ignition est obtenue par une augmentation de la température à l'une des extr
 
 <h2>Choix du modèle</h2>
 <p>Tout d'abord il nous faut trouver l'équation de la chaleur qui régit notre système. C'est cette équation qui nous servira, par la suite, à simuler numériquement notre problème. Cette équation est donnée par la première loi de la thermodynamique (loi de la conservation de l'énergie) à laquelle on a ajouté un terme découlant de la loi d'Arrhenius pour modéliser notre réaction chimique.
-<center><div lang="latex"> \rho c_{p} \frac{\partial T}{\partial t}=\text{div}(\lambda \nabla T) + \rho Q \Phi(T,\eta)</div> </center></p>
+$$\rho c_{p} \frac{\partial T}{\partial t}=\text{div}(\lambda \nabla T) + \rho Q \Phi(T,\eta)$$</p>
 <p>La description des variables présentes dans cette équation est donnée dans l'onglet <a href="nomenclature.html">Nomenclature</a>. Le terme $ \Phi(T,\eta) $ décrit le taux de progression de la loi d'Arrhenius
-<center><div lang="latex"> \Phi(T,\eta) = k_{0}(1-\eta)^{n}\text{exp}(-\frac{Ea}{RT}))</div></center>
+$$\Phi(T,\eta) = k_{0}\,(1-\eta)^{n}\,\exp\left(-\frac{Ea}{RT}\right)$$
 
 </p>
 <footer>

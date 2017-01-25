@@ -8,11 +8,27 @@
 
 <body>
 
-  <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
-  <script type="text/javascript">
-  LatexIT.add('p',true);
-  LatexIT.add('li',true);
-  </script>
+  <!--  ***********Ancien script (petites images)*************
+                              <div lang="latex"></div>
+                              $$
+        ******************************************************
+    <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
+    <script type="text/javascript">
+    LatexIT.add('p',true);
+    LatexIT.add('li',true);
+    </script>
+    <style> pre .latex {height: 40%;width:40%;}</style> -->
+
+    <!--  ***********Nouveau script (petites images)*************
+                                $$
+          ******************************************************-->
+
+          <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+          </script>
+          <script type="text/javascript"
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+          </script>
 
 
 

@@ -5,14 +5,30 @@
         <link rel="stylesheet" href="style.css" />
         <title>Description</title>
     </head>
-    
+
     <body>
-        
+
+      <!--  ***********Ancien script (petites images)*************
+                                  <div lang="latex"></div>
+                                  $$
+            ******************************************************
         <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
         <script type="text/javascript">
-            LatexIT.add('p',true);
-            LatexIT.add('li',true);
-            </script>
+        LatexIT.add('p',true);
+        LatexIT.add('li',true);
+        </script>
+        <style> pre .latex {height: 40%;width:40%;}</style> -->
+
+        <!--  ***********Nouveau script (petites images)*************
+                                    $$
+              ******************************************************-->
+
+              <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+              </script>
+              <script type="text/javascript"
+                src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+              </script>
         <!--<style> pre .latex {height: 40%;width:40%;}</style> -->
         <div id="bloc_page">
             <header>
@@ -23,7 +39,7 @@
                     </div>
                     <!--<h2>rrrrtttt</h2>-->
                 </div>
-                
+
                 <div>
                     <ul id="menu-demo2">
                         <li><a href="index.html">Accueil</a></li>
@@ -49,25 +65,25 @@
                     </ul>
                 </div>
             </header>
-            
+
             <!-- <div id="banniere_image">
              <a href="images/enseirb.png"><img src="images/img2.jpg" alt="Photographie" height="200" width="1100" /></a>
-             
+
              <div id="banniere_description">
              Modélisation du comportement d'un front dans un matériau fibreux
              <a href="#" class="bouton_rouge">Télécharger <img src="images/flecheblanchedroite.png" alt="" /></a>
              </div>
-             
+
              </div> -->
             <div id="banniere_image2">
                 <img />
-                
+
                 <div id="banniere_description">
                     <h1>Modélisation du comportement d'un front dans un matériau fibreux</h1>
                     <!--      <a href="telechargement.html" class="bouton_rouge">Télécharger <img src="images/flecheblanchedroite.png" alt="" /></a>-->
                 </div>
             </div>
-        
+
             <p> $\eta$ : Avancement de la réaction</p>
             <p> $\Phi$ : Taux de progression de la loi d'Arrhenius [ $s^{-1}$]</p>
             <p> $\rho$ : Masse volumique [ $kg.m^{-3}$]</p>
@@ -108,7 +124,7 @@
                     <div align='right'><FONT size="2pt">Tuteurs : Gérard Vignoles <I>LCTS</I> - Julien Mathiaud <I>CEA</I></FONT></div>
                     <div align='right'><FONT size="2pt"> Projet réalisé courant 2016/2017</FONT></div>
                 </div>
-                
+
                 <!--
                  <div id="mes_amis">
                  <h1>Mes amis</h1>
