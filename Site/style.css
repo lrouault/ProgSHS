@@ -141,7 +141,7 @@ nav a:hover
 {
     /*position: relative;*/
     margin-top: 15px;
-    margin-bottom: 25px;
+    margin-bottom: 50px;
     border-radius: 5px;
     box-shadow: 0px 4px 4px #1c1a19;
     background-image:linear-gradient(to bottom, #729EBF 0%, #333A40 100%);
@@ -160,7 +160,7 @@ nav a:hover
 	/*background: url('images/MADA32_0059.JPG') no-repeat;*/
     position: relative;
     box-shadow: 0px 4px 4px #1c1a19;
-    margin-bottom: 25px;
+    margin-bottom: 50px;
     height:100px;
     width:100%;
     background-image:linear-gradient(to bottom, #FF0000 0%, #8B0000 100%);
@@ -175,7 +175,7 @@ nav a:hover
 	/*background: url('images/MADA32_0059.JPG') no-repeat;*/
     position: relative;
     box-shadow: 0px 4px 4px #1c1a19;
-    margin-bottom: 25px;
+    margin-bottom: 50px;
     height:100px;
     width:100%;
     background-image:linear-gradient(to bottom, #F6AD1A 0%, #9F391A 100%);
@@ -190,7 +190,7 @@ nav a:hover
 	/*background: url('images/MADA32_0059.JPG') no-repeat;*/
     position: relative;
     box-shadow: 0px 4px 4px #1c1a19;
-    margin-bottom: 25px;
+    margin-bottom: 50px;
     height:100px;
     width:100%;
     background-image:linear-gradient(to bottom, #CFFF6A 0%, #677F35 100%);
