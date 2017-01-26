@@ -79,7 +79,7 @@
   </div>
 
   <p>
-    Pour discrétiser notre problème nous utilisons la méthode des différences finies sur un schema implicite. En 3 dimensions cela donne :
+    Pour discrétiser notre problème nous utilisons la méthode d'euler implicite en temps et des différences finies en espace. En 3 dimensions cela donne (cf. <a href="nomenclature.html">Nomenclature</a>):
 
 
 
@@ -87,7 +87,18 @@
     $$+ \frac{Q}{c_p}k_0 (1-\eta _{i,j,k}^{n+1}) \exp \left (-\frac{E_{a}}{RT_{i,j}^{n}}\right) $$
 
 
-     Avec $D=\frac{\lambda }{\rho C_p}$<br>
+     Attention, certains points sont à notés:
+     <ul>
+       <li> $D={\lambda }/{\rho C_p}$ n'est pas une constante. En effet les propriétés des <a href="materiaux.html">matériaux</a> dépendent à la fois de la température et de l'avancée de la réaction.
+       </li>
+       <li>
+         Afin d'obtenir une matrice de discrétisation symétrique, tous les termes de la réaction sont divisées par $D$. Ainsi il est possible d'utiliser l'algorithme du gradient conjugué pour résoudre le système linéaire ainsi créé.
+       </li>
+       <li>
+         $Q$ n'est pas non plus constant (cf. <a href="materiaux.html">matériaux</a> ). Il dépend de la quantité de fibres dans chaque maille. En effet pour un choix d'efficacité, nous avons choisi de limiter la chaleur produite par l'avancement de la réaction et non de contraindre la réaction aux endroits ou la densité de silicium est positive.
+       </li>
+     </ul>
+
 
 
       solve the chemical equation<br>
