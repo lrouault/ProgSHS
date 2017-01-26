@@ -92,9 +92,9 @@
 Le principe du procédé SHS est basé sur la propagation d'une réaction chimique exothermique dans un matériau fibreux. Généralement cette méthode implique deux réactifs, le plus souvent sous forme de poudres uniforméménts mélangées. La matrice de notre matériau est composée de Silicium et de Diazote, dans cet état, les réactifs ne sont pas thermodynamiquement stables. Par conséquent si nous les soumettons à une forte température, une réaction chimique se produira pour récupérer sa stabilité. Et le produit de cette réaction aura des propriétés thermodynamiques intéressantes. Nous étudierons donc la réaction suivante : $$3Si + 2N_2 = Si_3 N_4 + \Delta_{r} H$$ En plus du Nitrure de Silicium cette réaction dégagera une forte quantitée de chaleur. Ce dégagement de température permettra à la réaction de s'auto-alimenter et ainsi de se propager de manière autonome.
 </p>
 <section id= "center_image">
-    <a href="images/d1.PNG" onclick="window.open(this.href); return false;"><img src="images/d1.PNG" alt="Photographie" height="287" width="148" /></a>
-    <a href="images/d2.PNG" onclick="window.open(this.href); return false;"><img src="images/d2.PNG" alt="Photographie" height="287" width="148" /></a>
-    <a href="images/d3.PNG" onclick="window.open(this.href); return false;"><img src="images/d3.PNG" alt="Photographie" height="287" width="148" /></a>
+    <img src="images/d1.PNG" alt="Photographie" height="287" width="148" />
+    <img src="images/d2.PNG" alt="Photographie" height="287" width="148" />
+    <img src="images/d3.PNG" alt="Photographie" height="287" width="148" />
 </section>
 <p>
 L'ignition est obtenue par une augmentation de la température à l'une des extrémités. L'augmentation de la température, qui résulte de la réaction chimique exothermique, fournit l'énergie d'activation nécessaire pour répandre la réaction. Le processus se propage, on voit apparaitre le front de combustion. Cette réaction est appelée une réaction auto-induite, car elle se propage par elle-même après l'ignition. Une fois les réactifs consommés, la réaction s'arrête par elle-même et le produit refroidit. Un nouveau matériau est ainsi obtenu à partir du procédé SHS. Cependant certaines conditions sont requises pour que l'auto-induction de la réaction puisse se faire. En effet cette condition dépend de la température adiabatique, c'est à dire la température qui résulte du processus de combustion complet sans transfert de chaleur, et ne peut se faire tant qu'elle n'est pas atteinte.
@@ -102,10 +102,18 @@ L'ignition est obtenue par une augmentation de la température à l'une des extr
 
 <h2>Choix du modèle</h2>
 <p>Tout d'abord il nous faut trouver l'équation de la chaleur qui régit notre système. C'est cette équation qui nous servira, par la suite, à simuler numériquement notre problème. Cette équation est donnée par la première loi de la thermodynamique (loi de la conservation de l'énergie) à laquelle on a ajouté un terme découlant de la loi d'Arrhenius pour modéliser notre réaction chimique.
-$$\rho c_{p} \frac{\partial T}{\partial t}=\text{div}(\lambda \nabla T) + \rho Q \Phi(T,\eta)$$</p>
-<p>La description des variables présentes dans cette équation est donnée dans l'onglet <a href="nomenclature.html">Nomenclature</a>. Le terme $ \Phi(T,\eta) $ décrit le taux de progression de la loi d'Arrhenius.
-$$\Phi(T,\eta) = k_{0}\,(1-\eta)^{n}\,\exp\left(-\frac{Ea}{RT}\right)$$
-
+$$\rho c_{p} \frac{\partial T}{\partial t}=\underbrace{\text{div}(\lambda \nabla T)}_{(1)} + \underbrace{\rho Q \Phi(T,\eta)}_{(2)}\\$$
+Une description des variables présentes dans cette équation est donnée dans l'onglet <a href="nomenclature.html">Nomenclature</a>. La première partie (1) correspond à la chaleur due à la conduction, c'est à dire la propagation de la chaleur dans notre matériau. La seconde (2) représente la chaleur produite par la réaction chimique. Le terme $\Phi(T,\eta)$ modélise la dérivée temporelle de l'avancement de la réaction $\eta$, on peut donc écrire $ \Phi(T,\eta) = \frac{\partial\eta}{\partial t}(T) $. Nous représentons $\eta$ comme une variable allant de 0, si la réaction n'a pas eu lieu, à 1, lorsqu'elle est achevée. Pour calculer cette valeur nous nous servons de la loi d'Arrhenius qui dit que :
+$$\frac{\partial\eta}{\partial t}(T) = k_{0}\,(1-\eta)^{n}\,\exp\left(-\frac{Ea}{RT}\right)$$
+C'est cette équation qui, lorsqu'on atteint la température initiant la réaction, dégagera subitement une large quantité de chaleur et fera donc apparaitre le front de combustion. Nous notons n l'ordre de la réaction. Les simulations numériques ont été faites avec n égal à 1.<br>
+Au final nous obtenons le système couplé suivant :
+$$\left\{
+  \begin{align*}
+  \rho c_{p} \frac{\partial T}{\partial t} &= \text{div}(\lambda \nabla T) + \rho Q \Phi(T,\eta)\\
+  \Phi(T,\eta) &= k_{0}\,(1-\eta)^{n}\,\exp\left(-\frac{Ea}{RT}\right)\\
+  \end{align*}
+  \right.
+  $$
 </p>
 <footer>
 
