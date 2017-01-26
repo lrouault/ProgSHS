@@ -14,6 +14,7 @@ contains
     character(len=*), intent(in) :: filename
     character(len=3)             :: bfr ! Variable poubelle
     integer                      :: i,j,k , num
+    integer                      :: sizemat
 
     open(11, file=filename, action="read", status="old")
     read(11,'(A3,I6)')    bfr, Nx     ! "Nx="
@@ -26,24 +27,25 @@ contains
     !read(11,'(A3,F10.6)') bfr, cp     ! "cp="
     !read(11,'(A7,F4.6)')  bfr, lambda ! "lambda"
 
-    tmax    = 1.
-    Niter   = 10000
+    tmax    = 500.
+    Niter   = 100000
     epsilon = 1.e-7
     epsilon = epsilon**2
     Text    = 298.
     Tad     = 850 !2300.0
     h       = 10.0d+0
-    Ea      = 266547.
     R       = 8.3144621d+0
-    k0      = 6.2e17 !2.0e+4
-    Q       = 287.e+3 !626e+3
+    Ea      = 372.e3 !266547.
+    k0      = 12.3e6 !6.2e17 !2.0e+4
+    Q       = 372.4e3 !287.e+3 !626e+3
 
-    flux = 11.e+6
 
     dt = 1.e-4
     dx = Lx/(Nx+1)
     dy = Ly/(Ny+1)
     dz = Lz/(Nz+1)
+
+    flux = 6.e+6 !* (dx*dy*dz)
 
     allocate(U(Nx*Ny*Nz), rhs(Nx*Ny*Nz), U0(Nx*Ny*Nz), eta(Nx*Ny*Nz))
     allocate(Cd(Nx*Ny*Nz), Cx((Nx-1)*Ny*Nz), Cy(Nx*(Ny-1)*Nz), Cz(Nx*Ny*(Nz-1)))
@@ -60,41 +62,75 @@ contains
 
     ! MATERIAU
     allocate(rho(Nx*Ny*Nz),   rhocp(Nx*Ny*Nz),    lambda(Nx*Ny*Nz))
-    allocate(cp_Si(1,2)    , cp_Si3N4(1,2)    , cp_N2(1,2)    , cp_fibre(1,2)    )
-    allocate(lambda_Si(1,2), lambda_Si3N4(1,2), lambda_N2(1,2), lambda_fibre(1,2))
+    !
+    open(101, file="PropMat.dat", action="read", status="old")
 
-    rho_Si    = 1600.
-    cp_Si    = reshape((/298., 228./),(/1,2/))
-    lambda_Si    = reshape((/298., 22./),(/1,2/))
+    rho_Si    = 2330.
+    read(101,*) sizemat      ! "Nx="
+    ! print*,"sizemat: ",sizemat
+    allocate(cp_Si(sizemat,2))
+    do i=1,sizemat
+      read(101,*) cp_Si(i,1),cp_Si(i,2)
+    enddo
+    read(101,*) sizemat      ! "Nx="
+    ! print*,"sizemat: ",sizemat
+    allocate(lambda_Si(sizemat,2))
+    do i=1,sizemat
+      read(101,*) lambda_Si(i,1),lambda_Si(i,2)
+    enddo
 
-    rho_Si3N4 = 1600.
-    cp_Si3N4 = reshape((/298., 228./),(/1,2/))
-    lambda_Si3N4 = reshape((/298., 22./),(/1,2/))
+    rho_N2    = 4.61 !....?????.....
+    read(101,*) sizemat      ! "Nx="
+    ! print*,"sizemat: ",sizemat
+    allocate(cp_N2(sizemat,2))
+    do i=1,sizemat
+      read(101,*) cp_N2(i,1),cp_N2(i,2)
+    enddo
+    read(101,*) sizemat      ! "Nx="
+    ! print*,"sizemat: ",sizemat
+    allocate(lambda_N2(sizemat,2))
+    do i=1,sizemat
+      read(101,*) lambda_N2(i,1),lambda_N2(i,2)
+    enddo
 
-    rho_N2    = 1600.
-    cp_N2    = reshape((/298., 228./),(/1,2/))
-    lambda_N2    = reshape((/298., 22./),(/1,2/))
+    rho_Si3N4    = 3440.
+    read(101,*) sizemat      ! "Nx="
+    ! print*,"sizemat: ",sizemat
+    allocate(cp_Si3N4(sizemat,2))
+    do i=1,sizemat
+      read(101,*) cp_Si3N4(i,1),cp_Si3N4(i,2)
+    enddo
+    read(101,*) sizemat      ! "Nx="
+    ! print*,"sizemat: ",sizemat
+    allocate(lambda_Si3N4(sizemat,2))
+    do i=1,sizemat
+      read(101,*) lambda_Si3N4(i,1),lambda_Si3N4(i,2)
+    enddo
 
-    ! rho_fibre = 1600.
-    ! cp_fibre = reshape((/298., 228./),(/1,2/))
-    ! lambda_fibre = reshape((/298., 22./),(/1,2/))
-    ! Laine de verre
-    rho_fibre = 1000.
-    cp_fibre = reshape((/298., 500./),(/1,2/))
-    lambda_fibre = reshape((/298., 10./),(/1,2/))
-    ! ! Laine de verre
-    ! rho_fibre = 35.
-    ! cp_fibre = reshape((/298., 1030./),(/1,2/))
-    ! lambda_fibre = reshape((/298., 0.039/),(/1,2/))
+    rho_fibre    = 3210.
+    read(101,*) sizemat      ! "Nx="
+    ! print*,"sizemat: ",sizemat
+    allocate(cp_fibre(sizemat,2))
+    do i=1,sizemat
+      read(101,*) cp_fibre(i,1),cp_fibre(i,2)
+    enddo
+    read(101,*) sizemat      ! "Nx="
+    ! print*,"sizemat: ",sizemat
+    allocate(lambda_fibre(sizemat,2))
+    do i=1,sizemat
+      read(101,*) lambda_fibre(i,1),lambda_fibre(i,2)
+    enddo
+    close(101)
+
+    ! print*,lambda_N2
 
 
 
-
-    ! allocate(cp_Si(10,2)    , cp_Si3N4(1,2)    , cp_N2(1,2)    , cp_fibre(1,2)    )
+    ! allocate(cp_Si(1,2)    , cp_Si3N4(1,2)    , cp_N2(1,2)    , cp_fibre(1,2)    )
     ! allocate(lambda_Si(1,2), lambda_Si3N4(1,2), lambda_N2(1,2), lambda_fibre(1,2))
     !
     ! rho_Si    = 1600.
-    ! cp_Si    = reshape((/300., 228. , 300., 228. ,500., 228. , 700., 228. , 900., 228. , 1100., 228. , 1300., 228. , 1500., 228. , 1700., 228. , 1900., 228. , /),(/1,2/),(/0./),(/2,1/))
+    ! cp_Si    = reshape((/298., 228./),(/1,2/))
     ! lambda_Si    = reshape((/298., 22./),(/1,2/))
     !
     ! rho_Si3N4 = 1600.
@@ -105,10 +141,17 @@ contains
     ! cp_N2    = reshape((/298., 228./),(/1,2/))
     ! lambda_N2    = reshape((/298., 22./),(/1,2/))
     !
+    ! ! rho_fibre = 1600.
+    ! ! cp_fibre = reshape((/298., 228./),(/1,2/))
+    ! ! lambda_fibre = reshape((/298., 22./),(/1,2/))
+    ! ! Laine de verre
     ! rho_fibre = 1000.
     ! cp_fibre = reshape((/298., 500./),(/1,2/))
     ! lambda_fibre = reshape((/298., 10./),(/1,2/))
-
+    ! ! ! Laine de verre
+    ! ! rho_fibre = 35.
+    ! ! cp_fibre = reshape((/298., 1030./),(/1,2/))
+    ! ! lambda_fibre = reshape((/298., 0.039/),(/1,2/))
 
 
 

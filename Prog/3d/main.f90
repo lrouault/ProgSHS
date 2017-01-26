@@ -52,12 +52,25 @@ program main
 
   call creation_matrice()
 
-
-  !print *, "rho cp lambda dt Tad",rho,cp,lambda,dt,Tad
-
+  !
+  ! print *, "rho cp lambda dt Tad",rho,cp,lambda,dt,Tad
+  !
   ! call printvector(U0,0)
 
-  write(*,*) dx*(Nx+1),dx,Nx
+
+
+  ! print*, interp(cp_Si,550._PR)
+  ! print*, interp(cp_N2,550._PR)
+  ! print*, interp(cp_Si3N4,550._PR)
+  ! print*, interp(cp_fibre,550._PR)
+  ! print*, interp(lambda_Si,550._PR)
+  ! print*, interp(lambda_N2,550._PR)
+  ! print*, interp(lambda_Si3N4,550._PR)
+  ! print*, interp(lambda_fibre,550._PR)
+
+
+
+  write(*,*) dx*(Nx+1),dx,Nx,dt
   !*************Marche en temps*********************
   iter=0
   Niter = nint(tmax/dt)
@@ -69,13 +82,14 @@ program main
      call creation_matrice() ! Construit rhocp, rho, lambda, Cd Cx Cy
 
      rhs = rhocp*U + rho*Q*eq_arrhenius() + cd_lim() + chauffage()
-
+    ! print*,"iter: ",iter," U1:",U(1)
      call Gradient_conjugue(U,rhs,epsilon) !V+chi
 
      if(modulo(iter*nb_fichiers,Niter) == 0) then
         ! call printvector(U, iter*nb_fichiers/Niter)
         ! call writeVtk(U, Nx, Ny, dx, dy, iter*nb_fichiers/Niter)
         call write3dVtk(U, Nx,Ny,Nz, dx,dy,dz, iter*nb_fichiers/Niter)
+        print*, "temps : ",time
      end if
 
   end do
