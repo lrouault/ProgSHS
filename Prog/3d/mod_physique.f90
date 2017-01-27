@@ -93,13 +93,24 @@ contains
   !> @brief Implique une condition de chauffe
   function chauffage()
     real(PR),dimension(Nx*Ny*Nz) :: chauffage
+    real(PR) :: flux_corr,Tmax
     integer::i,j,k
+
 
     ! if(eta((Ny/2)*Nx+2)==1.)then
     !   flux = 0.
     ! end if
 
+    Tmax=U((Nz/2-1)*Nx*Ny + Nx/2)
+    !print*, "Tmax :", Tmax
+    if(Tmax<4000)then
+      flux_corr=flux
+    else
+      flux_corr=0
+    endif
+
     chauffage = 0.
+
     !chauffage((Ny/2)*Nx+1) = -Cx((Ny/2)*Nx+1)*flux*dx/lambda((Ny/2)*Nx+1)
     ! do i=1,Nx
     !   do j=1,Ny
@@ -118,8 +129,7 @@ contains
         ! chauffage((k-1)*Nx*Ny + i) = -Cx((k-1)*Nx*Ny + i)*flux*dx/lambda((k-1)*Nx*Ny + i) &
         ! *16*(k*dz)*(k*dz-Lz)*(i*dx)*(i*dx-Lx)/(Lx**2*Lz**2)
         ! chauffe pleine
-        chauffage((k-1)*Nx*Ny + i) = -Cx((k-1)*Nx*Ny + i)*flux*dx/lambda((k-1)*Nx*Ny + i)
-
+        chauffage((k-1)*Nx*Ny + i) = -Cx((k-1)*Nx*Ny + i)*flux_corr*dx/lambda((k-1)*Nx*Ny + i)
       end do
     end do
 

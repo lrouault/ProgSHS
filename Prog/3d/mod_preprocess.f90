@@ -27,7 +27,7 @@ contains
     !read(11,'(A3,F10.6)') bfr, cp     ! "cp="
     !read(11,'(A7,F4.6)')  bfr, lambda ! "lambda"
 
-    tmax    = 500.
+    tmax    = 1000.
     Niter   = 100000
     epsilon = 1.e-7
     epsilon = epsilon**2
@@ -55,7 +55,7 @@ contains
 
     ! Conditions initiales
 
-    U0 = 298.
+    U0 = 1000. !298
     U=U0
 
     nb_fichiers = 100
@@ -182,36 +182,39 @@ contains
           ! end if
           !
           ! 5 bandes *2
-          if (i<=Nx/5 .and. k<=Nz/2)then
-            fraction_vol(num,3) = 1.
-          elseif (i<=2*Nx/5.and. k<=Nz/2)then
-            fraction_vol(num,3) = 0.
-          elseif (i<=3*Nx/5.and. k<=Nz/2)then
-            fraction_vol(num,3) = 1.
-          elseif (i<=4*Nx/5.and. k<=Nz/2)then
-            fraction_vol(num,3) = 0.
-          elseif (i<=Nx.and. k<=Nz/2)then
-            fraction_vol(num,3) = 1.
-          elseif (i<=Nx/5)then
-            fraction_vol(num,3) = 0.
-          elseif (i<=2*Nx/5)then
-            fraction_vol(num,3) = 1.
-          elseif (i<=3*Nx/5)then
-            fraction_vol(num,3) = 0.
-          elseif (i<=4*Nx/5)then
-            fraction_vol(num,3) = 1.
-          else
-            fraction_vol(num,3) = 0.
-          end if
+          ! if (i<=Nx/5 .and. k<=Nz/2)then
+          !   fraction_vol(num,3) = 1.
+          ! elseif (i<=2*Nx/5.and. k<=Nz/2)then
+          !   fraction_vol(num,3) = 0.
+          ! elseif (i<=3*Nx/5.and. k<=Nz/2)then
+          !   fraction_vol(num,3) = 1.
+          ! elseif (i<=4*Nx/5.and. k<=Nz/2)then
+          !   fraction_vol(num,3) = 0.
+          ! elseif (i<=Nx.and. k<=Nz/2)then
+          !   fraction_vol(num,3) = 1.
+          ! elseif (i<=Nx/5)then
+          !   fraction_vol(num,3) = 0.
+          ! elseif (i<=2*Nx/5)then
+          !   fraction_vol(num,3) = 1.
+          ! elseif (i<=3*Nx/5)then
+          !   fraction_vol(num,3) = 0.
+          ! elseif (i<=4*Nx/5)then
+          !   fraction_vol(num,3) = 1.
+          ! else
+          !   fraction_vol(num,3) = 0.
+          ! end if
 
 
           ! Fibre
-          ! fraction_vol(num,3) = Poro(i,j,k)/135.
+          fraction_vol(num,3) = Poro(i,j,k)/135.
 
           ! 256 Pour image crop et 135 pour tex1_
         end do
       end do
     end do
+
+    ! fraction_vol(:,3) = 0.
+
 
     fraction_vol(:,1) = 0.76*(1-fraction_vol(:,3)) ! 0.76 CFC
     fraction_vol(:,2) = 1.-fraction_vol(:,1)-fraction_vol(:,3)

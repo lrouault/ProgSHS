@@ -41,9 +41,11 @@ program main
 
   !
   ! call fillPoro("image/IMAGE_crop.mat","image/IMAGE_crop2.mat") ! Remplit fibre(porox/y/z)
-  ! call fillPoro2("image/tex1_249x249x100_vol_uchar.raw",249,249,100) ! Remplit fibre(porox/y/z)
-  ! call writeFibreVtk(Poro,porox,poroy,poroz)
-  ! print*, porox,poroy,poroz
+
+  call fillPoro2("image/tex1_249x249x100_vol_uchar.raw",249,249,100) ! Remplit fibre(porox/y/z)
+  call writeFibreVtk(Poro,porox,poroy,poroz)
+  print*, porox,poroy,poroz
+
   !
   ! call fillOrientation("IMAGE_crop.or")
   !
