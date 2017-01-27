@@ -40,10 +40,10 @@ program main
 
 
   !
-  call fillPoro("image/IMAGE_crop.mat","image/IMAGE_crop2.mat") ! Remplit fibre(porox/y/z)
+  ! call fillPoro("image/IMAGE_crop.mat","image/IMAGE_crop2.mat") ! Remplit fibre(porox/y/z)
   ! call fillPoro2("image/tex1_249x249x100_vol_uchar.raw",249,249,100) ! Remplit fibre(porox/y/z)
-  call writeFibreVtk(Poro,porox,poroy,poroz)
-  print*, porox,poroy,poroz
+  ! call writeFibreVtk(Poro,porox,poroy,poroz)
+  ! print*, porox,poroy,poroz
   !
   ! call fillOrientation("IMAGE_crop.or")
   !
@@ -81,7 +81,7 @@ program main
 
      call creation_matrice() ! Construit rhocp, rho, lambda, Cd Cx Cy
 
-     rhs = rhocp*U + rho*Q*eq_arrhenius() + cd_lim() + chauffage()
+     rhs = rhocp*U + rho*Q*eq_arrhenius()*fraction_vol(:,1) + cd_lim() + chauffage()
     ! print*,"iter: ",iter," U1:",U(1)
      call Gradient_conjugue(U,rhs,epsilon) !V+chi
 

@@ -40,7 +40,7 @@ contains
     Q       = 372.4e3 !287.e+3 !626e+3
 
 
-    dt = 1.e-4
+    dt = 0.5
     dx = Lx/(Nx+1)
     dy = Ly/(Ny+1)
     dz = Lz/(Nz+1)
