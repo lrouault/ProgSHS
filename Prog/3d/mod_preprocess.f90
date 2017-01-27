@@ -26,21 +26,21 @@ contains
     !read(11,'(A3,F10.6)') bfr, cp     ! "cp="
     !read(11,'(A7,F4.6)')  bfr, lambda ! "lambda"
 
-    tmax    = 1.
+    tmax    = 500.
     Niter   = 10000
     epsilon = 1.e-7
     epsilon = epsilon**2
     Text    = 298.
     Tad     = 850 !2300.0
     h       = 10.0d+0
-    Ea      = 266547.
+    Ea      = 372.e3 !266547.
     R       = 8.3144621d+0
-    k0      = 6.2e17 !2.0e+4
-    Q       = 287.e+3 !626e+3
+    k0      = 1.227e7 !6.2e17 !2.0e+4
+    Q       = 372.e3 !287.e+3 !626e+3
 
     flux = 11.e+6
 
-    dt = 1.e-4
+    dt = 0.5
     dx = Lx/(Nx+1)
     dy = Ly/(Ny+1)
     dz = Lz/(Nz+1)
