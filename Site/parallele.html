@@ -84,7 +84,7 @@
             </p>
 
             <h2> Découpe du maillage </h2>
-            <h3> 2D OOOOOOO</h3>
+            <h3> 2D </h3>
             <p>
               Pour paralléliser l'éxecution du code, nous utilisons la bibliothèque MPI. Il faut découper le maillage de sorte que chaque processus qui exécute le code ait la même charge de travail. On essaye donc de faire en sorte que chaque processus ait à traiter le même nombre de points de maillage.
             </p>
@@ -105,7 +105,18 @@
 
             <h2> Efficacité du parallélisme </h2>
             <p>
-              Afin de tester l'efficacité de notre code sur des machines avec un grand nombre de processus, nous disposons d'un accès à la plateforme PlaFRIM.
+              Afin de tester les performances de notre code sur des machines avec un grand nombre de processus, nous disposons d'un accès à la plateforme PlaFRIM.</br>
+
+On peut donc calculer l'efficacité du code ainsi que le speed-up 
+
+$$Efficacite = \frac{charge}{nbprocs \times charge}$$
+$$Speed-Up = \frac{charge}{charge_totale}$$
+
+
+
+              Pour calculer la température en un point, on résout l'équation de la chaleur avec la méthode des volumes finis, nous avons besoin des valeurs aux points situés à côtés de ce point. De ce fait, chaque processus aura à traiter tous les points qui lui sont attribués et les points liés venant des processus précédent et suivant.</br>
+            En gardant le même maillage pour le calcul d'efficacité, on rencontre donc un problème puisque plus on aura un nombre important de processus, plus les deux lignes de données venant des processus précédents et suivant vont avoir de l'importance.</br>
+            Nous allons alors augmenter le nombre de mailles en fonction du nombre de processus afin que l'influence de ces deux lignes soit négligeable. Ainsi nous prenons une maillage 100x50 pour 1 processus, 200x50 pour 2 processus etc...
             </p>
 
             <h2> Optimisation </h2>
