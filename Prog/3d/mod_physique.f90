@@ -103,10 +103,12 @@ contains
 
     Tmax=U((Nz/2-1)*Nx*Ny + Nx/2)
     !print*, "Tmax :", Tmax
-    if(Tmax<4000)then
+    if(Tmax<3000)then
       flux_corr=flux
     else
       flux_corr=0
+      flux=0.
+      print*,">>>>> flux=0"
     endif
 
     chauffage = 0.

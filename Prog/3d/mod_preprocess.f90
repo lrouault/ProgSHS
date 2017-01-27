@@ -27,7 +27,7 @@ contains
     !read(11,'(A3,F10.6)') bfr, cp     ! "cp="
     !read(11,'(A7,F4.6)')  bfr, lambda ! "lambda"
 
-    tmax    = 1000.
+    tmax    = 10*3600.
     Niter   = 100000
     epsilon = 1.e-7
     epsilon = epsilon**2
@@ -36,16 +36,16 @@ contains
     h       = 10.0d+0
     R       = 8.3144621d+0
     Ea      = 372.e3 !266547.
-    k0      = 12.3e6 !6.2e17 !2.0e+4
-    Q       = 372.4e3 !287.e+3 !626e+3
+    k0      = 1.227e7 !6.2e17 !2.0e+4
+    Q       = 1.e4 !372.4e3 !287.e+3 !626e+3
 
 
-    dt = 0.5
+    dt = 1
     dx = Lx/(Nx+1)
     dy = Ly/(Ny+1)
     dz = Lz/(Nz+1)
 
-    flux = 6.e+6 !* (dx*dy*dz)
+    flux = 6.e+4 !* (dx*dy*dz)
 
     allocate(U(Nx*Ny*Nz), rhs(Nx*Ny*Nz), U0(Nx*Ny*Nz), eta(Nx*Ny*Nz))
     allocate(Cd(Nx*Ny*Nz), Cx((Nx-1)*Ny*Nz), Cy(Nx*(Ny-1)*Nz), Cz(Nx*Ny*(Nz-1)))
@@ -206,14 +206,14 @@ contains
 
 
           ! Fibre
-          fraction_vol(num,3) = Poro(i,j,k)/135.
+          ! fraction_vol(num,3) = Poro(i,j,k)/135.
 
           ! 256 Pour image crop et 135 pour tex1_
         end do
       end do
     end do
 
-    ! fraction_vol(:,3) = 0.
+    fraction_vol(:,3) = 0.
 
 
     fraction_vol(:,1) = 0.76*(1-fraction_vol(:,3)) ! 0.76 CFC

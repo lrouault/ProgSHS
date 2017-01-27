@@ -42,9 +42,9 @@ program main
   !
   ! call fillPoro("image/IMAGE_crop.mat","image/IMAGE_crop2.mat") ! Remplit fibre(porox/y/z)
 
-  call fillPoro2("image/tex1_249x249x100_vol_uchar.raw",249,249,100) ! Remplit fibre(porox/y/z)
-  call writeFibreVtk(Poro,porox,poroy,poroz)
-  print*, porox,poroy,poroz
+  ! call fillPoro2("image/tex1_249x249x100_vol_uchar.raw",249,249,100) ! Remplit fibre(porox/y/z)
+  ! call writeFibreVtk(Poro,porox,poroy,poroz)
+  ! print*, porox,poroy,poroz
 
   !
   ! call fillOrientation("IMAGE_crop.or")
@@ -91,7 +91,7 @@ program main
         ! call printvector(U, iter*nb_fichiers/Niter)
         ! call writeVtk(U, Nx, Ny, dx, dy, iter*nb_fichiers/Niter)
         call write3dVtk(U, Nx,Ny,Nz, dx,dy,dz, iter*nb_fichiers/Niter)
-        print*, "temps : ",time
+        print*, "temps : ",time," T0.5 : ",U((Nz/2-1)*Nx*Ny + Nx/2)
      end if
 
   end do

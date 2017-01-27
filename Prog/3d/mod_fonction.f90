@@ -181,7 +181,7 @@ contains
             write(2,'(/)',advance='no')
           end if
           s = ""
-          write(s,'(F20.10)')         eta(num)
+          write(s,'(F20.10)')         (eta(num)*fraction_vol(num,1)/0.76)
           write(2,'(a)',advance='no') adjustl(trim(s)) // " "
         enddo
       end do
