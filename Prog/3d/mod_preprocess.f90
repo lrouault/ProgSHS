@@ -27,7 +27,7 @@ contains
     !read(11,'(A3,F10.6)') bfr, cp     ! "cp="
     !read(11,'(A7,F4.6)')  bfr, lambda ! "lambda"
 
-    tmax    = 10*3600.
+    tmax    = 5*3600.
     Niter   = 100000
     epsilon = 1.e-7
     epsilon = epsilon**2
@@ -206,14 +206,14 @@ contains
 
 
           ! Fibre
-          ! fraction_vol(num,3) = Poro(i,j,k)/135.
+          fraction_vol(num,3) = Poro(i,j,k)/135.
 
           ! 256 Pour image crop et 135 pour tex1_
         end do
       end do
     end do
 
-    fraction_vol(:,3) = 0.
+    ! fraction_vol(:,3) = 0.
 
 
     fraction_vol(:,1) = 0.76*(1-fraction_vol(:,3)) ! 0.76 CFC
