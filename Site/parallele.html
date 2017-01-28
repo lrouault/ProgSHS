@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="style.css" />
+        <title>Optimisation</title>
+    </head>
+
+    <body>
+
+      <!--  ***********Ancien script (petites images)*************
+                                  <div lang="latex"></div>
+                                  $$
+            ******************************************************
+        <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
+        <script type="text/javascript">
+        LatexIT.add('p',true);
+        LatexIT.add('li',true);
+        </script>
+        <style> pre .latex {height: 40%;width:40%;}</style> -->
+
+        <!--  ******************Nouveau script**********************
+                          Utiliser comme Latex normal
+              ******************************************************-->
+
+              <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+              </script>
+              <script type="text/javascript"
+                src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+              </script>
+
+
+
+        <div id="bloc_page">
+            <header>
+                <div id="titre_principal">
+                    <div id="logo">
+                        <img src="images/enseirb.png" alt="ENSEIRB" />
+                        <h1></h1>
+                    </div>
+                    <!--<h2>rrrrtttt</h2>-->
+                </div>
+
+                <div>
+                    <ul id="menu-demo2">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="description.html">Description</a>
+                            <ul>
+                                <li><a href="nomenclature.html">Nomenclature</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="documentation.html">Documentation</a>
+                            <ul>
+                                <li><a href="materiaux.html">Matériaux</a></li>
+                                <li><a href="schemasnumeriques.html">Schémas numériques</a></li>
+                                <li><a href="parallele.html">Parallélisation</a></li>
+                                <li><a href="Doxygen/html/index.html" onclick="window.open(this.href); return false;">Doxygen</a></li>
+                                <!-- <li><a href="Doxygen/html/index.html">Doxygen</a></li> -->
+                            </ul>
+                        </li>
+                        <li><a href="telechargement.html">Téléchargement</a>
+                            <ul>
+                                <li><a href="code.html">Règles de codage</a></li>
+                                    </ul>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+
+
+            <div id="banniere_image3">
+                <img />
+
+                <div id="banniere_description">
+                    <h1>Modélisation du comportement d'un front dans un matériau fibreux</h1>
+                    <!--      <a href="telechargement.html" class="bouton_rouge">Télécharger <img src="images/flecheblanchedroite.png" alt="" /></a>-->
+                </div>
+            </div>
+            <h1><br/>Parallèle<br/></h1>
+
+            <p>
+            Le code de calcul que nous avons réalisé est destiné à être utilisé sur des modèles 3D avec une technique de raffinement de maillage adaptatif (AMR). Pour ces raisons, il est nécessaire de paralléliser et optimiser le code de manière à accélerer son exécution.
+            </p>
+
+            <h2> Découpe du maillage </h2>
+            <h3> 2D </h3>
+            <p>
+              Pour paralléliser l'éxecution du code, nous utilisons la bibliothèque MPI. Il faut découper le maillage de sorte que chaque processus qui exécute le code ait la même charge de travail. On essaye donc de faire en sorte que chaque processus ait à traiter le même nombre de points de maillage.
+            </p>
+            <p>
+              Pour cela, il y a plusieurs solutions. On peut choisir de diviser le nombre total de points de maillage par le nombre de processus et répartir ces points entre les différents processus. Mais dans notre cas, puisque le code est destiné à fonctionner avec une technique d'AMR, nous découpons plutôt le maillage en bandes afin que chaque processus ait la même charge de travail étant donné qu'avec la technique d'AMR, certaines zones du maillage contiennent plus de points de maillages que d'autres. Ainsi pour un maillage de taille $N_x \times N_y$, on va répartir la carge de travail de chaque processus en découpant $N_y$. 
+
+          <figure>
+              <img src="images/Decoupe_AMR.png" alt="Parallèle 2D" height="500" width="800" />
+              <figcaption>Découpe du maillage</figcaption>
+            </figure>
+On voit bien que c'est une bonne façon de couper le maillage en maintenant l'équilibrage des charges de travail. Un découpage dans l'autre sens (verticalement) aurait fait que le processus contenant la zone où est appliquée l'AMR aurait eu à traiter beaucoup plus de mailles que les autres.</p>
+
+
+<p>
+Voici un exemple ci-dessous qui montre comment est découpé le maillage en 2D où chaque couleur représente un processus différent.
+            
+<section id= "center_image">
+            <figure>
+              <img src="images/Decoupe.png" alt="Parallèle 2D" height="500" width="800" />
+              <figcaption>Découpe du maillage pour 6 processus</figcaption>
+            </figure>
+</p>
+</section>
+
+            <h3> 3D </h3>
+            <p>
+              De la même façon qu'en 2D, on découpe le maillage 3D en bandes. Pour un maillage $N_x \times N_y \times N_z$, on découpe $N_z$.
+            </p>
+
+            <h2> Efficacité du parallélisme </h2>
+              Afin de tester les performances de notre code sur des machines avec un grand nombre de processus, nous disposons d'un accès à la plateforme <a href="https://www.plafrim.fr/fr/accueil/">PlaFRIM</a> (<b>Pla</b>teforme <b>F</b>édérative pour la <b>R</b>echerche en <b>I</b>nformatique et <b>M</b>athématiques).</br>
+Cette plateforme nous permet d'éxecuter notre programme avec 60 Gb de RAM et 300 processus.
+            <p>
+
+On peut donc calculer l'efficacité du code ainsi que le speed-up 
+
+$$\text{Efficacite} = \frac{\text{charge maximale}}{\text{nb procs} \times \text{charge}}$$
+$$\text{Speed-Up} = \frac{\text{charge}}{\text{charge totale}}$$
+
+
+              <figure>
+              <img src="images/Efficacite_2D.png" alt="Efficacite 2D" height="500" width="800" />
+              <figcaption>Efficacité prgramme 2D pour un maillage $100 \times 600$</figcaption>
+            </figure>
+
+              Pour calculer la température en un point, on résout l'équation de la chaleur avec la méthode des volumes finis, c'est un schéma à 5 points donc nous avons besoin des valeurs des points adjacents. De ce fait, la première ligne et la dernière ligne de chaque maillage découpé sera partagée entre deux processus.</br>
+            En gardant le même maillage pour le calcul d'efficacité, on rencontre donc un problème puisque plus le nombre de processus sera élevé, moins les calculs effectués avec les deux lignes venant des autres processus seront négligeables.</br>
+            En effet, avec $N_y=100$, si on lance le programme avec 1 processus, les 2 lignes représentent 2% du domaine alors que si on lance le programme avec 10 processus, cela représente 20% du domaine. Cela explique la perte d'efficacité que l'on peut observer lorsqu'on augmente le nombre de processus.</br> 
+            Nous allons alors augmenter le nombre de mailles en fonction du nombre de processus afin que l'influence de ces deux lignes soit négligeable. Ainsi nous prenons par exemple un maillage 100x100 pour 1 processus, 100x200 pour 2 processus etc...
+            </p>
+
+            
+
+            <h2> Optimisation </h2>
+            <p>
+              Enfin, on peut optimiser le code en réduisant le nombre d'opérations par itération en utilisant gprof
+            </p>
+
+
+
+
+
+
+
+
+            <footer>
+                <!--
+                 <div id="tweet">
+                 <h1>Dernier voyage</h1>
+                 <p>Miami - FLORIDE!</p>
+                 <p>Fevrier 2016</p>
+                 </div>
+                 -->
+                <div id="mes_photos">
+                    <h1>Quelques résultats</h1>
+                    <p>
+                    <a href="images/enseirb.png"><img src="images/enseirb.png" alt="Photographie" height="69" width="92" /></a>
+                    <a href="images/enseirb.png"><img src="images/enseirb.png" alt="Photographie" height="69" width="92" /></a>
+                    <a href="images/enseirb.png"><img src="images/enseirb.png" alt="Photographie" height="69" width="92" /></a>
+                    <a href="images/enseirb.png"><img src="images/enseirb.png" alt="Photographie" height="69" width="92" /></a>
+                    <a href="images/enseirb.png"><img src="images/enseirb.png" alt="Photographie" height="69" width="92" /></a>
+                    <a href="images/enseirb.png"><img src="images/enseirb.png" alt="Photographie" height="69" width="92" /></a>
+                    <a href="images/enseirb.png"><img src="images/enseirb.png" alt="Photographie" height="69" width="92" /></a>
+                    <a href="images/enseirb.png"><img src="images/enseirb.png" alt="Photographie" height="69" width="92" /></a>
+                    <a href="images/enseirb.png"><img src="images/enseirb.png" alt="Photographie" height="69" width="92" /></a>
+                    </p>
+                    <hr>
+                    <div align='right'><FONT size="2pt"> Elèves ingénieurs <I>ENSEIRB-MATMECA</I> :  Kévin Marchais - Ludovic Raymond - Laurent Rouault</FONT></div>
+                    <div align='right'><FONT size="2pt">Tuteurs : Gérard Vignoles <I>LCTS</I> - Julien Mathiaud <I>CEA</I></FONT></div>
+                    <div align='right'><FONT size="2pt"> Projet réalisé courant 2016/2017</FONT></div>
+                </div>
+
+                <!--
+                 <div id="mes_amis">
+                 <h1>Mes amis</h1>
+                 <div id="listes_amis">
+                 <ul>
+                 <li><a href="#">Pupi le lapin</a></li>
+                 <li><a href="#">Mr Baobab</a></li>
+                 <li><a href="#">Kaiwaii</a></li>
+                 <li><a href="#">Perceval.eu</a></li>
+                 </ul>
+                 <ul>
+                 <li><a href="#">Belette</a></li>
+                 <li><a href="#">Le concombre masqué</a></li>
+                 <li><a href="#">Ptit prince</a></li>
+                 <li><a href="#">Mr Fan</a></li>
+                 </ul>
+                 </div>
+                 </div>
+                 -->
+            </footer>
+        </div>
+    </body>
+</html>

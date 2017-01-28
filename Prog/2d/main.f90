@@ -22,7 +22,7 @@ program main
 
   !print *, "rho cp lambda dt Tad",rho,cp,lambda,dt,Tad
 
- ! call printvector(U,eta,0)
+  call printvector(U,eta,0)
 
   !write(*,*) dx*(Nx+1),dx,Nx
   !*************Marche en temps*********************
