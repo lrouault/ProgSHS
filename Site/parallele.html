@@ -140,7 +140,8 @@ $$\text{Speed-Up} = \frac{\text{charge}}{\text{charge totale}}$$
 
             <h2> Optimisation </h2>
             <p>
-              Enfin, on peut optimiser le code en réduisant le nombre d'opérations par itération en utilisant gprof
+              Dans la résolution de cette équation, la plus grosse étape est celle de la résolution du système linéaire par un algorithme de gradient conjugué. On peut s'en rendre compte en utilisant le logiciel gprof (sur le code séquentiel), qui nous indique qu'on passe le plus de temps dans cette fonction.</br>
+              Il faut donc si possible réduire le nombre d'opérations à effectuer. Le produit matrice vecteur étant gourmant en ressources, il faut limiter le nombre d'appels à cette fonction. On peut stocker dans une variable tous les appels à la fonction qui se font avec les mêmes paramètres. De même pour les produits scalaires.
             </p>
 
 
