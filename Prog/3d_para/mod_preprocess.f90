@@ -68,6 +68,7 @@ contains
 
     nb_fichiers = 100
 
+    print*,Me,num1,numN,Nx*Ny*Nz
     ! MATERIAU
     allocate(rho(num1:numN),   rhocp(num1:numN),    lambda(num1:numN))
 

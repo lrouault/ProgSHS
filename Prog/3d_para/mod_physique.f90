@@ -113,11 +113,12 @@ contains
     !   end do
     ! end do
     do i=1,Nx
-      do k=k1,kN
+      do k=k1,kN !!!!===!!! ATTENTION kN NORMALEMENT
         !2D  face xz
         ! chauffage((k-1)*Nx*Ny + i) = -Cx((k-1)*Nx*Ny + i)*flux*dx/lambda((k-1)*Nx*Ny + i) &
         ! *16*(k*dz)*(k*dz-Lz)*(i*dx)*(i*dx-Lx)/(Lx**2*Lz**2)
         ! chauffe pleine
+        !if(Me==Np-1) print*,((k-1)*Nx*Ny + i),num1,numN
         chauffage((k-1)*Nx*Ny + i) = -Cx((k-1)*Nx*Ny + i)*flux*dx/lambda((k-1)*Nx*Ny + i)
 
       end do

@@ -131,15 +131,16 @@ contains
     character(len=40)                   :: s1, s2, s3, s4, s5, s
     real(PR),dimension(Numx*Numy*Numz) :: X,chimie
 
+
     if(Me/=0)then
        call MPI_SEND(U(num1:numN),numN-num1+1,MPI_REAL8,0,100,MPI_COMM_WORLD,statinfo)
        !call MPI_SEND(eta(num1:numN),numN-num1+1,MPI_REAL8,0,102,MPI_COMM_WORLD,statinfo)
-       call MPI_SEND(eta(num1:numN)*fraction_vol(num1:numN,1)/0.76, numN-num1+1,MPI_REAL8,0,102,MPI_COMM_WORLD,statinfo)
-
+       chimie(num1:numN) = eta(num1:numN)*fraction_vol(num1:numN,1)/0.76
+       call MPI_SEND(chimie(num1:numN),numN-num1+1,MPI_REAL8,0,102,MPI_COMM_WORLD,statinfo)
     end if
     if(Me==0)then
        X(num1:numN) = U
-       chimie(num1:numN) = eta*fraction_vol(:,1)/0.76
+       chimie(num1:numN) = eta(num1:numN)*fraction_vol(num1:numN,1)/0.76
        do i=1,Np-1
           call charge(Nz,Np,i,ideb,ifin)
           call MPI_RECV(X((ideb-1)*Nx*Ny+1:ifin*Nx*Ny),&

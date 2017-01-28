@@ -45,7 +45,6 @@ program main
   Niter = nint(tmax/dt)
   iteration = 0
   do while(time<tmax)
-    print*,"lol"
      time = time + dt
      iter=iter+1
 
@@ -55,7 +54,8 @@ program main
 
      call Gradient_conjugue(U,rhs,epsilon) !V+chi
 
-     if(modulo(iter*nb_fichiers,Niter) == 0 .and. Me==0) then
+    !  if(modulo(iter*nb_fichiers,Niter) == 0 .and. Me==0) then
+     if(modulo(iter*nb_fichiers,Niter) == 0) then
         ! call printvector(U, iter*nb_fichiers/Niter)
         ! call writeVtk(U, Nx, Ny, dx, dy, iter*nb_fichiers/Niter)
         call write3dVtk(U, Nx,Ny,Nz, dx,dy,dz, iter*nb_fichiers/Niter)
