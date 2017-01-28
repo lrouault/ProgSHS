@@ -104,19 +104,20 @@
             </p>
 
             <h2> Efficacité du parallélisme </h2>
+              Afin de tester les performances de notre code sur des machines avec un grand nombre de processus, nous disposons d'un accès à la plateforme <a href="https://www.plafrim.fr/fr/accueil/">PlaFRIM</a> (<b>Pla</b>teforme <b>F</b>édérative pour la <b>R</b>echerche en <b>I</b>nformatique et <b>M</b>athématiques).</br>
+Cette plateforme nous permet d'éxecuter notre programme avec 60 Gb de RAM et 300 processus.
             <p>
-              Afin de tester les performances de notre code sur des machines avec un grand nombre de processus, nous disposons d'un accès à la plateforme PlaFRIM.</br>
 
 On peut donc calculer l'efficacité du code ainsi que le speed-up 
 
-$$Efficacite = \frac{charge}{nbprocs \times charge}$$
-$$Speed-Up = \frac{charge}{charge_totale}$$
+$$\text{Efficacite} = \frac{\text{charge maximale}}{\text{nb procs} \times \text{charge}}$$
+$$\text{Speed-Up} = \frac{\text{charge}}{\text{charge totale}}$$
 
 
 
               Pour calculer la température en un point, on résout l'équation de la chaleur avec la méthode des volumes finis, nous avons besoin des valeurs aux points situés à côtés de ce point. De ce fait, chaque processus aura à traiter tous les points qui lui sont attribués et les points liés venant des processus précédent et suivant.</br>
             En gardant le même maillage pour le calcul d'efficacité, on rencontre donc un problème puisque plus on aura un nombre important de processus, plus les deux lignes de données venant des processus précédents et suivant vont avoir de l'importance.</br>
-            Nous allons alors augmenter le nombre de mailles en fonction du nombre de processus afin que l'influence de ces deux lignes soit négligeable. Ainsi nous prenons une maillage 100x50 pour 1 processus, 200x50 pour 2 processus etc...
+            Nous allons alors augmenter le nombre de mailles en fonction du nombre de processus afin que l'influence de ces deux lignes soit négligeable. Ainsi nous prenons par exemple un maillage 100x50 pour 1 processus, 200x50 pour 2 processus etc...
             </p>
 
             <h2> Optimisation </h2>
