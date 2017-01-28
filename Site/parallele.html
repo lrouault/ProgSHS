@@ -89,18 +89,29 @@
               Pour paralléliser l'éxecution du code, nous utilisons la bibliothèque MPI. Il faut découper le maillage de sorte que chaque processus qui exécute le code ait la même charge de travail. On essaye donc de faire en sorte que chaque processus ait à traiter le même nombre de points de maillage.
             </p>
             <p>
-              Pour cela, il y a plusieurs solutions. On peut choisir de diviser le nombre total de points de maillage par le nombre de processus et répartir ces points entre les différents processus. Mais dans notre cas, puisque le code est destiné à fonctionner avec une technique d'AMR, nous découpons plutôt le maillage en bandes afin que chaque processus ait la même charge de travail étant donné qu'avec la technique d'AMR, certaines zones du maillage contiennent plus de points de maillages que d'autres. Voici un exemple ci-dessous qui montre comment est découpé le maillage en 2D où chaque couleur représente un processus différent.
-            </p>
+              Pour cela, il y a plusieurs solutions. On peut choisir de diviser le nombre total de points de maillage par le nombre de processus et répartir ces points entre les différents processus. Mais dans notre cas, puisque le code est destiné à fonctionner avec une technique d'AMR, nous découpons plutôt le maillage en bandes afin que chaque processus ait la même charge de travail étant donné qu'avec la technique d'AMR, certaines zones du maillage contiennent plus de points de maillages que d'autres. Ainsi pour un maillage de taille $N_x \times N_y$, on va répartir la carge de travail de chaque processus en découpant $N_y$. 
+
+          <figure>
+              <img src="images/Decoupe_AMR.png" alt="Parallèle 2D" height="500" width="800" />
+              <figcaption>Découpe du maillage</figcaption>
+            </figure>
+On voit bien que c'est une bonne façon de couper le maillage en maintenant l'équilibrage des charges de travail. Un découpage dans l'autre sens (verticalement) aurait fait que le processus contenant la zone où est appliquée l'AMR aurait eu à traiter beaucoup plus de mailles que les autres.</p>
+
+
+<p>
+Voici un exemple ci-dessous qui montre comment est découpé le maillage en 2D où chaque couleur représente un processus différent.
+            
 <section id= "center_image">
             <figure>
-              <img src="images/para2d.png" alt="Parallèle 2D" height="500" width="800" />
-              <figcaption>Avancée de la simulation avec 4 processus</figcaption>
+              <img src="images/Decoupe.png" alt="Parallèle 2D" height="500" width="800" />
+              <figcaption>Découpe du maillage pour 6 processus</figcaption>
             </figure>
+</p>
 </section>
 
             <h3> 3D </h3>
             <p>
-              De la même façon qu'en 2D, on découpe le maillage 3D en bandes.
+              De la même façon qu'en 2D, on découpe le maillage 3D en bandes. Pour un maillage $N_x \times N_y \times N_z$, on découpe $N_z$.
             </p>
 
             <h2> Efficacité du parallélisme </h2>
@@ -114,25 +125,23 @@ $$\text{Efficacite} = \frac{\text{charge maximale}}{\text{nb procs} \times \text
 $$\text{Speed-Up} = \frac{\text{charge}}{\text{charge totale}}$$
 
 
+              <figure>
+              <img src="images/Efficacite_2D.png" alt="Efficacite 2D" height="500" width="800" />
+              <figcaption>Efficacité prgramme 2D pour un maillage $100 \times 600$</figcaption>
+            </figure>
 
-              Pour calculer la température en un point, on résout l'équation de la chaleur avec la méthode des volumes finis, nous avons besoin des valeurs aux points situés à côtés de ce point. De ce fait, chaque processus aura à traiter tous les points qui lui sont attribués et les points liés venant des processus précédent et suivant.</br>
-            En gardant le même maillage pour le calcul d'efficacité, on rencontre donc un problème puisque plus on aura un nombre important de processus, plus les deux lignes de données venant des processus précédents et suivant vont avoir de l'importance.</br>
-            Nous allons alors augmenter le nombre de mailles en fonction du nombre de processus afin que l'influence de ces deux lignes soit négligeable. Ainsi nous prenons par exemple un maillage 100x50 pour 1 processus, 200x50 pour 2 processus etc...
+              Pour calculer la température en un point, on résout l'équation de la chaleur avec la méthode des volumes finis, c'est un schéma à 5 points donc nous avons besoin des valeurs des points adjacents. De ce fait, la première ligne et la dernière ligne de chaque maillage découpé sera partagée entre deux processus.</br>
+            En gardant le même maillage pour le calcul d'efficacité, on rencontre donc un problème puisque plus le nombre de processus sera élevé, moins les calculs effectués avec les deux lignes venant des autres processus seront négligeables.</br>
+            En effet, avec $N_y=100$, si on lance le programme avec 1 processus, les 2 lignes représentent 2% du domaine alors que si on lance le programme avec 10 processus, cela représente 20% du domaine. Cela explique la perte d'efficacité que l'on peut observer lorsqu'on augmente le nombre de processus.</br> 
+            Nous allons alors augmenter le nombre de mailles en fonction du nombre de processus afin que l'influence de ces deux lignes soit négligeable. Ainsi nous prenons par exemple un maillage 100x100 pour 1 processus, 100x200 pour 2 processus etc...
             </p>
+
+            
 
             <h2> Optimisation </h2>
             <p>
               Enfin, on peut optimiser le code en réduisant le nombre d'opérations par itération en utilisant gprof
             </p>
-
-            <!--
-             Here are my formulas
-             <div lang="latex">1+sin(x)^2+3</div>
-             <ul>
-             <li lang="latex">x^2+y^2+z^2</li>
-             <li>$a^2+b^2$ et $\rho$</li>
-             </ul> -->
-
 
 
 
