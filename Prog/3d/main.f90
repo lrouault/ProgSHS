@@ -16,8 +16,10 @@ program main
   implicit none
 
   integer  :: iter
-  real(PR) :: scal
+  real(PR) :: t1,t2,diff
 
+  
+  t1 = MPI_WTIME()
   !call fillPoro("IMAGE_crop.mat","IMAGE_crop2.mat") ! Remplit fibre(porox/y/z)
   !call writeFibreVtk(Poro,porox,poroy,poroz)
   !print*, porox,poroy,poroz
@@ -25,6 +27,7 @@ program main
   ! call fillOrientation("IMAGE_crop.or")
   !
   call initialisation("param.dat")
+  
   
   call write3dVtk(U,Nx,Ny,Nz,  dx,dy,dz, 0)
   
@@ -34,7 +37,7 @@ program main
 
   ! call printvector(U0,0)
 
-  write(*,*) dx*(Nx+1),dx,Nx
+  !write(*,*) dx*(Nx+1),dx,Nx
   !*************Marche en temps*********************
   iter=0
   Niter = nint(tmax/dt)
@@ -53,17 +56,18 @@ program main
         ! call printvector(U, iter*nb_fichiers/Niter)
         ! call writeVtk(U, Nx, Ny, dx, dy, iter*nb_fichiers/Niter)
         !call write3dVtk(U, Nx,Ny,Nz, dx,dy,dz, iter*nb_fichiers/Niter)
-        write(*,*) iter*nb_fichiers/Niter
-        call printvector(U,eta,iter*nb_fichiers/Niter)
+        !write(*,*) iter*nb_fichiers/Niter
+        !call printvector(U,eta,iter*nb_fichiers/Niter)
      end if
 
   end do
+  
+  t2 = MPI_WTIME()
 
-  call MPI_ALLREDUCE(dot_product(U,U),scal,1,MPI_REAL8,MPI_SUM,MPI_COMM_WORLD,statinfo)
-  write(*,*) sqrt(scal)
+  call MPI_ALLREDUCE(t2-t1,diff,1,MPI_REAL8,MPI_MAX,MPI_COMM_WORLD,statinfo)
 
   call fin()
 
-  write(*,*) "iterations : ", iteration
+  write(*,*) diff
 
 end program main
