@@ -19,27 +19,6 @@ program main
 
 
 
-  ! character(kind=C_SIGNED_CHAR)      :: data2
-  ! character(kind=C_CHAR)      :: data3
-  ! integer :: i,j,k
-  !
-  ! open( 102 , file="image/tex1_249x249x100_vol_uchar.raw", form="unformatted", action="read", &
-  ! access="stream")
-  ! 1	FORMAT ( Z4 ) ! Format pour ecrire les caractere en hexadecimal
-  ! do k=1,249*249*100
-  !   ! do j=1,poroy
-  !   !   do i=1,porox
-  !       read(102) data3
-  !       if (ichar(data3)/=0)  print*,ichar(data3)
-  !   !   enddo
-  !   ! enddo
-  ! enddo
-  ! close(102)
-  !
-  !
-
-
-  !
   ! call fillPoro("image/IMAGE_crop.mat","image/IMAGE_crop2.mat") ! Remplit fibre(porox/y/z)
 
   call fillPoro2("image/tex1_249x249x100_vol_uchar.raw",249,249,100) ! Remplit fibre(porox/y/z)
