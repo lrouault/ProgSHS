@@ -11,9 +11,8 @@ CFLAGS = -O
 FC = f77
 FFLAGS = -O
 #F90 = ifort
-#F90 = gfortran
 F90 = mpif90
-F90FLAGS = -O3 -march=native
+#F90FLAGS = -O3 -march=native
 #F90FLAGS = -O3 -march=native -ftz -parallel
 #F90FLAGS = -O3 -march=native -ffpe-trap=invalid
 # F90FLAGS = -O0 -pedantic -Wall -ffpe-trap=invalid,zero,overflow,underflow -g -fcheck=all -fbacktrace -fdump-core
