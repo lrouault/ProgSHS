@@ -29,7 +29,7 @@ program main
   call initialisation("param.dat")
   
   
-  call write3dVtk(U,Nx,Ny,Nz,  dx,dy,dz, 0)
+  !call write3dVtk(U,Nx,Ny,Nz,  dx,dy,dz, 0)
   
   call creation_matrice()
 
@@ -68,6 +68,6 @@ program main
 
   call fin()
 
-  write(*,*) diff
+  if(me==0)write(*,*) diff
 
 end program main
