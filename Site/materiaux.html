@@ -45,7 +45,7 @@
     <div>
       <ul id="menu-demo2">
         <li><a href="index.html">Accueil</a></li>
-        <li><a href="description.html">&nbsp&nbspDescription ▼</a>
+        <li><a href="description.html">  &nbsp &nbsp Description ▼</a>
             <ul>
                 <li><a href="nomenclature.html">Nomenclature</a></li>
             </ul>
@@ -85,9 +85,13 @@
 \begin{equation} 3Si_{(s)}+2N2_{(g)} \rightarrow Si3N4_{(s)} \end{equation}
   </p>
 
+
   <h1>Propriétés des matériaux</h1>
   <p>
   Les propriétés retenues pour les différents matériaux constituant le composite sont décrits les sections suivantes.
+  </p>
+  <p>
+      Elle sont lues dans un fichier contenant 8 blocs. Chaque bloc commence par le nombre n de données à lire. Elle est ensuite suivie par n ligne contenant en premier une température donnée en degré Kelvin et la valeur de la propriété. Les températures sont indiquées dans l'ordre croissant. Ensuite quand le programme voudra calculer la conductivité du silicium à la température $T$ par exemple, il prendra une approximation linéaire entre sa valeur à la température $T_1$ et $T_2$ de sorte que $T_1\leq T \lt T_2$.
   </p>
 
   <h2>Silicium</h2>
@@ -106,14 +110,14 @@
 
   <h2>Nicalon</h2>
   <p>
-    Les fibres de nicalon ne jouent pas un rôle direct dans la réaction. Cependant elle peuvent limiter l'avancement de la réaction comme expliqué précédemment. Elles sont intégrées selon un enchevêtrement complexe présenté dans la section suivante.
+    Les fibres de nicalon ne jouent pas un rôle direct dans la réaction. Cependant elles peuvent limiter l'avancement de la réaction comme expliqué précédemment. Elles sont intégrées selon un enchevêtrement complexe présenté dans la section suivante.
   </p>
   <h3>Capacité thermique</h3>
   <h3>Conductivité thermique</h3>
 
   <h3>Emplacement des fibres</h3>
   <p>
-    Les fibres
+    Les fibres peuvent
   </p>
   <center>
     <a href="images/Disposition_fibre.png" onclick="window.open(this.href); return false;"><img src="images/Disposition_fibre.png" alt="Disposition des fibres" /></a>
@@ -124,9 +128,43 @@
   <h3>Conductivité thermique</h3>
 
   <h1>Propriétés de la réaction</h1>
-$$\frac{\partial\eta}{\partial t}(T) = k_{0}\,(1-\eta)^{n}\,\exp\left(-\frac{E_a}{RT}\right)$$
+<p>
+  La réaction de nitruration du silicium est une réaction chimique qui peut se quantifier sous la forme d’une loi appelée la loi d’Arrhenius. Cette loi est en fait une loi très générale de la chimie cinétique permettant de quantifier la vitesse de réaction de la plupart des réactions chimiques existantes. Elle s’écrit de la façon suivante :
+
+  $$\frac{\partial\eta}{\partial t}(T) = k_{0}\,(1-\eta)^{n}\,\exp\left(-\frac{E_a}{RT}\right)$$
+
+  Avec:
+</p>
+  <ul>
+    <li>$\eta$ le taux d'avancement de la réaction.</li>
+    <li> le facteur préexponentielle $K_0$ et l’énergie d’activation $E_a$ sont les deux paramètres permettant de définir la vitesse et le moment de la réaction. Ils peuvent prendre des valeurs très différentes selon le type de réaction voulu. $K_0$ varie entre $10^2$ et $10^{15}$ ($1.227e7$ dans notre cas) et l’énergie d’activation entre $10^2$ et $10^6$ ($372e3$ dans notre cas). </li>
+    <li> n l’ordre de la réaction, généralement compris entre 1 et 3 (1 ici). </li>
+    <li>R est la constante des gaz parfaits.</li>
+  </ul>
 
 
+
+
+  <h1>Construction du matériau équivalent</h1>
+  <p>
+    Le modèle implémenté afin de déterminer les propriétés du matériau équivalent repose sur l'état d'avancement de la réaction chimique au cours du temps. Le paramètre $\eta$ déterminé par la résolution de la réaction d'Arrhénius est utilisé. Il vaut 0 si la réaction n’a pas débuté et 1 si la réaction est terminée.
+  </p>
+
+  <p>
+    Ainsi, les densités, capacités et conductivités thermiques sont définies de la manière suivante dans les différentes mailles représentant le composite ($x_{fib}$ représente le taux de fibres) :
+  </p>
+        $$
+        \begin{aligned}
+            \rho &= x_{fib}\,\rho_{fib}  \\
+            &+(1-x_{fib})\,\rho_{reactifs} \\\\
+
+            \rho_{reactifs} &= \,x_{Si}\,(\eta\,\rho_{Si_3 N_4} + (1-\eta)\,\rho_{Si})  \\
+            & +(1-x_{Si})\,\rho_{N_2}
+        \end{aligned}
+        $$
+  <p>
+    Dans une zone sans fibre ($x_{fib}=0$), si la réaction n’a pas débutée, $\eta$ vaut 0, les propriétés prennent bien les valeurs des réactifs au début de la réaction. S’il vaut 1, les valeurs des produits sont prises. Sinon, une valeur intermédiaire dépendant du taux d’avancement de la réaction est retenue.
+  </p>
 
 <!--
   Here are my formulas
