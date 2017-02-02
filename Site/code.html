@@ -75,36 +75,36 @@
                     <!--      <a href="telechargement.html" class="bouton_rouge">Télécharger <img src="images/flecheblanchedroite.png" alt="" /></a>-->
                 </div>
             </div>
+Dans cette partie nous allons expliciter les règles de calcul utilisées lors de la programation de notre projet en Fortran 90.
 
-
-            <h1>.f90 en général :</h1>
+            <h1>Règles pour chaque fichier</h1>
             <ul>
-            <li>Lister tous les modules importés (use … / use …)</li>
-            <li>En commentaire en haut, description du module +liste des fonctions contenues</li>
-            <li>Implicit none seulement en début de module</li>
-            <li>Liste de variables avec espaces a, b, c, d</li>
+            <li>Lister tous les modules utilisés dans le fichier</li>
+            <li>Utiliser Implicit none une seule fois au début</li>
             </ul>
 
-            <h1>Modules :</h1>
+            <h1>Règles pour les modules</h1>
             <ul>
+            <li>Écrire une brève description de ce que l'on trouve à l'intérieur</li>
+            <li>Lister les fonctions présentes</li>
             <li>Nommer mod_xxx.f90</li>
-            <li>Un module par type de fonction ...</li>
+            <li>Créer un module par type de fonction</li>
+            <li>Séparation visuelle !****! entre les subroutines/fonctions</li>
+            <li>Mettre un espace après le début et avant la fin d'une subroutine/fonction</li>
             </ul>
 
-            <h1>Déclaration des variable :</h1>
+            <h1>Déclaration des variables </h1>
             <ul>
+            <li>Aérer la déclaration de nos variables</li>
             <li>Aligner au maximum les « :: » (avec des espaces autour)</li>
-            <li>Dans une ligne, lister que les variables qui ont un rapport commun (ie propriété du matériau / données de discrétisation ...)</li>
-            <li>Nom des variables en minuscules sauf pour les tableaux (première lettre en majusctule) et exeption (température T)</li>
-            <li>integer, dim :: ab</li>
-            <li>Variable i j k .. déclarer à la fin</li>
+            <li>Dans une ligne, lister que les variables qui ont un rapport commun (ie propriétés du matériau, données de discrétisation ...)</li>
+            <li>Nom des variables en minuscules sauf pour les tableaux (première lettre en majuscule) et exceptions (température T)</li>
+            <li>Déclarer en dernier les variables utilisées pour les boucles (i j k)</li>
             </ul>
 
-            <h1>Fonction/Boucle/Condition :</h1>
+            <h1>Fonction/Boucle/Condition </h1>
             <ul>
-            <li>Tout en minuscule (fonction aussi??)</li>
-            <li>Séparation !****! entre les sub/fct</li>
-            <li>Espace après le début et avant la fin d'une subroutine</li>
+            <li>Tout en minuscule </li>
             </ul>
 
             <footer>
