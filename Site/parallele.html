@@ -77,10 +77,19 @@
                     <!--      <a href="telechargement.html" class="bouton_rouge">Télécharger <img src="images/flecheblanchedroite.png" alt="" /></a>-->
                 </div>
             </div>
+
+
+
             <h1><br/>Parallèle<br/></h1>
 
+            <h2> Optimisation </h2>
             <p>
-            Le code de calcul que nous avons réalisé est destiné à être utilisé sur des modèles 3D avec une technique de raffinement de maillage adaptatif (AMR). Pour ces raisons, il est nécessaire de paralléliser et optimiser le code de manière à accélerer son exécution.
+              Dans la résolution de cette équation, la plus grosse étape est celle du calculs des différents paramètre physiques comme la conductivité thermique $\lambda$ ou la quantité de chaleur $\rho C_p$ puisqu'on doit calculer leur valeur dans chaque maille. On peut s'en rendre compte en utilisant le logiciel gprof (sur le code séquentiel), qui permet de mesurer le temps passé dans chaque partie du programme et qui nous indique qu'on passe le plus de temps dans la partie physique.</br>
+              En effet, on se rend compte que le calcul de $\lambda$ prend 28% du temps, celui de $\rho C_p$ prend 27% et et 23% du temps est passé dans des fonctions internes. On passe donc 78% du temps à calculer les propriétés thermiques. Il est peut-être possible d'optimiser ces fonctions en réduisant le nombre d'opérations mais on ne pourra pas rendre cette étape négligeable en temps d'éxecution, donc il devient nécessaire de paralléliser le programme.  
+            </p>
+
+            <p>
+            Le code de calcul que nous avons réalisé est destiné à être utilisé également sur des modèles 3D et avec une technique de raffinement de maillage adaptatif (AMR). 
             </p>
 
             <h2> Découpe du maillage </h2>
@@ -90,11 +99,12 @@
             </p>
             <p>
               Pour cela, il y a plusieurs solutions. On peut choisir de diviser le nombre total de points de maillage par le nombre de processus et répartir ces points entre les différents processus. Mais dans notre cas, puisque le code est destiné à fonctionner avec une technique d'AMR, nous découpons plutôt le maillage en bandes afin que chaque processus ait la même charge de travail étant donné qu'avec la technique d'AMR, certaines zones du maillage contiennent plus de points de maillages que d'autres. Ainsi pour un maillage de taille $N_x \times N_y$, on va répartir la carge de travail de chaque processus en découpant $N_y$.
-
+          <section id="center_image">
           <figure>
-              <img src="images/Decoupe_AMR.png" alt="Parallèle 2D" height="500" width="800" />
+              <a href="images/Decoupe_AMR.png" onclick="window.open(this.href); return false;"><img src="images/Decoupe_AMR.png" alt="Parallèle 2D" height="500" width="800" /></a>
               <figcaption>Découpe du maillage</figcaption>
             </figure>
+</section>
 On voit bien que c'est une bonne façon de couper le maillage en maintenant l'équilibrage des charges de travail. Un découpage dans l'autre sens (verticalement) aurait fait que le processus contenant la zone où est appliquée l'AMR aurait eu à traiter beaucoup plus de mailles que les autres.</p>
 
 
@@ -103,7 +113,7 @@ Voici un exemple ci-dessous qui montre comment est découpé le maillage en 2D o
 
 <section id= "center_image">
             <figure>
-              <img src="images/Decoupe.png" alt="Parallèle 2D" height="500" width="800" />
+              <a href="images/Decoupe.png" onclick="window.open(this.href); return false;"><img src="images/Decoupe.png" alt="Parallèle 2D" height="500" width="800" /><a/>
               <figcaption>Découpe du maillage pour 6 processus</figcaption>
             </figure>
 </p>
@@ -116,7 +126,7 @@ Voici un exemple ci-dessous qui montre comment est découpé le maillage en 2D o
 
             <h2> Efficacité du parallélisme </h2>
               Afin de tester les performances de notre code sur des machines avec un grand nombre de processus, nous disposons d'un accès à la plateforme <a href="https://www.plafrim.fr/fr/accueil/">PlaFRIM</a> (<b>Pla</b>teforme <b>F</b>édérative pour la <b>R</b>echerche en <b>I</b>nformatique et <b>M</b>athématiques).</br>
-Cette plateforme nous permet d'éxecuter notre programme avec 60 Gb de RAM et 300 processus.
+Cette plateforme nous permet d'éxecuter notre programme avec 60 Gb de RAM et 300 processus avec une limitation de 2h de calcul.
             <p>
 
 On peut donc calculer l'efficacité du code ainsi que le speed-up
@@ -124,25 +134,32 @@ On peut donc calculer l'efficacité du code ainsi que le speed-up
 $$\text{Efficacite} = \frac{\text{charge maximale}}{\text{nb procs} \times \text{charge}}$$
 $$\text{Speed-Up} = \frac{\text{charge}}{\text{charge totale}}$$
 
-
+<section id="center_image">
               <figure>
-              <img src="images/Efficacite_2D.png" alt="Efficacite 2D" height="500" width="800" />
+              <a href="images/efficacite_2d.png" onclick="window.open(this.href); return false;"><img src="images/efficacite_2d.png" alt="Efficacite 2D" height="500" width="800" /></a>
               <figcaption>Efficacité prgramme 2D pour un maillage $100 \times 600$</figcaption>
             </figure>
-
+</section>
               Pour calculer la température en un point, on résout l'équation de la chaleur avec la méthode des volumes finis, c'est un schéma à 5 points donc nous avons besoin des valeurs des points adjacents. De ce fait, la première ligne et la dernière ligne de chaque maillage découpé sera partagée entre deux processus.</br>
             En gardant le même maillage pour le calcul d'efficacité, on rencontre donc un problème puisque plus le nombre de processus sera élevé, moins les calculs effectués avec les deux lignes venant des autres processus seront négligeables.</br>
             En effet, avec $N_y=100$, si on lance le programme avec 1 processus, les 2 lignes représentent 2% du domaine alors que si on lance le programme avec 10 processus, cela représente 20% du domaine. Cela explique la perte d'efficacité que l'on peut observer lorsqu'on augmente le nombre de processus.</br>
-            Nous allons alors augmenter le nombre de mailles en fonction du nombre de processus afin que l'influence de ces deux lignes soit négligeable. Ainsi nous prenons par exemple un maillage 100x100 pour 1 processus, 100x200 pour 2 processus etc...
+            Lorsqu'on veut lancer le programme, il faut donc choisir le nombre de processus sur lesquels lancer le programme en fonction du maillage utilisé. 
             </p>
 
-
-
-            <h2> Optimisation </h2>
             <p>
-              Dans la résolution de cette équation, la plus grosse étape est celle de la résolution du système linéaire par un algorithme de gradient conjugué. On peut s'en rendre compte en utilisant le logiciel gprof (sur le code séquentiel), qui nous indique qu'on passe le plus de temps dans cette fonction.</br>
-              Il faut donc si possible réduire le nombre d'opérations à effectuer. Le produit matrice vecteur étant gourmant en ressources, il faut limiter le nombre d'appels à cette fonction. On peut stocker dans une variable tous les appels à la fonction qui se font avec les mêmes paramètres. De même pour les produits scalaires.
+              <section id="center_image">
+              <figure>
+              <a href="images/efficacite_3d.png" onclick="window.open(this.href); return false;"><img src="images/efficacite_3d.png" alt="Efficacite 2D" height="500" width="800" /></a>
+              <figcaption>Efficacité prgramme 3D pour un maillage $84 \times 84 \times 84$</figcaption>
+            </figure>
+              </section>
+              On remarque qu'on a une très bonne efficacité pour un nombre de processus inférieur à 10. A partir de 11 processus, on a une perte de performance même si l'efficacité reste à une valeur acceptable de 60%. Cela est probablement dû au maillage qui contient trop peu de points. En effet, on divise les 84 points de la direction z pour les répartir dans chaque processus donc les dépendances entre les divers processus ont une importance non négligeable.</br>
+              Il pourrait être intéressant de faire une étude avec un maillage plus fin pour augmenter le nombre de points mais dans ce cas les calculs deviennent très long et la limitation de 2h de PlaFRIM rend cela fastidieux voire impossible si le calcul prend plus que 2h.
             </p>
+
+
+
+            
 
 
 
